@@ -1,0 +1,187 @@
+{
+  "northern_uniform": {
+    "basic_info": {
+      "business_name": "Northern Uniform",
+      "owner_name": "Unknown (Family-owned since 1901)",
+      "website": "northernuniform.com",
+      "phone": "1-888-416-6784",
+      "address": "45 Reagen's Industrial Parkway, Bradford, ON",
+      "years_in_business": "123",
+      "email": "Contact form only"
+    },
+    "financial_estimates": {
+      "revenue_estimate": "$1.5M",
+      "sde_estimate": "$300-400K",
+      "employee_count": "8-15",
+      "acquisition_score": "92"
+    },
+    "acquisition_insights": {
+      "key_strengths": [
+        "123 years of established reputation",
+        "Steel industry expertise in Hamilton",
+        "Family-owned authenticity",
+        "Specialized safety compliance (P.A.S.S. Program)"
+      ],
+      "buy_then_build_opportunities": [
+        "Digital marketing expansion",
+        "Geographic expansion beyond Ontario",
+        "Safety technology integration",
+        "Corporate uniform programs"
+      ],
+      "risk_factors": [
+        "Aging business model",
+        "Competition from larger uniform services",
+        "Family succession planning needs"
+      ],
+      "recommended_approach": "Legacy preservation - acknowledge 123-year heritage and family values"
+    }
+  },
+  "janco_steel": {
+    "basic_info": {
+      "business_name": "Janco Steel Ltd",
+      "owner_name": "Carl Evink (Director), Allan Schutten (President)",
+      "website": "www.jancosteel.com",
+      "phone": "(905) 643-3535",
+      "address": "925 Arvin Avenue, Stoney Creek, ON",
+      "years_in_business": "36",
+      "email": "sales@jancosteel.com"
+    },
+    "financial_estimates": {
+      "revenue_estimate": "$76.9M",
+      "sde_estimate": "$3-5M",
+      "employee_count": "90-283",
+      "acquisition_score": "88"
+    },
+    "acquisition_insights": {
+      "key_strengths": [
+        "Strong revenue ($76.9M annually)",
+        "Family-owned since 1988",
+        "Specialized steel service center",
+        "Large facility (205,000 sq ft)"
+      ],
+      "buy_then_build_opportunities": [
+        "Technology automation",
+        "Geographic expansion",
+        "Value-added services",
+        "Digital transformation"
+      ],
+      "risk_factors": [
+        "May be too large for target criteria",
+        "Steel industry cyclical nature",
+        "Capital intensive operations"
+      ],
+      "recommended_approach": "Growth partnership - steel industry opportunities and technology advancement"
+    }
+  },
+  "campbell_glass": {
+    "basic_info": {
+      "business_name": "Campbell Glass & Mirror",
+      "owner_name": "Manny & Zena Fresco",
+      "website": "campbellglass.ca",
+      "phone": "(905) 545-1222",
+      "address": "196 Ottawa Street North, Hamilton, ON",
+      "years_in_business": "37",
+      "email": "info@campbellglass.ca"
+    },
+    "financial_estimates": {
+      "revenue_estimate": "$1.2M",
+      "sde_estimate": "$250-350K",
+      "employee_count": "8-12",
+      "acquisition_score": "87"
+    },
+    "acquisition_insights": {
+      "key_strengths": [
+        "Consumer Choice Award winner",
+        "Artistic leadership (Manny's background)",
+        "4,000 sq ft showroom on Ottawa Street",
+        "Long-term employee retention (10-20+ years)"
+      ],
+      "buy_then_build_opportunities": [
+        "E-commerce platform development",
+        "Residential market expansion",
+        "Commercial glass services growth",
+        "Digital marketing and online presence"
+      ],
+      "risk_factors": [
+        "Artistic owner may have strong attachment",
+        "Specialized skill requirements",
+        "Ottawa Street location dependency"
+      ],
+      "recommended_approach": "Growth partnership - creative/artistic angle, respect for craftsmanship"
+    }
+  },
+  "award_windows": {
+    "basic_info": {
+      "business_name": "Award Windows",
+      "owner_name": "Unknown (Family-run)",
+      "website": "awardwindows.ca",
+      "phone": "(905) 522-6610",
+      "address": "70 Unsworth Dr, Unit 10, Hamilton, ON",
+      "years_in_business": "60+",
+      "email": "info@awardwindows.ca"
+    },
+    "financial_estimates": {
+      "revenue_estimate": "$1.8M",
+      "sde_estimate": "$350-450K",
+      "employee_count": "10-18",
+      "acquisition_score": "89"
+    },
+    "acquisition_insights": {
+      "key_strengths": [
+        "60+ years family operation",
+        "Local manufacturing capability",
+        "Multiple service locations",
+        "Lifetime warranty offering"
+      ],
+      "buy_then_build_opportunities": [
+        "Digital marketing expansion",
+        "E-commerce platform",
+        "Technology integration",
+        "Geographic expansion"
+      ],
+      "risk_factors": [
+        "Mixed customer reviews",
+        "Warranty service challenges",
+        "Family succession planning"
+      ],
+      "recommended_approach": "Legacy preservation - manufacturing heritage and family tradition"
+    }
+  },
+  "country_meat_packing": {
+    "basic_info": {
+      "business_name": "Country Meat Packing",
+      "owner_name": "Albert Boekestein (current), Benjamin Boekestein (son/partner)",
+      "website": "countrymeatpacking.com",
+      "phone": "Unknown",
+      "address": "1188 Hwy. 8, RR#1, Dundas, ON",
+      "years_in_business": "48",
+      "email": "Need to find"
+    },
+    "financial_estimates": {
+      "revenue_estimate": "$2.1M",
+      "sde_estimate": "$400-600K",
+      "employee_count": "15-25",
+      "acquisition_score": "89"
+    },
+    "acquisition_insights": {
+      "key_strengths": [
+        "Three-generation family legacy",
+        "Albert (38 years experience) + Benjamin partnership",
+        "Established since 1976",
+        "Both foodservice and retail operations"
+      ],
+      "buy_then_build_opportunities": [
+        "Retail expansion",
+        "Online ordering platform",
+        "Regional distribution growth",
+        "Food safety technology"
+      ],
+      "risk_factors": [
+        "Father-son succession in progress",
+        "Food safety regulations",
+        "Perishable product challenges"
+      ],
+      "recommended_approach": "Legacy preservation - family tradition and generational expertise"
+    }
+  }
+}
