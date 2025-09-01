@@ -57,11 +57,16 @@ Formats Claude AI research into:
 
 ## Workflow
 
-1. **Discovery**: Use Claude prompts from `claude-instructions.md` Phase 1
-2. **Research**: Apply Phase 2 prompts for top prospects  
-3. **Email Finding**: Run `email_finder.py` for contact discovery
-4. **Outreach**: Generate emails with Phase 3 prompts
-5. **Tracking**: Update CRM and monitor responses
+✅ **Phase 1-3 Complete**: Discovery, research, and email templates ready
+🚀 **Phase 4 Active**: Automated outreach and response management
+
+### Current Phase: Email Campaign Execution
+
+1. **Send Initial Emails**: `python scripts/email_sender.py` (dry-run first)
+2. **Monitor Responses**: `python scripts/email_tracker.py` 
+3. **Automated Follow-ups**: `python scripts/follow_up_automation.py`
+4. **Meeting Management**: `python scripts/meeting_manager.py`
+5. **Campaign Dashboard**: `python scripts/campaign_dashboard.py` (master control)
 
 ## File Structure
 ```
