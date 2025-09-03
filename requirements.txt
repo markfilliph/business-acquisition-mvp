@@ -25,6 +25,7 @@ structlog==23.2.0
 # Configuration and environment
 python-dotenv==1.0.0
 pyyaml==6.0.1
+croniter==2.0.1       # Cron expression parsing for automation
 
 # Data processing and analysis
 pandas==2.1.4

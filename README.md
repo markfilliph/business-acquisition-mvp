@@ -30,6 +30,13 @@ This system provides a complete lead generation pipeline with enterprise-grade a
 - 🎯 **Scoring Service**: Multi-factor qualification algorithm
 - 🎛️ **Pipeline Orchestrator**: End-to-end workflow coordination
 
+**Automation:**
+- 🤖 **Automated Scheduling**: Cron-based task execution with graceful shutdown
+- 🚨 **Multi-Channel Alerts**: Email, Slack, webhook notifications
+- 📊 **Real-time Monitoring**: Performance metrics and health checks
+- ⚡ **Error Recovery**: Circuit breakers and exponential backoff
+- 🔄 **Pipeline Automation**: Configurable automated lead generation
+
 **Integration:**
 - 📈 **Export System**: CSV, Excel, Google Sheets integration
 - 🐳 **Docker Support**: Containerized deployment
@@ -54,6 +61,7 @@ This system provides a complete lead generation pipeline with enterprise-grade a
 - **Database**: SQLite with aiosqlite
 - **Logging**: structlog (JSON formatting)
 - **Configuration**: python-dotenv, dataclasses
+- **Automation**: croniter (cron expressions), asyncio scheduling
 
 ### Business Intelligence
 - **Data Processing**: Pandas, NumPy  
@@ -126,10 +134,16 @@ business-acquisition-mvp-v2/
 │   │   └── scoring_service.py    # Lead qualification scoring
 │   ├── agents/                  # Pipeline orchestration
 │   │   └── orchestrator.py      # Main pipeline coordinator
+│   ├── automation/              # Automation system
+│   │   ├── config.py           # Automation configuration
+│   │   ├── scheduler.py        # Cron-based task scheduler
+│   │   ├── monitoring.py       # Multi-channel alerts & monitoring
+│   │   └── runner.py           # Automated lead generation runner
 │   └── utils/                   # Utilities
 │       └── logging_config.py    # Structured logging setup
 ├── scripts/                     # Command-line interfaces
 │   ├── run_pipeline.py         # Main pipeline execution
+│   ├── run_automation.py       # Production automation runner
 │   └── export_results.py       # Data export utility
 ├── tests/                       # Test suite
 ├── data/                        # Database and data files
@@ -173,6 +187,15 @@ business-acquisition-mvp-v2/
 - **Retry Logic**: Exponential backoff with jitter
 - **Robots.txt Compliance**: Ethical web crawling
 - **Connection Pooling**: Efficient resource usage
+
+### Automation Features
+- **Cron Scheduling**: Flexible scheduling with cron expressions
+- **Graceful Shutdown**: SIGINT/SIGTERM signal handling
+- **Multi-Channel Alerts**: Email, Slack, webhook notifications
+- **Performance Monitoring**: Real-time metrics and health checks
+- **Alert Throttling**: Deduplication and rate limiting
+- **Configuration Validation**: Production safety checks
+- **Concurrent Execution Limits**: Resource management
 
 ### Data Quality
 - **Comprehensive Validation**: Phone, email, postal code normalization
@@ -218,8 +241,11 @@ docker-compose -f docker-compose.prod.yml up -d
 ## 🧪 Testing
 
 ```bash
-# Run test suite
+# Run complete test suite
 pytest
+
+# Run automation tests only  
+pytest tests/test_automation.py -v
 
 # With coverage
 pytest --cov=src --cov-report=html
@@ -244,6 +270,45 @@ python scripts/export_results.py --format csv
 
 # Database statistics
 python scripts/run_pipeline.py --stats-only
+```
+
+### Automation Usage
+```bash
+# Start automated lead generation (production)
+python scripts/run_automation.py
+
+# Check configuration before running
+python scripts/run_automation.py --config-check
+
+# Check system status
+python scripts/run_automation.py --status
+
+# Test run (single execution)
+python scripts/run_automation.py --dry-run
+```
+
+### Automation Configuration
+Set environment variables in `.env`:
+```bash
+# Automation settings
+AUTOMATION_ENV=production
+SCHEDULE_ENABLED=true
+SCHEDULE_CRON="0 9 * * *"  # Daily at 9 AM
+MAX_LEADS_PER_RUN=50
+
+# Email alerts
+SMTP_HOST=smtp.gmail.com
+SMTP_USERNAME=your-email@gmail.com
+SMTP_PASSWORD=your-app-password
+ALERT_RECIPIENTS=admin@company.com,manager@company.com
+
+# Slack alerts
+SLACK_TOKEN=xoxb-your-slack-token
+SLACK_CHANNEL=#lead-generation
+
+# Webhook alerts
+WEBHOOK_URL=https://hooks.slack.com/services/...
+WEBHOOK_SECRET=your-webhook-secret
 ```
 
 ### Programmatic Usage

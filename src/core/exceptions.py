@@ -46,3 +46,13 @@ class ScoringError(LeadGenerationError):
 class ConfigurationError(LeadGenerationError):
     """Raised when configuration is invalid."""
     pass
+
+
+class AutomationError(LeadGenerationError):
+    """Raised when automation system operations fail."""
+    pass
+
+
+class MonitoringError(LeadGenerationError):
+    """Raised when monitoring and alerting operations fail."""
+    pass
