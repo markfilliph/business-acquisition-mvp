@@ -53,6 +53,27 @@ class BusinessCriteria:
         "printing", "equipment_rental"
     ])
     # EXCLUDED: All skilled trades (metal_fabrication, auto_repair, construction, welding, machining, etc.)
+    
+    # Major established companies to exclude (too large/established for our criteria)
+    excluded_companies: List[str] = field(default_factory=lambda: [
+        "G.S. Dunn Limited",
+        "G.S. Dunn Ltd",
+        "G.S. Dunn",
+        "ArcelorMittal Dofasco",
+        "Dofasco",
+        "Stelco",
+        "National Steel Car",
+        "McMaster University",
+        "Mohawk College",
+        "Hamilton Health Sciences",
+        "St. Joseph's Healthcare Hamilton"
+    ])
+    
+    # Exclusion patterns (company names containing these will be excluded)
+    excluded_patterns: List[str] = field(default_factory=lambda: [
+        "university", "college", "hospital", "health sciences",
+        "government", "municipal", "city of", "province of"
+    ])
 
 
 @dataclass

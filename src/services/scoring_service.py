@@ -88,6 +88,17 @@ class IntelligentScoringService:
         try:
             lead.status = LeadStatus.SCORING
             
+            # Check if company is in exclusion list (major established companies)
+            if self._is_excluded_company(lead.business_name):
+                lead.status = LeadStatus.DISQUALIFIED
+                lead.disqualification_reasons = ["Major established company - excluded from target criteria"]
+                lead.lead_score = LeadScore(0, 0, 0, 0, 0, 0, 0, 100)
+                lead.add_note("Excluded as major established company", "scoring_service")
+                self.logger.info("lead_excluded", 
+                               business_name=lead.business_name,
+                               reason="major_established_company")
+                return lead
+            
             # Initialize scoring components
             qualification_reasons = []
             disqualification_reasons = []
@@ -312,6 +323,23 @@ class IntelligentScoringService:
             reasons['negative'].append("Limited growth indicators identified")
         
         return min(score, self.weights.growth_indicators), reasons
+    
+    def _is_excluded_company(self, business_name: str) -> bool:
+        """Check if company should be excluded as major established company."""
+        
+        name_lower = business_name.lower().strip()
+        
+        # Check exact matches (case insensitive)
+        for excluded in self.config.business_criteria.excluded_companies:
+            if name_lower == excluded.lower().strip():
+                return True
+        
+        # Check patterns
+        for pattern in self.config.business_criteria.excluded_patterns:
+            if pattern.lower() in name_lower:
+                return True
+        
+        return False
     
     def get_scoring_stats(self) -> Dict[str, Any]:
         """Get scoring statistics."""
