@@ -1,0 +1,280 @@
+{
+  "export_metadata": {
+    "timestamp": "2025-09-03T14:25:21.318018",
+    "total_leads": 7,
+    "export_criteria": {
+      "status": "qualified",
+      "min_score": 60,
+      "revenue_range": "$1M - $1.4M",
+      "min_years_in_business": 15,
+      "target_locations": [
+        "Hamilton",
+        "Dundas",
+        "Ancaster",
+        "Stoney Creek",
+        "Waterdown"
+      ]
+    }
+  },
+  "qualified_leads": [
+    {
+      "identification": {
+        "unique_id": "51e5a7e2755b",
+        "business_name": "Waterdown Metal Works",
+        "industry": "metal_fabrication"
+      },
+      "location": {
+        "address": "123 Hamilton St N, Waterdown, ON L9A 4X2",
+        "city": "Hamilton",
+        "province": "ON",
+        "postal_code": "L9A 4X2",
+        "country": "Canada"
+      },
+      "contact_information": {
+        "phone": "(905) 555-0123",
+        "email": "info@waterdownmetal.ca",
+        "website": "https://waterdownmetal.ca"
+      },
+      "business_profile": {
+        "years_in_business": 20,
+        "employee_count": 10,
+        "estimated_revenue": 1368434,
+        "revenue_confidence": 0.655
+      },
+      "qualification_metrics": {
+        "lead_score": 75,
+        "status": "qualified",
+        "qualification_reasons": "[\"Revenue estimate $1.4M fits target range perfectly\", \"Well established business (20 years)\", \"Excellent data completeness (100.0%)\", \"High data confidence (86.2%)\", \"Target industry: metal_fabrication\", \"Located in Hamilton area (target market)\", \"Central Hamilton location\", \"Optimal team size (10) for acquisition\"]",
+        "data_completeness": 1.0
+      },
+      "metadata": {
+        "data_sources": "[\"web_scraping\"]",
+        "created_at": "2025-09-03 16:23:36",
+        "updated_at": "2025-09-03 16:23:36.804128",
+        "notes": "[\"[2025-09-03 16:23] discovery: Discovered via DataSource.WEB_SCRAPING\", \"[2025-09-03 16:23] business_intelligence: Hamilton market offers cost advantages over Toronto\", \"[2025-09-03 16:23] business_intelligence: Growing tech and innovation sector\", \"[2025-09-03 16:23] business_intelligence: Strategic location for North American trade\", \"[2025-09-03 16:23] business_intelligence: Small team size suggests owner-managed operation\", \"[2025-09-03 16:23] enrichment_service: Data enrichment completed\", \"[2025-09-03 16:23] scoring_service: QUALIFIED with score 75/100\"]"
+      }
+    },
+    {
+      "identification": {
+        "unique_id": "db1de6123ff4",
+        "business_name": "Hamilton Business Printing Co",
+        "industry": "printing"
+      },
+      "location": {
+        "address": "234 James St N, Hamilton, ON L8R 2L3",
+        "city": "Hamilton",
+        "province": "ON",
+        "postal_code": "L8R 2L3",
+        "country": "Canada"
+      },
+      "contact_information": {
+        "phone": "(905) 555-0234",
+        "email": "print@hamiltonbizprint.ca",
+        "website": "https://hamiltonbizprint.ca"
+      },
+      "business_profile": {
+        "years_in_business": 21,
+        "employee_count": 11,
+        "estimated_revenue": 1379367,
+        "revenue_confidence": 0.5456666666666666
+      },
+      "qualification_metrics": {
+        "lead_score": 72,
+        "status": "qualified",
+        "qualification_reasons": "[\"Revenue estimate $1.4M fits target range perfectly\", \"Well established business (21 years)\", \"Excellent data completeness (100.0%)\", \"High data confidence (81.8%)\", \"Target industry: printing\", \"Located in Hamilton area (target market)\", \"Central Hamilton location\", \"Optimal team size (11) for acquisition\"]",
+        "data_completeness": 1.0
+      },
+      "metadata": {
+        "data_sources": "[\"manual_research\"]",
+        "created_at": "2025-09-03 17:25:08",
+        "updated_at": "2025-09-03 17:25:08.171644",
+        "notes": "[\"[2025-09-03 17:25] discovery: Discovered via DataSource.MANUAL_RESEARCH\", \"[2025-09-03 17:25] business_intelligence: Hamilton market offers cost advantages over Toronto\", \"[2025-09-03 17:25] business_intelligence: Growing tech and innovation sector\", \"[2025-09-03 17:25] business_intelligence: Strategic location for North American trade\", \"[2025-09-03 17:25] business_intelligence: Medium-sized team indicates established operations\", \"[2025-09-03 17:25] enrichment_service: Data enrichment completed\", \"[2025-09-03 17:25] scoring_service: QUALIFIED with score 72/100\"]"
+      }
+    },
+    {
+      "identification": {
+        "unique_id": "7321fd441906",
+        "business_name": "Hamilton Precision Printing",
+        "industry": "printing"
+      },
+      "location": {
+        "address": "678 Barton St E, Hamilton, ON L8L 2Y5",
+        "city": "Hamilton",
+        "province": "ON",
+        "postal_code": "L8L 2Y5",
+        "country": "Canada"
+      },
+      "contact_information": {
+        "phone": "(905) 555-0678",
+        "email": "orders@hamiltonprecision.ca",
+        "website": "https://hamiltonprecision.ca"
+      },
+      "business_profile": {
+        "years_in_business": 24,
+        "employee_count": 11,
+        "estimated_revenue": 1395723,
+        "revenue_confidence": 0.5456666666666666
+      },
+      "qualification_metrics": {
+        "lead_score": 72,
+        "status": "qualified",
+        "qualification_reasons": "[\"Revenue estimate $1.4M fits target range perfectly\", \"Well established business (24 years)\", \"Excellent data completeness (100.0%)\", \"High data confidence (81.8%)\", \"Target industry: printing\", \"Located in Hamilton area (target market)\", \"Central Hamilton location\", \"Optimal team size (11) for acquisition\"]",
+        "data_completeness": 1.0
+      },
+      "metadata": {
+        "data_sources": "[\"canada411\"]",
+        "created_at": "2025-09-03 17:25:08",
+        "updated_at": "2025-09-03 17:25:08.131564",
+        "notes": "[\"[2025-09-03 17:25] discovery: Discovered via DataSource.CANADA411\", \"[2025-09-03 17:25] business_intelligence: Hamilton market offers cost advantages over Toronto\", \"[2025-09-03 17:25] business_intelligence: Growing tech and innovation sector\", \"[2025-09-03 17:25] business_intelligence: Strategic location for North American trade\", \"[2025-09-03 17:25] business_intelligence: Medium-sized team indicates established operations\", \"[2025-09-03 17:25] enrichment_service: Data enrichment completed\", \"[2025-09-03 17:25] scoring_service: QUALIFIED with score 72/100\"]"
+      }
+    },
+    {
+      "identification": {
+        "unique_id": "62984f2a20f6",
+        "business_name": "Hamilton Bay Equipment Services",
+        "industry": "equipment_rental"
+      },
+      "location": {
+        "address": "345 Burlington St E, Hamilton, ON L8H 7M3",
+        "city": "Hamilton",
+        "province": "ON",
+        "postal_code": "L8H 7M3",
+        "country": "Canada"
+      },
+      "contact_information": {
+        "phone": "(905) 555-0345",
+        "email": "rentals@bayequipment.ca",
+        "website": "https://bayequipment.ca"
+      },
+      "business_profile": {
+        "years_in_business": 17,
+        "employee_count": 9,
+        "estimated_revenue": 1204570,
+        "revenue_confidence": 0.63
+      },
+      "qualification_metrics": {
+        "lead_score": 70,
+        "status": "qualified",
+        "qualification_reasons": "[\"Revenue estimate $1.2M fits target range perfectly\", \"Meets minimum age requirement (17 years)\", \"Excellent data completeness (100.0%)\", \"High data confidence (85.2%)\", \"Target industry: equipment_rental\", \"Located in Hamilton area (target market)\", \"Central Hamilton location\", \"Optimal team size (9) for acquisition\"]",
+        "data_completeness": 1.0
+      },
+      "metadata": {
+        "data_sources": "[\"api_integration\"]",
+        "created_at": "2025-09-03 17:25:08",
+        "updated_at": "2025-09-03 17:25:08.211152",
+        "notes": "[\"[2025-09-03 17:25] discovery: Discovered via DataSource.API_INTEGRATION\", \"[2025-09-03 17:25] business_intelligence: Hamilton market offers cost advantages over Toronto\", \"[2025-09-03 17:25] business_intelligence: Growing tech and innovation sector\", \"[2025-09-03 17:25] business_intelligence: Strategic location for North American trade\", \"[2025-09-03 17:25] business_intelligence: Small team size suggests owner-managed operation\", \"[2025-09-03 17:25] enrichment_service: Data enrichment completed\", \"[2025-09-03 17:25] scoring_service: QUALIFIED with score 70/100\"]"
+      }
+    },
+    {
+      "identification": {
+        "unique_id": "5db9a9d7426d",
+        "business_name": "Stoney Creek Office Solutions",
+        "industry": "professional_services"
+      },
+      "location": {
+        "address": "67 King St E, Stoney Creek, ON L8G 1K1",
+        "city": "Stoney Creek",
+        "province": "ON",
+        "postal_code": "L8G 1K1",
+        "country": "Canada"
+      },
+      "contact_information": {
+        "phone": "(905) 555-0067",
+        "email": "admin@stoneyoffice.ca",
+        "website": "https://stoneyoffice.ca"
+      },
+      "business_profile": {
+        "years_in_business": 18,
+        "employee_count": 9,
+        "estimated_revenue": 1215259,
+        "revenue_confidence": 0.496
+      },
+      "qualification_metrics": {
+        "lead_score": 65,
+        "status": "qualified",
+        "qualification_reasons": "[\"Revenue estimate $1.2M fits target range perfectly\", \"Meets minimum age requirement (18 years)\", \"Excellent data completeness (100.0%)\", \"High data confidence (79.8%)\", \"Target industry: professional_services\", \"Located in Hamilton area (target market)\", \"Hamilton suburb location: Stoney Creek\", \"Optimal team size (9) for acquisition\"]",
+        "data_completeness": 1.0
+      },
+      "metadata": {
+        "data_sources": "[\"yellowpages\"]",
+        "created_at": "2025-09-03 17:25:08",
+        "updated_at": "2025-09-03 17:25:08.323971",
+        "notes": "[\"[2025-09-03 17:25] discovery: Discovered via DataSource.YELLOWPAGES\", \"[2025-09-03 17:25] business_intelligence: Small team size suggests owner-managed operation\", \"[2025-09-03 17:25] business_intelligence: Professional services team size ideal for personal service delivery\", \"[2025-09-03 17:25] enrichment_service: Data enrichment completed\", \"[2025-09-03 17:25] scoring_service: QUALIFIED with score 65/100\"]"
+      }
+    },
+    {
+      "identification": {
+        "unique_id": "cec0c19a5c04",
+        "business_name": "Dundas Professional Consulting",
+        "industry": "professional_services"
+      },
+      "location": {
+        "address": "156 King St W, Dundas, ON L9H 1V1",
+        "city": "Dundas",
+        "province": "ON",
+        "postal_code": "L9H 1V1",
+        "country": "Canada"
+      },
+      "contact_information": {
+        "phone": "(905) 555-0156",
+        "email": "service@dundasconsulting.ca",
+        "website": "https://dundasconsulting.ca"
+      },
+      "business_profile": {
+        "years_in_business": 16,
+        "employee_count": 8,
+        "estimated_revenue": 1139170,
+        "revenue_confidence": 0.496
+      },
+      "qualification_metrics": {
+        "lead_score": 65,
+        "status": "qualified",
+        "qualification_reasons": "[\"Revenue estimate $1.1M fits target range perfectly\", \"Meets minimum age requirement (16 years)\", \"Excellent data completeness (100.0%)\", \"High data confidence (79.8%)\", \"Target industry: professional_services\", \"Located in Hamilton area (target market)\", \"Hamilton suburb location: Dundas\", \"Optimal team size (8) for acquisition\"]",
+        "data_completeness": 1.0
+      },
+      "metadata": {
+        "data_sources": "[\"linkedin\"]",
+        "created_at": "2025-09-03 17:25:08",
+        "updated_at": "2025-09-03 17:25:08.286506",
+        "notes": "[\"[2025-09-03 17:25] discovery: Discovered via DataSource.LINKEDIN\", \"[2025-09-03 17:25] business_intelligence: Dundas: Historic town with strong local business community\", \"[2025-09-03 17:25] business_intelligence: Good mix of residential and commercial opportunities\", \"[2025-09-03 17:25] business_intelligence: Small team size suggests owner-managed operation\", \"[2025-09-03 17:25] business_intelligence: Professional services team size ideal for personal service delivery\", \"[2025-09-03 17:25] enrichment_service: Data enrichment completed\", \"[2025-09-03 17:25] scoring_service: QUALIFIED with score 65/100\"]"
+      }
+    },
+    {
+      "identification": {
+        "unique_id": "77e91cc1531e",
+        "business_name": "Ancaster Professional Services",
+        "industry": "professional_services"
+      },
+      "location": {
+        "address": "89 Wilson St W, Ancaster, ON L9G 1N4",
+        "city": "Ancaster",
+        "province": "ON",
+        "postal_code": "L9G 1N4",
+        "country": "Canada"
+      },
+      "contact_information": {
+        "phone": "(905) 555-0189",
+        "email": "info@ancasterpro.ca",
+        "website": "https://ancasterprofessional.com"
+      },
+      "business_profile": {
+        "years_in_business": 19,
+        "employee_count": 11,
+        "estimated_revenue": 1336590,
+        "revenue_confidence": 0.496
+      },
+      "qualification_metrics": {
+        "lead_score": 65,
+        "status": "qualified",
+        "qualification_reasons": "[\"Revenue estimate $1.3M fits target range perfectly\", \"Meets minimum age requirement (19 years)\", \"Excellent data completeness (100.0%)\", \"High data confidence (79.8%)\", \"Target industry: professional_services\", \"Located in Hamilton area (target market)\", \"Hamilton suburb location: Ancaster\", \"Optimal team size (11) for acquisition\"]",
+        "data_completeness": 1.0
+      },
+      "metadata": {
+        "data_sources": "[\"hamilton_chamber\"]",
+        "created_at": "2025-09-03 17:25:08",
+        "updated_at": "2025-09-03 17:25:08.248352",
+        "notes": "[\"[2025-09-03 17:25] discovery: Discovered via DataSource.HAMILTON_CHAMBER\", \"[2025-09-03 17:25] business_intelligence: Ancaster: Affluent area with higher-end service demand\", \"[2025-09-03 17:25] business_intelligence: Good access to both Hamilton and Burlington markets\", \"[2025-09-03 17:25] business_intelligence: Medium-sized team indicates established operations\", \"[2025-09-03 17:25] business_intelligence: Professional services team size ideal for personal service delivery\", \"[2025-09-03 17:25] enrichment_service: Data enrichment completed\", \"[2025-09-03 17:25] scoring_service: QUALIFIED with score 65/100\"]"
+      }
+    }
+  ]
+}

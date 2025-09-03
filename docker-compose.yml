@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  lead-generator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: business-lead-generator
+    environment:
+      - ENVIRONMENT=production
+      - DEBUG=false
+      - DATABASE_PATH=/app/data/leads.db
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./output:/app/output
+      - ./credentials.json:/app/credentials.json:ro
+    working_dir: /app
+    command: python scripts/run_pipeline.py
+    restart: unless-stopped
+    networks:
+      - lead-gen-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: lead-gen-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+    networks:
+      - lead-gen-network
+
+  # Optional: Database backup service
+  backup:
+    image: alpine:latest
+    container_name: lead-gen-backup
+    volumes:
+      - ./data:/app/data:ro
+      - ./backups:/app/backups
+    command: |
+      sh -c "
+      while true; do
+        DATE=$$(date +%Y%m%d_%H%M%S)
+        cp /app/data/leads.db /app/backups/leads_backup_$$DATE.db
+        # Keep only last 30 backups
+        ls -t /app/backups/leads_backup_*.db | tail -n +31 | xargs -r rm
+        sleep 86400  # Backup daily
+      done"
+    restart: unless-stopped
+    networks:
+      - lead-gen-network
+
+volumes:
+  redis_data:
+
+networks:
+  lead-gen-network:
+    driver: bridge

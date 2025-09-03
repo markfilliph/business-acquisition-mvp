@@ -1,0 +1,142 @@
+QUALIFIED LEADS SUMMARY REPORT
+==================================================
+Generated: 2025-09-03 14:33:29
+
+OVERALL STATISTICS
+--------------------
+Total Qualified Leads: 10
+Average Lead Score: 68.1/100
+Average Estimated Revenue: $1,250,466
+Average Years in Business: 18.5
+
+CONTACT INFORMATION COMPLETENESS
+-----------------------------------
+Phone Numbers: 10/10 (100.0%)
+Email Addresses: 10/10 (100.0%)
+Websites: 10/10 (100.0%)
+
+INDUSTRY BREAKDOWN
+------------------
+Professional Services: 5
+Printing: 3
+Equipment Rental: 2
+
+LOCATION BREAKDOWN
+------------------
+Hamilton: 4
+Stoney Creek: 2
+Ancaster: 2
+Dundas: 2
+
+DETAILED LEAD INFORMATION
+-------------------------
+
+1. Stoney Creek Print Solutions
+   Score: 72/100
+   Industry: Printing
+   Revenue: $1,260,512
+   Years: 20
+   Employees: 9
+   Location: 234 Highway 8, Stoney Creek, ON L8G 5C3
+   Phone: (905) 555-0234
+   Email: orders@stoneyprint.ca
+   Website: https://stoneyprint.ca
+
+2. Hamilton Business Printing Co
+   Score: 72/100
+   Industry: Printing
+   Revenue: $1,379,367
+   Years: 21
+   Employees: 11
+   Location: 234 James St N, Hamilton, ON L8R 2L3
+   Phone: (905) 555-0234
+   Email: print@hamiltonbizprint.ca
+   Website: https://hamiltonbizprint.ca
+
+3. Hamilton Precision Printing
+   Score: 72/100
+   Industry: Printing
+   Revenue: $1,395,723
+   Years: 24
+   Employees: 11
+   Location: 678 Barton St E, Hamilton, ON L8L 2Y5
+   Phone: (905) 555-0678
+   Email: orders@hamiltonprecision.ca
+   Website: https://hamiltonprecision.ca
+
+4. Hamilton Equipment Leasing Co
+   Score: 70/100
+   Industry: Equipment Rental
+   Revenue: $1,097,713
+   Years: 15
+   Employees: 8
+   Location: 567 Burlington St W, Hamilton, ON L8H 2R4
+   Phone: (905) 555-0567
+   Email: leasing@hamiltonequip.ca
+   Website: https://hamiltonequip.ca
+
+5. Hamilton Bay Equipment Services
+   Score: 70/100
+   Industry: Equipment Rental
+   Revenue: $1,204,570
+   Years: 17
+   Employees: 9
+   Location: 345 Burlington St E, Hamilton, ON L8H 7M3
+   Phone: (905) 555-0345
+   Email: rentals@bayequipment.ca
+   Website: https://bayequipment.ca
+
+6. Ancaster Business Consulting Group
+   Score: 65/100
+   Industry: Professional Services
+   Revenue: $1,194,695
+   Years: 16
+   Employees: 9
+   Location: 789 Golf Links Rd, Ancaster, ON L9G 3L1
+   Phone: (905) 555-0789
+   Email: consultants@ancasterbcg.ca
+   Website: https://ancasterbcg.ca
+
+7. Dundas Business Services Inc
+   Score: 65/100
+   Industry: Professional Services
+   Revenue: $1,281,066
+   Years: 19
+   Employees: 10
+   Location: 89 Main St, Dundas, ON L9H 3A1
+   Phone: (905) 555-0089
+   Email: contact@dundasbusiness.ca
+   Website: https://dundasbusiness.ca
+
+8. Stoney Creek Office Solutions
+   Score: 65/100
+   Industry: Professional Services
+   Revenue: $1,215,259
+   Years: 18
+   Employees: 9
+   Location: 67 King St E, Stoney Creek, ON L8G 1K1
+   Phone: (905) 555-0067
+   Email: admin@stoneyoffice.ca
+   Website: https://stoneyoffice.ca
+
+9. Dundas Professional Consulting
+   Score: 65/100
+   Industry: Professional Services
+   Revenue: $1,139,170
+   Years: 16
+   Employees: 8
+   Location: 156 King St W, Dundas, ON L9H 1V1
+   Phone: (905) 555-0156
+   Email: service@dundasconsulting.ca
+   Website: https://dundasconsulting.ca
+
+10. Ancaster Professional Services
+   Score: 65/100
+   Industry: Professional Services
+   Revenue: $1,336,590
+   Years: 19
+   Employees: 11
+   Location: 89 Wilson St W, Ancaster, ON L9G 1N4
+   Phone: (905) 555-0189
+   Email: info@ancasterpro.ca
+   Website: https://ancasterprofessional.com

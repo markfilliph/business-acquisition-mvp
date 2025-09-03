@@ -27,6 +27,9 @@ MANIFEST
 venv/
 env/
 ENV/
+.venv/
+env.bak/
+venv.bak/
 
 # IDE
 .vscode/
@@ -38,10 +41,34 @@ ENV/
 .DS_Store
 Thumbs.db
 
-# Project specific
-credentials.json
-*.log
+# Environment and credentials
 .env
+.env.local
+.env.production
+credentials.json
+*.pem
+*.key
+
+# Production Lead Generation System specific
+# Database files
+data/*.db
+data/*.sqlite
+!data/.gitkeep
+
+# Log files
+logs/*.log
+logs/*.txt
+!logs/.gitkeep
+
+# Output files
+output/*.csv
+output/*.json
+output/*.xlsx
+!output/.gitkeep
+
+# Backup files
+backups/
+*.backup
 
 # Data files (contains sensitive business info)
 data/prospects.csv
@@ -53,3 +80,19 @@ data/email_search_*.txt
 # Temporary files
 ~$*
 *.tmp
+*.temp
+temp/
+
+# Test coverage
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+
+# Documentation
+docs/_build/
+
+# Docker
+.dockerignore

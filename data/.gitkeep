@@ -1,0 +1,2 @@
+# This file ensures the data directory is tracked by git
+# Database files and sensitive data will be ignored but directory structure preserved
