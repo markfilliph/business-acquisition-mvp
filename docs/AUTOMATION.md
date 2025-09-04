@@ -2,7 +2,7 @@
 
 ## Overview
 
-The automation system provides enterprise-grade scheduling, monitoring, and alerting capabilities for the lead generation pipeline. It enables hands-off operation with comprehensive error handling and multi-channel notifications.
+The automation system provides enterprise-grade scheduling, monitoring, and alerting capabilities for the lead generation pipeline with strict $1M-$1.4M revenue targeting. It enables hands-off operation with comprehensive error handling and multi-channel notifications.
 
 ## Key Features
 
