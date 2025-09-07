@@ -13,6 +13,8 @@ from ..database.connection import DatabaseManager
 from ..services.discovery_service import EthicalDiscoveryService
 from ..services.enrichment_service import BusinessEnrichmentService
 from ..services.scoring_service import IntelligentScoringService
+from ..services.validation_service import BusinessValidationService
+from ..validation.config_validator import CriticalConfigValidator
 
 
 class LeadGenerationOrchestrator:
@@ -27,6 +29,7 @@ class LeadGenerationOrchestrator:
         self.discovery_service = EthicalDiscoveryService(config)
         self.enrichment_service = BusinessEnrichmentService(config)
         self.scoring_service = IntelligentScoringService(config)
+        self.validation_service = BusinessValidationService(config)
         
         # Pipeline state
         self.results = PipelineResults()
@@ -38,6 +41,20 @@ class LeadGenerationOrchestrator:
         self.results = PipelineResults(start_time=datetime.utcnow())
         
         try:
+            # CRITICAL: Pre-flight validation checks
+            self.logger.info("running_critical_validation_checks")
+            validator = CriticalConfigValidator()
+            validation_errors = await validator.validate_all()
+            
+            critical_errors = [e for e in validation_errors if e.severity == 'critical']
+            if critical_errors:
+                error_msg = f"CRITICAL VALIDATION FAILURES: {len(critical_errors)} errors found"
+                self.logger.critical("pipeline_aborted_validation_failed", 
+                                   critical_errors=[e.message for e in critical_errors])
+                raise RuntimeError(error_msg)
+            
+            self.logger.info("critical_validation_passed")
+            
             # Initialize database
             await self.db_manager.initialize()
             
@@ -52,9 +69,34 @@ class LeadGenerationOrchestrator:
                 self.results.finalize()
                 return self.results
             
-            # Stage 2: Validation and enrichment
-            self.logger.info("stage_2_enrichment_starting", count=len(discovered_leads))
-            enriched_leads = await self.enrichment_service.enrich_leads(discovered_leads)
+            # Stage 2: Validation (website verification and sanity checks)
+            self.logger.info("stage_2_validation_starting", count=len(discovered_leads))
+            validation_report = await self.validation_service.batch_validate_leads(discovered_leads)
+            
+            # Use only validated leads for further processing
+            validated_leads = validation_report['valid_leads_list']
+            self.results.total_validated = len(validated_leads)
+            
+            if validation_report['invalid_leads']:
+                self.logger.warning(
+                    "leads_failed_validation",
+                    failed_count=len(validation_report['invalid_leads_list']),
+                    validation_rate=f"{validation_report['validation_rate']:.1%}"
+                )
+                
+                # Log specific validation failures
+                for lead_id, issues in validation_report['validation_issues'].items():
+                    self.logger.warning("lead_validation_failed", lead_id=lead_id, issues=issues)
+            
+            if not validated_leads:
+                self.logger.error("no_leads_passed_validation")
+                self.results.recommendations.append("All leads failed validation - check data sources for fake/invalid businesses")
+                self.results.finalize()
+                return self.results
+            
+            # Stage 3: Enrichment  
+            self.logger.info("stage_3_enrichment_starting", count=len(validated_leads))
+            enriched_leads = await self.enrichment_service.enrich_leads(validated_leads)
             
             # Filter out error leads
             valid_leads = [lead for lead in enriched_leads if lead.status != LeadStatus.ERROR]
@@ -67,8 +109,8 @@ class LeadGenerationOrchestrator:
                 self.results.finalize()
                 return self.results
             
-            # Stage 3: Scoring and qualification
-            self.logger.info("stage_3_scoring_starting", count=len(valid_leads))
+            # Stage 4: Scoring and qualification
+            self.logger.info("stage_4_scoring_starting", count=len(valid_leads))
             scored_leads = await self.scoring_service.score_leads(valid_leads)
             
             # Separate qualified leads
@@ -80,11 +122,11 @@ class LeadGenerationOrchestrator:
             self.results.total_qualified = len(qualified_leads)
             self.results.qualified_leads = qualified_leads
             
-            # Stage 4: Database persistence
-            self.logger.info("stage_4_persistence_starting", count=len(scored_leads))
+            # Stage 5: Database persistence
+            self.logger.info("stage_5_persistence_starting", count=len(scored_leads))
             await self._persist_leads(scored_leads)
             
-            # Stage 5: Generate insights and recommendations
+            # Stage 6: Generate insights and recommendations
             await self._generate_insights()
             
             # Finalize results

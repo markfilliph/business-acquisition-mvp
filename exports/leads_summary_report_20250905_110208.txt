@@ -1,0 +1,209 @@
+QUALIFIED LEADS SUMMARY REPORT
+==================================================
+Generated: 2025-09-05 11:02:09
+
+OVERALL STATISTICS
+--------------------
+Total Qualified Leads: 16
+Average Lead Score: 64.8/100
+Average Estimated Revenue: $1,165,987
+Average Years in Business: 18.6
+
+CONTACT INFORMATION COMPLETENESS
+-----------------------------------
+Phone Numbers: 16/16 (100.0%)
+Email Addresses: 0/16 (0.0%)
+Websites: 16/16 (100.0%)
+
+INDUSTRY BREAKDOWN
+------------------
+Professional Services: 6
+Printing: 4
+Equipment Rental: 4
+Wholesale: 2
+
+LOCATION BREAKDOWN
+------------------
+Ancaster: 5
+Hamilton: 5
+Stoney Creek: 3
+Dundas: 3
+
+DETAILED LEAD INFORMATION
+-------------------------
+
+1. Stoney Creek Graphics Ltd.
+   Score: 69/100
+   Industry: Printing
+   Revenue: $1,101,312
+   Years: 22
+   Employees: 6
+   Location: 345 Centennial Pkwy N, Stoney Creek, ON L8E 2P5
+   Phone: (905) 662-9900
+   Email: None
+   Website: https://360energy.net
+
+2. Dundas Print & Graphics Ltd.
+   Score: 69/100
+   Industry: Printing
+   Revenue: $1,101,312
+   Years: 22
+   Employees: 6
+   Location: 23 King St W, Dundas, ON L9H 1T7
+   Phone: (905) 627-3800
+   Email: None
+   Website: https://awardwindows.ca
+
+3. Ancaster Equipment Solutions
+   Score: 67/100
+   Industry: Equipment Rental
+   Revenue: $1,097,713
+   Years: 18
+   Employees: 8
+   Location: 456 Wilson St W, Ancaster, ON L9G 2B2
+   Phone: (905) 648-2200
+   Email: None
+   Website: https://campbellglass.ca
+
+4. Hamilton Equipment Solutions
+   Score: 67/100
+   Industry: Equipment Rental
+   Revenue: $1,097,713
+   Years: 18
+   Employees: 8
+   Location: 234 Barton St W, Hamilton, ON L8L 1C2
+   Phone: (905) 540-3300
+   Email: None
+   Website: https://burnsenergy.ca
+
+5. Stoney Creek Consulting Ltd.
+   Score: 67/100
+   Industry: Professional Services
+   Revenue: $1,245,884
+   Years: 22
+   Employees: 6
+   Location: 234 Queenston Rd, Stoney Creek, ON L8E 2A3
+   Phone: (905) 662-4400
+   Email: None
+   Website: https://awardwindows.ca
+
+6. A.H. Burns Energy Systems Ltd.
+   Score: 67/100
+   Industry: Professional Services
+   Revenue: $1,407,042
+   Years: 22
+   Employees: 9
+   Location: 562 Main St. East, Hamilton, ON L8M 1J2
+   Phone: (905) 525-6321
+   Email: None
+   Website: https://burnsenergy.ca
+
+7. Stoney Creek Rentals Ltd.
+   Score: 67/100
+   Industry: Equipment Rental
+   Revenue: $994,757
+   Years: 22
+   Employees: 6
+   Location: 567 Centennial Pkwy S, Stoney Creek, ON L8E 1M3
+   Phone: (905) 662-5500
+   Email: None
+   Website: https://awardwindows.ca
+
+8. Hamilton Distribution Centre
+   Score: 64/100
+   Industry: Wholesale
+   Revenue: $1,479,241
+   Years: 16
+   Employees: 6
+   Location: 345 Kenilworth Ave S, Hamilton, ON L8H 6P4
+   Phone: (905) 547-2200
+   Email: None
+   Website: https://www.fox40world.com
+
+9. Ancaster Wholesale Supply
+   Score: 64/100
+   Industry: Wholesale
+   Revenue: $1,479,241
+   Years: 16
+   Employees: 6
+   Location: 890 Wilson St E, Ancaster, ON L9G 4V5
+   Phone: (905) 648-9900
+   Email: None
+   Website: https://flamboromachineshop.ca
+
+10. Hamilton Print Shop
+   Score: 63/100
+   Industry: Printing
+   Revenue: $989,470
+   Years: 17
+   Employees: 6
+   Location: 123 James St N, Hamilton, ON L8R 2K7
+   Phone: (905) 525-4444
+   Email: None
+   Website: https://burnsenergy.ca
+
+11. Ancaster Printing Solutions
+   Score: 63/100
+   Industry: Printing
+   Revenue: $1,110,301
+   Years: 18
+   Employees: 8
+   Location: 890 Wilson St E, Ancaster, ON L9G 4V3
+   Phone: (905) 648-8800
+   Email: None
+   Website: https://www.protoplast.com
+
+12. Waterdown Business Services
+   Score: 62/100
+   Industry: Professional Services
+   Revenue: $1,083,647
+   Years: 16
+   Employees: 7
+   Location: 789 Dundas St E, Waterdown, ON L8B 1G9
+   Phone: (905) 690-5555
+   Email: None
+   Website: https://awardwindows.ca
+
+13. Hamilton Strategic Consulting
+   Score: 62/100
+   Industry: Professional Services
+   Revenue: $1,028,122
+   Years: 16
+   Employees: 6
+   Location: 456 James St N, Hamilton, ON L8R 2L1
+   Phone: (905) 525-6600
+   Email: None
+   Website: https://campbellglass.ca
+
+14. Ancaster Professional Solutions
+   Score: 62/100
+   Industry: Professional Services
+   Revenue: $1,159,735
+   Years: 18
+   Employees: 8
+   Location: 1275 Golf Links Rd, Ancaster, ON L9K 1H9
+   Phone: (905) 648-5200
+   Email: None
+   Website: https://campbellglass.ca
+
+15. 360 Energy Inc
+   Score: 62/100
+   Industry: Professional Services
+   Revenue: $1,381,832
+   Years: 18
+   Employees: 12
+   Location: 1480 Sandhill Drive Unit 8B, Ancaster, ON L9G 4V5
+   Phone: (905) 304-6001
+   Email: None
+   Website: https://360energy.net
+
+16. Waterdown Equipment Rental Co.
+   Score: 61/100
+   Industry: Equipment Rental
+   Revenue: $898,467
+   Years: 16
+   Employees: 6
+   Location: 127 Dundas St E, Waterdown, ON L8B 2E4
+   Phone: (905) 690-1400
+   Email: None
+   Website: https://www.protoplast.com

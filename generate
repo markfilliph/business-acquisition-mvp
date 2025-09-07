@@ -1,0 +1,25 @@
+#!/bin/bash
+# Simple lead generation command
+# Usage: ./generate [count] [--show]
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
+cd "$SCRIPT_DIR"
+
+# Default count
+COUNT=${1:-10}
+
+# Check for --show flag
+SHOW_FLAG=""
+if [[ "$2" == "--show" ]] || [[ "$1" == "--show" ]]; then
+    SHOW_FLAG="--show-results"
+    # If --show is first arg, use default count
+    if [[ "$1" == "--show" ]]; then
+        COUNT=10
+    fi
+fi
+
+echo "🎯 Generating $COUNT leads..."
+
+# Activate virtual environment and run
+source automation_env/bin/activate
+PYTHONPATH="$SCRIPT_DIR" python3 scripts/generate_leads.py --count "$COUNT" $SHOW_FLAG

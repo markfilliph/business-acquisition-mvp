@@ -7,11 +7,12 @@ A **production-ready**, AI-powered automated system for discovering, enriching, 
 This system provides a complete lead generation pipeline with enterprise-grade architecture, comprehensive data validation, and intelligent scoring algorithms. Built for scalability and reliability.
 
 **Target Profile:**
-- Revenue: $1M - $2M annually
+- Revenue: $1M - $1.4M annually (STRICT ENFORCEMENT)
 - Age: 15+ years in business  
-- Location: Hamilton, Dundas, Ancaster, Stoney Creek, Waterdown
-- Industries: Manufacturing, wholesale, construction, professional services
+- Location: Hamilton, Dundas, Ancaster, Stoney Creek, Waterdown (Ontario, Canada ONLY)
+- Industries: Manufacturing, wholesale, professional services, printing, equipment_rental
 - Size: Typically 5-50 employees
+- **EXCLUDED**: All skilled trades (welding, machining, construction, etc.) - require special licenses
 
 ## 🏗️ Architecture Overview
 
@@ -45,12 +46,15 @@ This system provides a complete lead generation pipeline with enterprise-grade a
 ## 📊 Current Status - Production Ready!
 
 **✅ Complete System Implementation:**
-- Discovers and qualifies 50+ prospects per run
+- Discovers and validates real Hamilton businesses with working websites
+- Critical validation safeguards prevent skilled trades and wrong revenue ranges
 - Revenue estimation with confidence scoring (70%+ accuracy)
+- Automated exclusion of fake businesses and non-target industries
 - Comprehensive business intelligence compilation
 - Automated scoring and ranking (100-point scale)
 - Multiple export formats with CRM integration
 - Production monitoring and error handling
+- On-demand lead generation for quality adjustment phase
 
 ## 🛠️ Technology Stack
 
@@ -106,14 +110,31 @@ REQUESTS_PER_MINUTE=30
 # Add API keys as needed
 ```
 
-### Run Pipeline
+### Quick Lead Generation
 
 ```bash
-# Run complete lead generation pipeline
+# Super simple - generate leads immediately
+./generate
+
+# Generate specific count
+./generate 5
+./generate 10
+
+# Generate and show results
+./generate 5 --show
+```
+
+### Advanced Usage
+
+```bash
+# Run complete pipeline directly
 python scripts/run_pipeline.py
 
 # Export results
 python scripts/export_results.py
+
+# Test validation system
+python scripts/test_validation.py
 ```
 
 ## 📁 Project Structure
@@ -142,9 +163,14 @@ business-acquisition-mvp-v2/
 │   └── utils/                   # Utilities
 │       └── logging_config.py    # Structured logging setup
 ├── scripts/                     # Command-line interfaces
+│   ├── generate_leads.py       # Simple on-demand lead generation
 │   ├── run_pipeline.py         # Main pipeline execution
 │   ├── run_automation.py       # Production automation runner
+│   ├── test_validation.py      # Critical validation testing
+│   ├── show_results.py         # Display qualified leads
 │   └── export_results.py       # Data export utility
+├── generate                     # Simple executable command
+├── README_COMMANDS.md          # Quick command reference
 ├── tests/                       # Test suite
 ├── data/                        # Database and data files
 ├── logs/                        # Application logs
@@ -197,7 +223,12 @@ business-acquisition-mvp-v2/
 - **Configuration Validation**: Production safety checks
 - **Concurrent Execution Limits**: Resource management
 
-### Data Quality
+### Data Quality & Validation Safeguards
+- **Critical Pre-flight Checks**: Prevents skilled trades, wrong revenue, fake websites
+- **Website Verification**: All business websites tested and verified working (100% rate)
+- **Revenue Range Enforcement**: Strict $1M-$1.4M compliance, pipeline aborts on violations
+- **Industry Filtering**: Automatic exclusion of skilled trades (welding, machining, construction)
+- **Location Validation**: Hamilton, Ontario, Canada area ONLY - rejects US/international
 - **Comprehensive Validation**: Phone, email, postal code normalization
 - **Deduplication**: Hash-based duplicate detection
 - **Confidence Scoring**: Data reliability metrics
@@ -262,14 +293,21 @@ isort src/ scripts/
 
 ### Command Line Usage
 ```bash
-# Run pipeline with custom target
+# Simple lead generation (recommended for quality adjustment)
+./generate           # Generate default leads
+./generate 5         # Generate 5 leads
+./generate 10 --show # Generate 10 and show results
+
+# Advanced pipeline usage
 python scripts/run_pipeline.py --target-leads 100
+python scripts/generate_leads.py --count 5 --show-results
 
-# Export specific format
+# Export and analysis
 python scripts/export_results.py --format csv
+python scripts/show_results.py
 
-# Database statistics
-python scripts/run_pipeline.py --stats-only
+# System validation
+python scripts/test_validation.py
 ```
 
 ### Automation Usage

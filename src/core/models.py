@@ -42,6 +42,9 @@ class DataSource(str, Enum):
     MANUAL_RESEARCH = "manual_research"
     WEB_SCRAPING = "web_scraping"
     API_INTEGRATION = "api_integration"
+    OPENSTREETMAP = "openstreetmap"
+    VERIFIED_DATABASE = "verified_database"
+    BUSINESS_AGGREGATOR = "business_aggregator"
 
 
 class ContactInfo(BaseModel):

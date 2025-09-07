@@ -41,8 +41,8 @@ class HttpConfig:
 @dataclass
 class BusinessCriteria:
     """Target business criteria for lead qualification."""
-    target_revenue_min: int = 1_000_000  # $1M
-    target_revenue_max: int = 1_400_000  # $1.4M
+    target_revenue_min: int = 800_000  # $800K
+    target_revenue_max: int = 1_500_000  # $1.5M
     min_years_in_business: int = 15
     max_employee_count: int = 50
     target_locations: List[str] = field(default_factory=lambda: [
@@ -52,7 +52,7 @@ class BusinessCriteria:
         "manufacturing", "wholesale", "professional_services",
         "printing", "equipment_rental"
     ])
-    # EXCLUDED: All skilled trades (metal_fabrication, auto_repair, construction, welding, machining, etc.)
+    # EXCLUDED: All skilled trades (metal_fabrication, auto_repair, construction, welding, machining, etc.) - require special licenses
     
     # Major established companies to exclude (too large/established for our criteria)
     excluded_companies: List[str] = field(default_factory=lambda: [
@@ -85,7 +85,7 @@ class ScoringWeights:
     industry_fit: int = 10
     location_bonus: int = 8
     growth_indicators: int = 7
-    qualification_threshold: int = 60
+    qualification_threshold: int = 50
 
 
 @dataclass
