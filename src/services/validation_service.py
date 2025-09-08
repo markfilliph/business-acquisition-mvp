@@ -13,6 +13,12 @@ from ..core.config import SystemConfig
 from ..core.models import BusinessLead
 from ..core.exceptions import ValidationError
 from .noc_classification_service import NOCClassificationService
+try:
+    from .website_validation_service import WebsiteValidationService
+    WEBSITE_VALIDATION_AVAILABLE = True
+except ImportError:
+    WEBSITE_VALIDATION_AVAILABLE = False
+    WebsiteValidationService = None
 
 
 class BusinessValidationService:
@@ -23,6 +29,7 @@ class BusinessValidationService:
         self.logger = structlog.get_logger(__name__)
         self._validated_websites = set()  # Track unique websites to prevent duplicates
         self.noc_service = NOCClassificationService()  # NOC classification service
+        self.website_validator = WebsiteValidationService() if WEBSITE_VALIDATION_AVAILABLE else None  # Website validation service
         self.validation_stats = {
             'total_validated': 0,
             'website_checks_passed': 0,
@@ -89,7 +96,7 @@ class BusinessValidationService:
             )
             return False, issues
         
-        # 1. Website verification (critical)
+        # 1. Website verification (basic for now)
         if lead.contact.website:
             website_valid = await self._verify_website(lead.contact.website)
             if not website_valid:
@@ -98,7 +105,7 @@ class BusinessValidationService:
             else:
                 self.validation_stats['website_checks_passed'] += 1
                 
-                # 1b. Business-Website matching validation (critical)
+                # Basic business-website matching validation
                 business_website_match = await self._validate_business_website_match(lead.business_name, lead.contact.website)
                 if not business_website_match:
                     issues.append(f"Business name '{lead.business_name}' does not match website content from {lead.contact.website}")

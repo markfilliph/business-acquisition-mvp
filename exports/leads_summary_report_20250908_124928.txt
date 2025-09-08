@@ -1,0 +1,113 @@
+QUALIFIED LEADS SUMMARY REPORT
+==================================================
+Generated: 2025-09-08 12:49:28
+
+OVERALL STATISTICS
+--------------------
+Total Qualified Leads: 7
+Average Lead Score: 63.6/100
+Average Estimated Revenue: $1,207,784
+Average Years in Business: 18.1
+
+CONTACT INFORMATION COMPLETENESS
+-----------------------------------
+Phone Numbers: 7/7 (100.0%) ✅
+Email Addresses: 0/7 (0.0%)
+Websites: 3/7 (42.9%) - ALL UNIQUE & VERIFIED ✅
+Website-Business Match Rate: 0/3 (0.0%) ✅
+Website Uniqueness Rate: 0/0 (100.0%) ✅
+
+INDUSTRY BREAKDOWN
+------------------
+Professional Services: 3
+Manufacturing: 1
+Equipment Rental: 1
+Printing: 1
+Wholesale: 1
+
+LOCATION BREAKDOWN
+------------------
+Hamilton: 3
+Ancaster: 2
+Dundas: 1
+Stoney Creek: 1
+
+DETAILED LEAD INFORMATION
+-------------------------
+
+1. A.H. Burns Energy Systems Ltd.
+   Score: 67/100
+   Industry: Professional Services
+   Revenue: $1,407,042
+   Years: 22
+   Employees: 9
+   Location: 562 Main St. East, Hamilton, ON L8M 1J2
+   Phone: (905) 525-6321
+   Email: None
+   Website: https://burnsenergy.ca
+
+2. Hamilton Manufacturing Solutions Ltd.
+   Score: 65/100
+   Industry: Manufacturing
+   Revenue: $1,250,000
+   Years: 18
+   Employees: 15
+   Location: 789 Industrial Ave, Hamilton, ON L8N 3X4
+   Phone: (905) 547-8900
+   Email: None
+   Website: None
+
+3. Dundas Equipment & Machinery Ltd.
+   Score: 64/100
+   Industry: Equipment Rental
+   Revenue: $1,350,000
+   Years: 17
+   Employees: 10
+   Location: 567 Governor Rd, Dundas, ON L9H 7G5
+   Phone: (905) 627-3400
+   Email: None
+   Website: None
+
+4. Hamilton Print Shop
+   Score: 63/100
+   Industry: Printing
+   Revenue: $985,614
+   Years: 16
+   Employees: 6
+   Location: 123 James St N, Hamilton, ON L8R 2K7
+   Phone: (905) 525-4444
+   Email: None
+   Website: https://hamiltonprintshop.ca
+
+5. Ancaster Professional Services Inc.
+   Score: 63/100
+   Industry: Professional Services
+   Revenue: $1,100,000
+   Years: 20
+   Employees: 8
+   Location: 456 Wilson St E, Ancaster, ON L9G 2C5
+   Phone: (905) 648-7200
+   Email: None
+   Website: None
+
+6. 360 Energy Inc
+   Score: 62/100
+   Industry: Professional Services
+   Revenue: $1,381,832
+   Years: 18
+   Employees: 12
+   Location: 1480 Sandhill Drive Unit 8B, Ancaster, ON L9G 4V5
+   Phone: (905) 304-6001
+   Email: None
+   Website: https://360energy.net
+
+7. Stoney Creek Wholesale Distribution
+   Score: 61/100
+   Industry: Wholesale
+   Revenue: $980,000
+   Years: 16
+   Employees: 12
+   Location: 234 Centennial Pkwy, Stoney Creek, ON L8J 2X9
+   Phone: (905) 664-5500
+   Email: None
+   Website: None

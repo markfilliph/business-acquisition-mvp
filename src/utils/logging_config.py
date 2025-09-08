@@ -87,3 +87,8 @@ def setup_logging(environment: str = "development") -> None:
         wrapper_class=structlog.stdlib.BoundLogger,
         cache_logger_on_first_use=True,
     )
+
+
+def get_logger(name: str = None):
+    """Get a structured logger instance."""
+    return structlog.get_logger(name)

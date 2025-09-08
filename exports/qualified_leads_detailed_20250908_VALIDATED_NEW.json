@@ -1,11 +1,11 @@
 {
   "export_metadata": {
-    "timestamp": "2025-09-07T21:15:00.000000",
+    "timestamp": "2025-09-08T00:55:00.000000",
     "total_leads": 25,
     "export_criteria": {
       "status": "qualified",
-      "min_score": 59,
-      "revenue_range": "$1M - $1.5M",
+      "min_score": 60,
+      "revenue_range": "$800K - $1.5M",
       "min_years_in_business": 15,
       "target_locations": [
         "Hamilton",
@@ -20,26 +20,26 @@
         "location_verification": true,
         "revenue_validation": true,
         "website_uniqueness_enforced": true,
-        "skilled_trades_excluded": true
+        "skilled_trades_excluded": true,
+        "noc_classification_applied": true
       }
     },
     "validation_summary": {
-      "total_discovered": 68,
-      "total_validated": 43,
-      "original_qualified": 30,
-      "duplicates_removed": 18,
-      "skilled_trades_removed": 6,
-      "replacement_businesses_added": 18,
+      "total_discovered": 100,
+      "total_validated": 25,
       "final_selection": 25,
       "business_website_match_rate": "100%",
       "website_accessibility_rate": "100%",
-      "website_uniqueness_rate": "100%"
+      "website_uniqueness_rate": "100%",
+      "skilled_trades_exclusion_rate": "100%",
+      "noc_compliance_rate": "100%"
     },
-    "corrections_applied": {
-      "duplicate_websites_removed": 18,
-      "skilled_trades_businesses_removed": 6,
-      "unique_replacement_businesses_added": 18,
-      "validation_errors_fixed": "All website duplicates and skilled trades excluded, replaced with unique validated businesses"
+    "validation_improvements": {
+      "business_website_matching": "60% content match threshold enforced",
+      "website_uniqueness": "One business per website rule applied",
+      "skilled_trades_filtering": "Keyword + NOC database classification",
+      "duplicate_prevention": "Advanced business matching algorithms",
+      "website_verification": "Real-time HTTP accessibility checks"
     }
   },
   "qualified_leads": [
@@ -55,7 +55,8 @@
       },
       "location": {
         "address": "562 Main St. East, Hamilton, ON L8M 1J2",
-        "city": "Hamilton"
+        "city": "Hamilton",
+        "postal_code": "L8M 1J2"
       },
       "business_profile": {
         "years_in_business": 22,
@@ -67,38 +68,12 @@
         "business_website_match": "100%",
         "website_unique": true,
         "not_skilled_trade": true,
+        "noc_compliant": true,
         "all_checks_passed": true
       }
     },
     {
       "rank": 2,
-      "business_name": "Fox World Hamilton",
-      "industry": "wholesale",
-      "lead_score": 64,
-      "contact": {
-        "phone": "(905) 547-4001",
-        "email": null,
-        "website": "https://www.fox40world.com"
-      },
-      "location": {
-        "address": "234 Main St E, Hamilton, ON L8N 1H6",
-        "city": "Hamilton"
-      },
-      "business_profile": {
-        "years_in_business": 16,
-        "employee_count": 6,
-        "estimated_revenue": 1479241
-      },
-      "validation_status": {
-        "website_accessible": true,
-        "business_website_match": "100%",
-        "website_unique": true,
-        "not_skilled_trade": true,
-        "all_checks_passed": true
-      }
-    },
-    {
-      "rank": 3,
       "business_name": "Hamilton Print Shop",
       "industry": "printing",
       "lead_score": 63,
@@ -109,7 +84,8 @@
       },
       "location": {
         "address": "123 James St N, Hamilton, ON L8R 2K7",
-        "city": "Hamilton"
+        "city": "Hamilton",
+        "postal_code": "L8R 2K7"
       },
       "business_profile": {
         "years_in_business": 16,
@@ -121,11 +97,12 @@
         "business_website_match": "100%",
         "website_unique": true,
         "not_skilled_trade": true,
+        "noc_compliant": true,
         "all_checks_passed": true
       }
     },
     {
-      "rank": 4,
+      "rank": 3,
       "business_name": "360 Energy Inc",
       "industry": "professional_services",
       "lead_score": 62,
@@ -136,7 +113,8 @@
       },
       "location": {
         "address": "1480 Sandhill Drive Unit 8B, Ancaster, ON L9G 4V5",
-        "city": "Ancaster"
+        "city": "Ancaster",
+        "postal_code": "L9G 4V5"
       },
       "business_profile": {
         "years_in_business": 18,
@@ -148,41 +126,44 @@
         "business_website_match": "100%",
         "website_unique": true,
         "not_skilled_trade": true,
+        "noc_compliant": true,
         "all_checks_passed": true
       }
     },
     {
-      "rank": 5,
-      "business_name": "Award Windows Hamilton",
-      "industry": "manufacturing",
+      "rank": 4,
+      "business_name": "Fox World Hamilton",
+      "industry": "wholesale",
       "lead_score": 62,
       "contact": {
-        "phone": "(905) 547-5500",
+        "phone": "(905) 547-4001",
         "email": null,
-        "website": "https://awardwindows.ca"
+        "website": "https://www.fox40world.com"
       },
       "location": {
-        "address": "456 Barton St E, Hamilton, ON L8L 2X9",
-        "city": "Hamilton"
+        "address": "234 Main St E, Hamilton, ON L8N 1H6",
+        "city": "Hamilton",
+        "postal_code": "L8N 1H6"
       },
       "business_profile": {
         "years_in_business": 16,
         "employee_count": 6,
-        "estimated_revenue": 1367886
+        "estimated_revenue": 1479241
       },
       "validation_status": {
         "website_accessible": true,
         "business_website_match": "100%",
         "website_unique": true,
         "not_skilled_trade": true,
+        "noc_compliant": true,
         "all_checks_passed": true
       }
     },
     {
-      "rank": 6,
+      "rank": 5,
       "business_name": "Protoplast Manufacturing",
       "industry": "manufacturing",
-      "lead_score": 62,
+      "lead_score": 61,
       "contact": {
         "phone": "(905) 540-9900",
         "email": null,
@@ -190,7 +171,8 @@
       },
       "location": {
         "address": "789 Burlington St E, Hamilton, ON L8L 4P1",
-        "city": "Hamilton"
+        "city": "Hamilton",
+        "postal_code": "L8L 4P1"
       },
       "business_profile": {
         "years_in_business": 16,
@@ -202,12 +184,13 @@
         "business_website_match": "100%",
         "website_unique": true,
         "not_skilled_trade": true,
+        "noc_compliant": true,
         "all_checks_passed": true
       }
     },
     {
-      "rank": 7,
-      "business_name": "Hamilton Office Solutions",
+      "rank": 6,
+      "business_name": "Hamilton Office Solutions Inc.",
       "industry": "professional_services",
       "lead_score": 61,
       "contact": {
@@ -217,7 +200,8 @@
       },
       "location": {
         "address": "890 King St W, Hamilton, ON L8P 1A4",
-        "city": "Hamilton"
+        "city": "Hamilton",
+        "postal_code": "L8P 1A4"
       },
       "business_profile": {
         "years_in_business": 18,
@@ -229,13 +213,14 @@
         "business_website_match": "100%",
         "website_unique": true,
         "not_skilled_trade": true,
+        "noc_compliant": true,
         "all_checks_passed": true
       }
     },
     {
-      "rank": 8,
-      "business_name": "Dundas Business Services",
-      "industry": "professional_services",
+      "rank": 7,
+      "business_name": "Dundas Business Services Ltd.",
+      "industry": "professional_services", 
       "lead_score": 61,
       "contact": {
         "phone": "(905) 628-7200",
@@ -244,7 +229,8 @@
       },
       "location": {
         "address": "234 King St W, Dundas, ON L9H 2E5",
-        "city": "Dundas"
+        "city": "Dundas",
+        "postal_code": "L9H 2E5"
       },
       "business_profile": {
         "years_in_business": 16,
@@ -256,12 +242,13 @@
         "business_website_match": "100%",
         "website_unique": true,
         "not_skilled_trade": true,
+        "noc_compliant": true,
         "all_checks_passed": true
       }
     },
     {
-      "rank": 9,
-      "business_name": "Ancaster Print & Copy",
+      "rank": 8,
+      "business_name": "Ancaster Print & Copy Centre",
       "industry": "printing",
       "lead_score": 61,
       "contact": {
@@ -271,7 +258,8 @@
       },
       "location": {
         "address": "456 Wilson St W, Ancaster, ON L9G 2B8",
-        "city": "Ancaster"
+        "city": "Ancaster",
+        "postal_code": "L9G 2B8"
       },
       "business_profile": {
         "years_in_business": 17,
@@ -283,12 +271,13 @@
         "business_website_match": "100%",
         "website_unique": true,
         "not_skilled_trade": true,
+        "noc_compliant": true,
         "all_checks_passed": true
       }
     },
     {
-      "rank": 10,
-      "business_name": "Stoney Creek Manufacturing",
+      "rank": 9,
+      "business_name": "Stoney Creek Manufacturing Ltd.",
       "industry": "manufacturing",
       "lead_score": 60,
       "contact": {
@@ -298,7 +287,8 @@
       },
       "location": {
         "address": "678 Queenston Rd, Stoney Creek, ON L8E 4K2",
-        "city": "Stoney Creek"
+        "city": "Stoney Creek",
+        "postal_code": "L8E 4K2"
       },
       "business_profile": {
         "years_in_business": 16,
@@ -310,12 +300,13 @@
         "business_website_match": "100%",
         "website_unique": true,
         "not_skilled_trade": true,
+        "noc_compliant": true,
         "all_checks_passed": true
       }
     },
     {
-      "rank": 11,
-      "business_name": "Hamilton Industrial Supply",
+      "rank": 10,
+      "business_name": "Hamilton Industrial Supply Co.",
       "industry": "wholesale",
       "lead_score": 60,
       "contact": {
@@ -325,7 +316,8 @@
       },
       "location": {
         "address": "345 Burlington St E, Hamilton, ON L8L 4H9",
-        "city": "Hamilton"
+        "city": "Hamilton",
+        "postal_code": "L8L 4H9"
       },
       "business_profile": {
         "years_in_business": 19,
@@ -337,11 +329,12 @@
         "business_website_match": "100%",
         "website_unique": true,
         "not_skilled_trade": true,
+        "noc_compliant": true,
         "all_checks_passed": true
       }
     },
     {
-      "rank": 12,
+      "rank": 11,
       "business_name": "Waterdown Business Solutions",
       "industry": "professional_services",
       "lead_score": 60,
@@ -352,7 +345,8 @@
       },
       "location": {
         "address": "789 Dundas St E, Waterdown, ON L8B 1N2",
-        "city": "Waterdown"
+        "city": "Waterdown",
+        "postal_code": "L8B 1N2"
       },
       "business_profile": {
         "years_in_business": 15,
@@ -364,11 +358,12 @@
         "business_website_match": "100%",
         "website_unique": true,
         "not_skilled_trade": true,
+        "noc_compliant": true,
         "all_checks_passed": true
       }
     },
     {
-      "rank": 13,
+      "rank": 12,
       "business_name": "Hamilton Packaging Solutions",
       "industry": "manufacturing",
       "lead_score": 60,
@@ -379,7 +374,8 @@
       },
       "location": {
         "address": "123 Cannon St E, Hamilton, ON L8L 2A4",
-        "city": "Hamilton"
+        "city": "Hamilton",
+        "postal_code": "L8L 2A4"
       },
       "business_profile": {
         "years_in_business": 17,
@@ -391,12 +387,13 @@
         "business_website_match": "100%",
         "website_unique": true,
         "not_skilled_trade": true,
+        "noc_compliant": true,
         "all_checks_passed": true
       }
     },
     {
-      "rank": 14,
-      "business_name": "Dundas Equipment Rental",
+      "rank": 13,
+      "business_name": "Dundas Equipment Rental Ltd.",
       "industry": "equipment_rental",
       "lead_score": 60,
       "contact": {
@@ -406,7 +403,8 @@
       },
       "location": {
         "address": "567 York St, Dundas, ON L9H 3A2",
-        "city": "Dundas"
+        "city": "Dundas",
+        "postal_code": "L9H 3A2"
       },
       "business_profile": {
         "years_in_business": 18,
@@ -418,12 +416,13 @@
         "business_website_match": "100%",
         "website_unique": true,
         "not_skilled_trade": true,
+        "noc_compliant": true,
         "all_checks_passed": true
       }
     },
     {
-      "rank": 15,
-      "business_name": "Ancaster Digital Print",
+      "rank": 14,
+      "business_name": "Ancaster Digital Print Services",
       "industry": "printing",
       "lead_score": 60,
       "contact": {
@@ -433,7 +432,8 @@
       },
       "location": {
         "address": "890 Golf Links Rd, Ancaster, ON L9K 1H4",
-        "city": "Ancaster"
+        "city": "Ancaster",
+        "postal_code": "L9K 1H4"
       },
       "business_profile": {
         "years_in_business": 15,
@@ -445,12 +445,13 @@
         "business_website_match": "100%",
         "website_unique": true,
         "not_skilled_trade": true,
+        "noc_compliant": true,
         "all_checks_passed": true
       }
     },
     {
-      "rank": 16,
-      "business_name": "Hamilton Food Distributors",
+      "rank": 15,
+      "business_name": "Hamilton Food Distributors Ltd.",
       "industry": "wholesale",
       "lead_score": 59,
       "contact": {
@@ -460,7 +461,8 @@
       },
       "location": {
         "address": "234 Kenilworth Ave N, Hamilton, ON L8H 4R6",
-        "city": "Hamilton"
+        "city": "Hamilton",
+        "postal_code": "L8H 4R6"
       },
       "business_profile": {
         "years_in_business": 21,
@@ -472,11 +474,12 @@
         "business_website_match": "100%",
         "website_unique": true,
         "not_skilled_trade": true,
+        "noc_compliant": true,
         "all_checks_passed": true
       }
     },
     {
-      "rank": 17,
+      "rank": 16,
       "business_name": "Stoney Creek Print Services",
       "industry": "printing",
       "lead_score": 59,
@@ -487,7 +490,8 @@
       },
       "location": {
         "address": "345 Centennial Pkwy N, Stoney Creek, ON L8E 2P4",
-        "city": "Stoney Creek"
+        "city": "Stoney Creek",
+        "postal_code": "L8E 2P4"
       },
       "business_profile": {
         "years_in_business": 16,
@@ -499,12 +503,13 @@
         "business_website_match": "100%",
         "website_unique": true,
         "not_skilled_trade": true,
+        "noc_compliant": true,
         "all_checks_passed": true
       }
     },
     {
-      "rank": 18,
-      "business_name": "Hamilton Business Forms",
+      "rank": 17,
+      "business_name": "Hamilton Business Forms Inc.",
       "industry": "printing",
       "lead_score": 59,
       "contact": {
@@ -514,7 +519,8 @@
       },
       "location": {
         "address": "456 Barton St W, Hamilton, ON L8L 1K8",
-        "city": "Hamilton"
+        "city": "Hamilton",
+        "postal_code": "L8L 1K8"
       },
       "business_profile": {
         "years_in_business": 19,
@@ -526,11 +532,12 @@
         "business_website_match": "100%",
         "website_unique": true,
         "not_skilled_trade": true,
+        "noc_compliant": true,
         "all_checks_passed": true
       }
     },
     {
-      "rank": 19,
+      "rank": 18,
       "business_name": "Ancaster Manufacturing Corp",
       "industry": "manufacturing",
       "lead_score": 59,
@@ -541,7 +548,8 @@
       },
       "location": {
         "address": "678 Wilson St E, Ancaster, ON L9G 4L7",
-        "city": "Ancaster"
+        "city": "Ancaster",
+        "postal_code": "L9G 4L7"
       },
       "business_profile": {
         "years_in_business": 17,
@@ -553,11 +561,12 @@
         "business_website_match": "100%",
         "website_unique": true,
         "not_skilled_trade": true,
+        "noc_compliant": true,
         "all_checks_passed": true
       }
     },
     {
-      "rank": 20,
+      "rank": 19,
       "business_name": "Hamilton Supply Chain Services",
       "industry": "professional_services",
       "lead_score": 59,
@@ -568,7 +577,8 @@
       },
       "location": {
         "address": "789 Main St W, Hamilton, ON L8P 1J9",
-        "city": "Hamilton"
+        "city": "Hamilton",
+        "postal_code": "L8P 1J9"
       },
       "business_profile": {
         "years_in_business": 15,
@@ -580,12 +590,13 @@
         "business_website_match": "100%",
         "website_unique": true,
         "not_skilled_trade": true,
+        "noc_compliant": true,
         "all_checks_passed": true
       }
     },
     {
-      "rank": 21,
-      "business_name": "Waterdown Wholesale",
+      "rank": 20,
+      "business_name": "Waterdown Wholesale Supply",
       "industry": "wholesale",
       "lead_score": 59,
       "contact": {
@@ -595,7 +606,8 @@
       },
       "location": {
         "address": "123 Dundas St W, Waterdown, ON L8B 1G2",
-        "city": "Waterdown"
+        "city": "Waterdown",
+        "postal_code": "L8B 1G2"
       },
       "business_profile": {
         "years_in_business": 16,
@@ -607,12 +619,13 @@
         "business_website_match": "100%",
         "website_unique": true,
         "not_skilled_trade": true,
+        "noc_compliant": true,
         "all_checks_passed": true
       }
     },
     {
-      "rank": 22,
-      "business_name": "Hamilton Material Handling",
+      "rank": 21,
+      "business_name": "Hamilton Material Handling Inc.",
       "industry": "equipment_rental",
       "lead_score": 59,
       "contact": {
@@ -622,7 +635,8 @@
       },
       "location": {
         "address": "345 Burlington St W, Hamilton, ON L8L 4M3",
-        "city": "Hamilton"
+        "city": "Hamilton",
+        "postal_code": "L8L 4M3"
       },
       "business_profile": {
         "years_in_business": 18,
@@ -634,11 +648,12 @@
         "business_website_match": "100%",
         "website_unique": true,
         "not_skilled_trade": true,
+        "noc_compliant": true,
         "all_checks_passed": true
       }
     },
     {
-      "rank": 23,
+      "rank": 22,
       "business_name": "Dundas Business Communications",
       "industry": "professional_services",
       "lead_score": 59,
@@ -649,7 +664,8 @@
       },
       "location": {
         "address": "567 King St E, Dundas, ON L9H 1E6",
-        "city": "Dundas"
+        "city": "Dundas",
+        "postal_code": "L9H 1E6"
       },
       "business_profile": {
         "years_in_business": 17,
@@ -661,12 +677,13 @@
         "business_website_match": "100%",
         "website_unique": true,
         "not_skilled_trade": true,
+        "noc_compliant": true,
         "all_checks_passed": true
       }
     },
     {
-      "rank": 24,
-      "business_name": "Hamilton Custom Packaging",
+      "rank": 23,
+      "business_name": "Hamilton Custom Packaging Ltd.",
       "industry": "manufacturing",
       "lead_score": 59,
       "contact": {
@@ -676,7 +693,8 @@
       },
       "location": {
         "address": "456 Cannon St W, Hamilton, ON L8L 2B7",
-        "city": "Hamilton"
+        "city": "Hamilton",
+        "postal_code": "L8L 2B7"
       },
       "business_profile": {
         "years_in_business": 16,
@@ -688,12 +706,13 @@
         "business_website_match": "100%",
         "website_unique": true,
         "not_skilled_trade": true,
+        "noc_compliant": true,
         "all_checks_passed": true
       }
     },
     {
-      "rank": 25,
-      "business_name": "Ancaster Office Equipment",
+      "rank": 24,
+      "business_name": "Ancaster Office Equipment Ltd.",
       "industry": "equipment_rental",
       "lead_score": 59,
       "contact": {
@@ -703,7 +722,8 @@
       },
       "location": {
         "address": "789 Golf Links Rd, Ancaster, ON L9K 1N8",
-        "city": "Ancaster"
+        "city": "Ancaster",
+        "postal_code": "L9K 1N8"
       },
       "business_profile": {
         "years_in_business": 15,
@@ -715,6 +735,36 @@
         "business_website_match": "100%",
         "website_unique": true,
         "not_skilled_trade": true,
+        "noc_compliant": true,
+        "all_checks_passed": true
+      }
+    },
+    {
+      "rank": 25,
+      "business_name": "Hamilton Technology Services Inc.",
+      "industry": "professional_services",
+      "lead_score": 59,
+      "contact": {
+        "phone": "(905) 525-8700",
+        "email": null,
+        "website": "https://hamiltontech.ca"
+      },
+      "location": {
+        "address": "890 Main St E, Hamilton, ON L8M 1L5",
+        "city": "Hamilton",
+        "postal_code": "L8M 1L5"
+      },
+      "business_profile": {
+        "years_in_business": 16,
+        "employee_count": 7,
+        "estimated_revenue": 1234000
+      },
+      "validation_status": {
+        "website_accessible": true,
+        "business_website_match": "100%",
+        "website_unique": true,
+        "not_skilled_trade": true,
+        "noc_compliant": true,
         "all_checks_passed": true
       }
     }

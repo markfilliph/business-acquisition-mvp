@@ -53,6 +53,15 @@ class ContactInfo(BaseModel):
     email: Optional[str] = None
     website: Optional[str] = None
     
+    # Website validation fields
+    website_validated: bool = False
+    website_validation_timestamp: Optional[datetime] = None
+    website_status_code: Optional[int] = None
+    website_response_time: Optional[float] = None
+    website_business_name_match: float = 0.0
+    website_has_ssl: bool = False
+    website_validation_error: Optional[str] = None
+    
     @field_validator('phone')
     @classmethod
     def validate_phone(cls, v):
@@ -106,6 +115,27 @@ class ContactInfo(BaseModel):
             pass
         
         return None
+    
+    def is_website_verified(self) -> bool:
+        """Check if website is properly verified."""
+        return (
+            self.website_validated and
+            self.website_status_code == 200 and
+            self.website_business_name_match >= 0.6 and
+            not self.website_validation_error
+        )
+    
+    def update_website_validation(self, validation_result):
+        """Update website validation fields from validation result."""
+        from datetime import datetime
+        
+        self.website_validated = validation_result.is_accessible
+        self.website_validation_timestamp = datetime.utcnow()
+        self.website_status_code = validation_result.status_code
+        self.website_response_time = validation_result.response_time
+        self.website_business_name_match = validation_result.business_name_match
+        self.website_has_ssl = validation_result.has_ssl
+        self.website_validation_error = validation_result.error_message
 
 
 class LocationInfo(BaseModel):

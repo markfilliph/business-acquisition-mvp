@@ -39,6 +39,20 @@ class HttpConfig:
 
 
 @dataclass
+class WebsiteValidationConfig:
+    """Website validation configuration settings."""
+    enabled: bool = True
+    timeout_seconds: float = 10.0
+    max_retries: int = 3
+    min_business_name_match: float = 0.6
+    require_ssl: bool = False
+    max_response_time: float = 10.0
+    require_business_content: bool = True
+    parallel_validation_limit: int = 5
+    cache_validation_hours: int = 24
+
+
+@dataclass
 class BusinessCriteria:
     """Target business criteria for lead qualification."""
     target_revenue_min: int = 800_000  # $800K
@@ -110,6 +124,7 @@ class SystemConfig:
     # Sub-configurations
     database: DatabaseConfig = field(default_factory=DatabaseConfig)
     http: HttpConfig = field(default_factory=HttpConfig)
+    website_validation: WebsiteValidationConfig = field(default_factory=WebsiteValidationConfig)
     business_criteria: BusinessCriteria = field(default_factory=BusinessCriteria)
     scoring: ScoringWeights = field(default_factory=ScoringWeights)
     logging: LoggingConfig = field(default_factory=LoggingConfig)

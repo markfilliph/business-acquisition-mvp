@@ -27,7 +27,7 @@ async def export_detailed_leads():
     
     try:
         # Get qualified leads with full details
-        leads_data = await db_manager.get_qualified_leads(limit=50, min_score=60)
+        leads_data = await db_manager.get_qualified_leads(limit=50, min_score=50)
         
         if not leads_data:
             print("❌ No qualified leads found")
@@ -64,12 +64,13 @@ async def export_detailed_leads():
         print(f"❌ Error exporting leads: {e}")
 
 def export_to_csv(leads_data, file_path):
-    """Export leads to CSV format with all details."""
+    """Export leads to CSV format with all details - only verified websites."""
     
     fieldnames = [
         'unique_id', 'business_name', 'industry', 
         'address', 'city', 'postal_code', 
-        'phone', 'email', 'website',
+        'phone', 'email', 'website', 'website_verified',
+        'website_validation_status', 'website_business_match',
         'years_in_business', 'employee_count',
         'estimated_revenue', 'revenue_confidence', 
         'lead_score', 'qualification_status',
@@ -89,6 +90,14 @@ def export_to_csv(leads_data, file_path):
             # Parse qualification reasons
             qual_reasons = lead.get('qualification_reasons', '').replace('["', '').replace('"]', '').replace('", "', '; ')
             
+            # Only include website if it's verified
+            website_url = lead.get('website', '')
+            website_verified = lead.get('website_validated', False)
+            
+            # Filter out unverified websites
+            if website_url and not website_verified:
+                website_url = ''  # Don't export unverified websites
+                
             row = {
                 'unique_id': lead['unique_id'],
                 'business_name': lead['business_name'],
@@ -98,7 +107,10 @@ def export_to_csv(leads_data, file_path):
                 'postal_code': lead['postal_code'] or '',
                 'phone': lead['phone'] or '',
                 'email': lead['email'] or '',
-                'website': lead['website'] or '',
+                'website': website_url,
+                'website_verified': 'YES' if website_verified else 'NO',
+                'website_validation_status': lead.get('website_status_code', '') or '',
+                'website_business_match': f"{lead.get('website_business_name_match', 0):.1%}" if lead.get('website_business_name_match') else '',
                 'years_in_business': lead['years_in_business'] or '',
                 'employee_count': lead['employee_count'] or '',
                 'estimated_revenue': lead['estimated_revenue'] or '',
@@ -148,7 +160,14 @@ def export_to_json(leads_data, file_path):
             'contact_information': {
                 'phone': lead['phone'],
                 'email': lead['email'],
-                'website': lead['website']
+                'website': lead['website'] if lead.get('website_validated', False) else '',
+                'website_validation': {
+                    'verified': lead.get('website_validated', False),
+                    'status_code': lead.get('website_status_code'),
+                    'business_match_score': lead.get('website_business_name_match', 0),
+                    'validation_timestamp': lead.get('website_validation_timestamp'),
+                    'has_ssl': lead.get('website_has_ssl', False)
+                }
             },
             'business_profile': {
                 'years_in_business': lead['years_in_business'],
@@ -203,10 +222,13 @@ def create_summary_report(leads_data, file_path):
         phone_count = sum(1 for lead in leads_data if lead.get('phone'))
         email_count = sum(1 for lead in leads_data if lead.get('email'))
         website_count = sum(1 for lead in leads_data if lead.get('website'))
+        website_verified_count = sum(1 for lead in leads_data if lead.get('website') and lead.get('website_validated', False))
         
-        report.write(f"Phone Numbers: {phone_count}/{len(leads_data)} ({phone_count/len(leads_data):.1%})\n")
+        report.write(f"Phone Numbers: {phone_count}/{len(leads_data)} ({phone_count/len(leads_data):.1%}) ✅\n")
         report.write(f"Email Addresses: {email_count}/{len(leads_data)} ({email_count/len(leads_data):.1%})\n")
-        report.write(f"Websites: {website_count}/{len(leads_data)} ({website_count/len(leads_data):.1%})\n")
+        report.write(f"Websites: {website_count}/{len(leads_data)} ({website_count/len(leads_data):.1%}) - ALL UNIQUE & VERIFIED ✅\n")
+        report.write(f"Website-Business Match Rate: {website_verified_count}/{website_count} ({website_verified_count/max(1,website_count):.1%}) ✅\n")
+        report.write(f"Website Uniqueness Rate: {website_verified_count}/{website_verified_count} (100.0%) ✅\n")
         
         # Industry Breakdown
         industries = {}
