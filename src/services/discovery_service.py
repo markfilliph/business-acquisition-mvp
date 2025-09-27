@@ -198,16 +198,6 @@ class EthicalDiscoveryService:
                     'data_source': DataSource.HAMILTON_CHAMBER
                 },
                 {
-                    'business_name': 'Campbell Glass & Mirror',
-                    'address': '1049 King St W, Hamilton, ON L8S 1L3',
-                    'phone': '905-527-2751',
-                    'website': 'campbellglass.ca',
-                    'industry': 'manufacturing',
-                    'years_in_business': 19,  # Established 2006
-                    'employee_count': 6,  # Adjusted for target revenue range
-                    'data_source': DataSource.HAMILTON_CHAMBER
-                },
-                {
                     'business_name': 'Protoplast Inc.',
                     'address': '1150 Stone Church Rd E, Hamilton, ON L8W 2X7',
                     'phone': '905-574-7217',
@@ -345,16 +335,6 @@ class EthicalDiscoveryService:
                     'years_in_business': 21,  # Established 2004
                     'employee_count': 6,  # Reduced for target revenue range
                     'data_source': DataSource.YELLOWPAGES
-                },
-                {
-                    'business_name': 'Dundas Professional Group',
-                    'address': '321 King St W, Dundas, ON L9H 1W2',
-                    'phone': '905-627-3333',
-                    'website': 'www.protoplast.com',  # Using working website
-                    'industry': 'professional_services',
-                    'years_in_business': 18,  # Established 2007
-                    'employee_count': 5,
-                    'data_source': DataSource.YELLOWPAGES
                 }
             ]
         except Exception as e:
@@ -383,17 +363,6 @@ class EthicalDiscoveryService:
                     'data_source': DataSource.GOOGLE_BUSINESS
                 },
                 {
-                    # Real Hamilton-based manufacturing business - VERIFIED location
-                    'business_name': 'Award Windows & Doors',
-                    'address': '70 Unsworth Dr, Unit 10, Hamilton, ON L8W 3K4',
-                    'phone': '905-420-1933',
-                    'website': 'awardwindows.ca',
-                    'industry': 'manufacturing',
-                    'years_in_business': 25,  # Established company
-                    'employee_count': 9,  # Adjusted for target revenue range
-                    'data_source': DataSource.GOOGLE_BUSINESS
-                },
-                {
                     'business_name': 'Birnie Plumbing & Drains',
                     'address': 'Hamilton, ON',
                     'phone': '905-544-3030',
@@ -409,36 +378,6 @@ class EthicalDiscoveryService:
                     'phone': '905-828-9200',
                     'website': 'www.tcr-machining.com',
                     'industry': 'manufacturing',
-                    'years_in_business': 16,  # Established 2009
-                    'employee_count': 7,
-                    'data_source': DataSource.GOOGLE_BUSINESS
-                },
-                {
-                    'business_name': 'Hamilton Print Shop',
-                    'address': '123 James St N, Hamilton, ON L8R 2K7',
-                    'phone': '905-525-4444',
-                    'website': 'burnsenergy.ca',  # Using working website
-                    'industry': 'printing',
-                    'years_in_business': 17,  # Established 2008
-                    'employee_count': 6,
-                    'data_source': DataSource.GOOGLE_BUSINESS
-                },
-                {
-                    'business_name': 'Ancaster Equipment Solutions',
-                    'address': '456 Wilson St E, Ancaster, ON L9G 1L8',
-                    'phone': '905-648-8888',
-                    'website': 'campbellglass.ca',  # Using working website
-                    'industry': 'equipment_rental',
-                    'years_in_business': 19,  # Established 2006
-                    'employee_count': 5,
-                    'data_source': DataSource.GOOGLE_BUSINESS
-                },
-                {
-                    'business_name': 'Waterdown Business Services',
-                    'address': '789 Dundas St E, Waterdown, ON L8B 1G9',
-                    'phone': '905-690-5555',
-                    'website': 'awardwindows.ca',  # Using working website
-                    'industry': 'professional_services',
                     'years_in_business': 16,  # Established 2009
                     'employee_count': 7,
                     'data_source': DataSource.GOOGLE_BUSINESS
