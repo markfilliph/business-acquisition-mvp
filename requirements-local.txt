@@ -1,0 +1,25 @@
+# Core Dependencies
+ollama==0.1.8
+pydantic==2.6.0
+pandas==2.0.3
+requests==2.31.0
+
+# Web Scraping
+selenium==4.15.0
+beautifulsoup4==4.12.2
+playwright==1.40.0
+playwright-stealth==1.0.6
+
+# RAG & Vector DB
+chromadb==0.4.22
+langchain==0.1.0
+langchain-community==0.0.10
+langchain-ollama==0.0.1
+
+# Data Processing
+openpyxl==3.1.2
+python-dotenv==1.0.0
+
+# Optional: For better structured outputs
+instructor==0.4.0
+jsonschema==4.20.0
