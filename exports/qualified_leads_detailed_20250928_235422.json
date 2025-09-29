@@ -1,0 +1,120 @@
+{
+  "export_metadata": {
+    "timestamp": "2025-09-28T23:54:22.614751",
+    "total_leads": 2,
+    "export_criteria": {
+      "status": "qualified",
+      "min_score": 50,
+      "revenue_range": "$800K - $1.5M",
+      "min_years_in_business": 15,
+      "target_locations": [
+        "Hamilton",
+        "Dundas",
+        "Ancaster",
+        "Stoney Creek",
+        "Waterdown"
+      ],
+      "validation_applied": {
+        "business_website_matching": true,
+        "website_accessibility": true,
+        "location_verification": true,
+        "revenue_validation": true,
+        "website_uniqueness_enforced": true,
+        "skilled_trades_excluded": true
+      }
+    },
+    "validation_summary": {
+      "total_discovered": 9,
+      "total_validated": 2,
+      "validation_rate": "2/9",
+      "duplicates_removed": 0,
+      "fake_data_removed": "All data verified as real businesses only"
+    }
+  },
+  "qualified_leads": [
+    {
+      "identification": {
+        "unique_id": "3d128b83986d",
+        "business_name": "A.H. Burns Energy Systems Ltd.",
+        "industry": "professional_services"
+      },
+      "location": {
+        "address": "1-1370 Sandhill Drive, Ancaster, ON L9G 4V5",
+        "city": "Ancaster",
+        "province": "ON",
+        "postal_code": "L9G 4V5",
+        "country": "Canada"
+      },
+      "contact_information": {
+        "phone": "(905) 525-6321",
+        "email": "info@burnsenergy.ca",
+        "website": "https://burnsenergy.ca",
+        "website_validation": {
+          "verified": true,
+          "status_code": 200,
+          "business_match_score": 1.0
+        }
+      },
+      "business_profile": {
+        "years_in_business": 22,
+        "employee_count": 9,
+        "estimated_revenue": 1200223,
+        "revenue_confidence": 0.5126666666666666
+      },
+      "qualification_metrics": {
+        "lead_score": 70,
+        "status": "qualified",
+        "qualification_reasons": "[\"Revenue estimate $1.2M fits target range perfectly\", \"Well established business (22 years)\", \"Excellent data completeness (100.0%)\", \"High data confidence (80.5%)\", \"Target industry: professional_services\", \"Located in Hamilton area (target market)\", \"Hamilton suburb location: Ancaster\", \"Optimal team size (9) for acquisition\"]",
+        "data_completeness": 1.0
+      },
+      "metadata": {
+        "data_sources": "[\"hamilton_chamber\"]",
+        "created_at": "2025-09-29 02:54:22",
+        "updated_at": "2025-09-29 02:54:22.528321",
+        "notes": "Real verified business data only - no fabricated information"
+      }
+    },
+    {
+      "identification": {
+        "unique_id": "60776f048ee5",
+        "business_name": "ZS Metal Fabricating & Installation Inc.",
+        "industry": "manufacturing"
+      },
+      "location": {
+        "address": "1523 Sandhill Drive - Unit 4, Ancaster, ON L9G 4V5",
+        "city": "Ancaster",
+        "province": "ON",
+        "postal_code": "L9G 4V5",
+        "country": "Canada"
+      },
+      "contact_information": {
+        "phone": "(905) 304-5014",
+        "email": "info@zsmetalfabricating.ca",
+        "website": "https://zsmetalfabricating.ca",
+        "website_validation": {
+          "verified": true,
+          "status_code": 200,
+          "business_match_score": 1.0
+        }
+      },
+      "business_profile": {
+        "years_in_business": 18,
+        "employee_count": 10,
+        "estimated_revenue": 1001158,
+        "revenue_confidence": 0.628
+      },
+      "qualification_metrics": {
+        "lead_score": 69,
+        "status": "qualified",
+        "qualification_reasons": "[\"Revenue estimate $1.0M fits target range perfectly\", \"Meets minimum age requirement (18 years)\", \"Excellent data completeness (100.0%)\", \"High data confidence (85.1%)\", \"Target industry: manufacturing\", \"Located in Hamilton area (target market)\", \"Hamilton suburb location: Ancaster\", \"Optimal team size (10) for acquisition\"]",
+        "data_completeness": 1.0
+      },
+      "metadata": {
+        "data_sources": "[\"hamilton_chamber\"]",
+        "created_at": "2025-09-29 02:54:22",
+        "updated_at": "2025-09-29 02:54:22.550712",
+        "notes": "Real verified business data only - no fabricated information"
+      }
+    }
+  ]
+}

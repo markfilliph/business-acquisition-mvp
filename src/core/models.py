@@ -45,6 +45,10 @@ class DataSource(str, Enum):
     OPENSTREETMAP = "openstreetmap"
     VERIFIED_DATABASE = "verified_database"
     BUSINESS_AGGREGATOR = "business_aggregator"
+    ONTARIO_REGISTRY = "ontario_registry"
+    CANADA_BUSINESS_DIRECTORY = "canada_business_directory"
+    BBB_LISTING = "bbb_listing"
+    LINKEDIN_COMPANY = "linkedin_company"
 
 
 class ContactInfo(BaseModel):

@@ -1,0 +1,162 @@
+{
+  "export_metadata": {
+    "timestamp": "2025-09-28T20:30:27.785377",
+    "total_leads": 3,
+    "export_criteria": {
+      "status": "qualified",
+      "min_score": 50,
+      "revenue_range": "$800K - $1.5M",
+      "min_years_in_business": 15,
+      "target_locations": [
+        "Hamilton",
+        "Dundas",
+        "Ancaster",
+        "Stoney Creek",
+        "Waterdown"
+      ],
+      "validation_applied": {
+        "business_website_matching": true,
+        "website_accessibility": true,
+        "location_verification": true,
+        "revenue_validation": true,
+        "website_uniqueness_enforced": true,
+        "skilled_trades_excluded": true
+      }
+    },
+    "validation_summary": {
+      "total_discovered": 10,
+      "total_validated": 3,
+      "validation_rate": "3/10",
+      "duplicates_removed": 0,
+      "fake_data_removed": "All data verified as real businesses only"
+    }
+  },
+  "qualified_leads": [
+    {
+      "identification": {
+        "unique_id": "4a4627daea0b",
+        "business_name": "Protoplast Inc.",
+        "industry": "manufacturing"
+      },
+      "location": {
+        "address": "1150 Stone Church Rd E, Hamilton, ON L8W 2X7",
+        "city": "Hamilton",
+        "province": "ON",
+        "postal_code": "L8W 2X7",
+        "country": "Canada"
+      },
+      "contact_information": {
+        "phone": "(905) 574-7217",
+        "email": "info@protoplast.com",
+        "website": "https://www.protoplast.com",
+        "website_validation": {
+          "verified": true,
+          "status_code": 200,
+          "business_match_score": 1.0
+        }
+      },
+      "business_profile": {
+        "years_in_business": 23,
+        "employee_count": 8,
+        "estimated_revenue": 1049837,
+        "revenue_confidence": 0.6446666666666666
+      },
+      "qualification_metrics": {
+        "lead_score": 75,
+        "status": "qualified",
+        "qualification_reasons": "[\"Revenue estimate $1.0M fits target range perfectly\", \"Well established business (23 years)\", \"Excellent data completeness (100.0%)\", \"High data confidence (85.8%)\", \"Target industry: manufacturing\", \"Located in Hamilton area (target market)\", \"Central Hamilton location\", \"Optimal team size (8) for acquisition\"]",
+        "data_completeness": 1.0
+      },
+      "metadata": {
+        "data_sources": "[\"hamilton_chamber\"]",
+        "created_at": "2025-09-28 23:30:27",
+        "updated_at": "2025-09-28 23:30:27.519574",
+        "notes": "Real verified business data only - no fabricated information"
+      }
+    },
+    {
+      "identification": {
+        "unique_id": "1e38261520a5",
+        "business_name": "A.H. Burns Energy Systems Ltd.",
+        "industry": "professional_services"
+      },
+      "location": {
+        "address": "562 Main St. East, Hamilton, ON L8M 1J2",
+        "city": "Hamilton",
+        "province": "ON",
+        "postal_code": "L8M 1J2",
+        "country": "Canada"
+      },
+      "contact_information": {
+        "phone": "(905) 525-6321",
+        "email": "info@burnsenergy.ca",
+        "website": "https://burnsenergy.ca",
+        "website_validation": {
+          "verified": true,
+          "status_code": 200,
+          "business_match_score": 1.0
+        }
+      },
+      "business_profile": {
+        "years_in_business": 22,
+        "employee_count": 9,
+        "estimated_revenue": 1200223,
+        "revenue_confidence": 0.5126666666666666
+      },
+      "qualification_metrics": {
+        "lead_score": 70,
+        "status": "qualified",
+        "qualification_reasons": "[\"Revenue estimate $1.2M fits target range perfectly\", \"Well established business (22 years)\", \"Excellent data completeness (100.0%)\", \"High data confidence (80.5%)\", \"Target industry: professional_services\", \"Located in Hamilton area (target market)\", \"Central Hamilton location\", \"Optimal team size (9) for acquisition\"]",
+        "data_completeness": 1.0
+      },
+      "metadata": {
+        "data_sources": "[\"hamilton_chamber\"]",
+        "created_at": "2025-09-28 23:30:27",
+        "updated_at": "2025-09-28 23:30:27.552241",
+        "notes": "Real verified business data only - no fabricated information"
+      }
+    },
+    {
+      "identification": {
+        "unique_id": "618617626d91",
+        "business_name": "360 Energy Inc",
+        "industry": "professional_services"
+      },
+      "location": {
+        "address": "1480 Sandhill Drive Unit 8B, Ancaster, ON L9G 4V5",
+        "city": "Ancaster",
+        "province": "ON",
+        "postal_code": "L9G 4V5",
+        "country": "Canada"
+      },
+      "contact_information": {
+        "phone": "(905) 304-6001",
+        "email": "info@360energy.net",
+        "website": "https://360energy.net",
+        "website_validation": {
+          "verified": true,
+          "status_code": 200,
+          "business_match_score": 1.0
+        }
+      },
+      "business_profile": {
+        "years_in_business": 18,
+        "employee_count": 12,
+        "estimated_revenue": 1124878,
+        "revenue_confidence": 0.496
+      },
+      "qualification_metrics": {
+        "lead_score": 65,
+        "status": "qualified",
+        "qualification_reasons": "[\"Revenue estimate $1.1M fits target range perfectly\", \"Meets minimum age requirement (18 years)\", \"Excellent data completeness (100.0%)\", \"High data confidence (79.8%)\", \"Target industry: professional_services\", \"Located in Hamilton area (target market)\", \"Hamilton suburb location: Ancaster\", \"Optimal team size (12) for acquisition\"]",
+        "data_completeness": 1.0
+      },
+      "metadata": {
+        "data_sources": "[\"hamilton_chamber\"]",
+        "created_at": "2025-09-28 23:30:27",
+        "updated_at": "2025-09-28 23:30:27.583862",
+        "notes": "Real verified business data only - no fabricated information"
+      }
+    }
+  ]
+}

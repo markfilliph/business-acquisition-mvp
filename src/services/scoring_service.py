@@ -91,7 +91,7 @@ class IntelligentScoringService:
             # Check if company is in exclusion list (major established companies)
             if self._is_excluded_company(lead.business_name):
                 lead.status = LeadStatus.DISQUALIFIED
-                lead.disqualification_reasons = ["Major established company - excluded from target criteria"]
+                lead.lead_score.disqualification_reasons = ["Major established company - excluded from target criteria"]
                 lead.lead_score = LeadScore(0, 0, 0, 0, 0, 0, 0, 100)
                 lead.add_note("Excluded as major established company", "scoring_service")
                 self.logger.info("lead_excluded", 
@@ -99,6 +99,18 @@ class IntelligentScoringService:
                                reason="major_established_company")
                 return lead
             
+            # Check for 100% data completeness FIRST
+            completeness_check = self._validate_data_completeness(lead)
+            if not completeness_check["is_complete"]:
+                lead.status = LeadStatus.DISQUALIFIED
+                lead.lead_score.disqualification_reasons = completeness_check["missing_fields"]
+                lead.lead_score = LeadScore(0, 0, 0, 0, 0, 0, 0, 100)
+                lead.add_note(f"Disqualified: Missing required information - {', '.join(completeness_check['missing_fields'])}", "scoring_service")
+                self.logger.info("lead_disqualified_incomplete_data",
+                               business_name=lead.business_name,
+                               missing_fields=completeness_check["missing_fields"])
+                return lead
+
             # Initialize scoring components
             qualification_reasons = []
             disqualification_reasons = []
@@ -340,7 +352,43 @@ class IntelligentScoringService:
                 return True
         
         return False
-    
+
+    def _validate_data_completeness(self, lead: BusinessLead) -> Dict[str, Any]:
+        """Validate that lead has 100% complete information for all required fields."""
+
+        required_fields = {
+            'business_name': lead.business_name,
+            'phone': lead.contact.phone,
+            'email': lead.contact.email,
+            'website': lead.contact.website,
+            'address': lead.location.address,
+            'industry': lead.industry,
+            'years_in_business': lead.years_in_business,
+            'employee_count': lead.employee_count,
+            'estimated_revenue': lead.revenue_estimate.estimated_amount if lead.revenue_estimate else None
+        }
+
+        missing_fields = []
+
+        for field_name, field_value in required_fields.items():
+            if not field_value or (isinstance(field_value, str) and field_value.strip() == ""):
+                missing_fields.append(f"Missing {field_name.replace('_', ' ')}")
+
+        # Additional validation for specific fields
+        if lead.years_in_business and lead.years_in_business < 15:
+            missing_fields.append("Business age requirement not met (minimum 15 years)")
+
+        if lead.revenue_estimate and lead.revenue_estimate.estimated_amount:
+            revenue = lead.revenue_estimate.estimated_amount
+            if revenue < 1_000_000 or revenue > 1_400_000:
+                missing_fields.append("Revenue outside target range ($1M-$1.4M)")
+
+        return {
+            "is_complete": len(missing_fields) == 0,
+            "missing_fields": missing_fields,
+            "completeness_percentage": ((len(required_fields) - len(missing_fields)) / len(required_fields)) * 100
+        }
+
     def get_scoring_stats(self) -> Dict[str, Any]:
         """Get scoring statistics."""
         return self.scoring_stats.copy()

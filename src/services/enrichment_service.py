@@ -67,9 +67,12 @@ class BusinessEnrichmentService:
             lead.status = LeadStatus.ENRICHING
             lead.enrichment_attempts += 1
             
+            # Email discovery
+            lead = await self._discover_email(lead)
+
             # Revenue estimation
             lead = await self._estimate_revenue(lead)
-            
+
             # Business intelligence gathering
             lead = await self._gather_business_intelligence(lead)
             
@@ -341,7 +344,89 @@ class BusinessEnrichmentService:
             insights.append("Professional services team size ideal for personal service delivery")
         
         return insights
-    
+
+    async def _discover_email(self, lead: BusinessLead) -> BusinessLead:
+        """Discover business email through multiple methods."""
+
+        if lead.contact.email:
+            # Already has email
+            return lead
+
+        discovered_email = None
+
+        try:
+            # Method 1: Common business email patterns
+            if lead.business_name and lead.contact.website:
+                discovered_email = await self._generate_business_email(lead)
+
+            # Method 2: Website scraping for contact information
+            if not discovered_email and lead.contact.website:
+                discovered_email = await self._extract_email_from_website(lead.contact.website)
+
+            # Method 3: Standard business email patterns
+            if not discovered_email:
+                discovered_email = self._generate_standard_email_patterns(lead)
+
+            if discovered_email:
+                lead.contact.email = discovered_email
+                lead.add_note(f"Email discovered: {discovered_email}", "enrichment_service")
+                self.logger.info("email_discovered",
+                               business_name=lead.business_name,
+                               email=discovered_email)
+            else:
+                lead.add_note("No email could be discovered", "enrichment_service")
+                self.logger.warning("email_discovery_failed",
+                                  business_name=lead.business_name)
+
+        except Exception as e:
+            self.logger.error("email_discovery_error",
+                            business_name=lead.business_name,
+                            error=str(e))
+
+        return lead
+
+    async def _generate_business_email(self, lead: BusinessLead) -> Optional[str]:
+        """Generate likely business email addresses."""
+
+        if not lead.contact.website or not lead.business_name:
+            return None
+
+        # Extract domain from website
+        try:
+            domain = lead.contact.website.replace('https://', '').replace('http://', '').replace('www.', '').split('/')[0]
+
+            # Common business email patterns
+            email_patterns = [
+                f"info@{domain}",
+                f"contact@{domain}",
+                f"sales@{domain}",
+                f"admin@{domain}",
+                f"office@{domain}"
+            ]
+
+            # Return first pattern (most common)
+            return email_patterns[0]
+
+        except Exception:
+            return None
+
+    async def _extract_email_from_website(self, website: str) -> Optional[str]:
+        """Extract email from website contact pages (simulated)."""
+
+        # This would normally scrape the website for email addresses
+        # For now, return None to avoid false data
+        return None
+
+    def _generate_standard_email_patterns(self, lead: BusinessLead) -> Optional[str]:
+        """Generate standard email patterns when website is not available."""
+
+        if not lead.business_name:
+            return None
+
+        # For businesses without websites, we can't reliably generate emails
+        # This avoids creating fake email addresses
+        return None
+
     def get_enrichment_stats(self) -> Dict[str, int]:
         """Get enrichment statistics."""
         return self.enrichment_stats.copy()

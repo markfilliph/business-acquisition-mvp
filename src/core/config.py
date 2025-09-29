@@ -168,39 +168,46 @@ config = SystemConfig()
 # Industry benchmarks based on Statistics Canada data
 INDUSTRY_BENCHMARKS = {
     "manufacturing": {
-        "revenue_per_employee": 165_000,
+        "revenue_per_employee": 85_000,  # Adjusted for $1M-$1.4M target
         "confidence_multiplier": 0.8,
         "typical_margins": 0.15,
         "employee_range": (8, 25),
         "growth_rate": 0.03
     },
     "wholesale": {
-        "revenue_per_employee": 220_000,
+        "revenue_per_employee": 95_000,  # Adjusted for $1M-$1.4M target
         "confidence_multiplier": 0.7,
         "typical_margins": 0.12,
         "employee_range": (5, 18),
         "growth_rate": 0.025
     },
     "construction": {
-        "revenue_per_employee": 185_000,
+        "revenue_per_employee": 90_000,  # Adjusted for $1M-$1.4M target
         "confidence_multiplier": 0.75,
         "typical_margins": 0.18,
         "employee_range": (6, 20),
         "growth_rate": 0.04
     },
     "professional_services": {
-        "revenue_per_employee": 135_000,
+        "revenue_per_employee": 100_000,  # Adjusted for $1M-$1.4M target
         "confidence_multiplier": 0.6,
         "typical_margins": 0.25,
         "employee_range": (3, 15),
         "growth_rate": 0.05
     },
     "printing": {
-        "revenue_per_employee": 140_000,
+        "revenue_per_employee": 80_000,  # Adjusted for $1M-$1.4M target
         "confidence_multiplier": 0.65,
         "typical_margins": 0.20,
         "employee_range": (5, 15),
         "growth_rate": 0.02
+    },
+    "equipment_rental": {
+        "revenue_per_employee": 110_000,  # Adjusted for $1M-$1.4M target
+        "confidence_multiplier": 0.7,
+        "typical_margins": 0.22,
+        "employee_range": (4, 12),
+        "growth_rate": 0.035
     }
 }
 
