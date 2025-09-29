@@ -77,6 +77,23 @@ data/responses.csv
 data/research_*.json
 data/email_search_*.txt
 
+# Exports directory (contains sensitive lead data)
+exports/
+exports/*.csv
+exports/*.json
+exports/*.txt
+exports/*.xlsx
+
+# Lead data files
+*leads*.csv
+*leads*.json
+*leads*.txt
+*leads*.xlsx
+
+# Business validation reports
+*validation*.docx
+*validation*.txt
+
 # Temporary files
 ~$*
 *.tmp
