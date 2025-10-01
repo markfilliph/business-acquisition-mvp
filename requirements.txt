@@ -84,3 +84,9 @@ schedule==1.1.0               # Monitoring job scheduling
 # anthropic==0.3.0  # Claude API integration
 selenium==4.16.0    # Browser automation for data verification
 webdriver-manager==4.15.1
+
+# Local LLM and RAG dependencies (added for auto_hamilton_business_feeder.py)
+ollama==0.1.8               # Local LLM client for Ollama
+chromadb==0.4.22            # Vector database for RAG
+langchain==0.1.9            # LLM orchestration framework
+langchain-community==0.0.24 # Community integrations for LangChain

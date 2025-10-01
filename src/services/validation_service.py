@@ -105,10 +105,16 @@ class BusinessValidationService:
             else:
                 self.validation_stats['website_checks_passed'] += 1
                 
-                # Basic business-website matching validation
+                # Basic business-website matching validation (WARNING ONLY, not blocking)
                 business_website_match = await self._validate_business_website_match(lead.business_name, lead.contact.website)
                 if not business_website_match:
-                    issues.append(f"Business name '{lead.business_name}' does not match website content from {lead.contact.website}")
+                    # Log warning but don't fail validation - domain abbreviations are common
+                    self.logger.warning(
+                        "business_website_mismatch_warning",
+                        business_name=lead.business_name,
+                        website=lead.contact.website,
+                        note="Website name mismatch - manual review recommended"
+                    )
                     self.validation_stats['business_website_matches_failed'] += 1
                 else:
                     self.validation_stats['business_website_matches_passed'] += 1
@@ -304,40 +310,122 @@ class BusinessValidationService:
         """
         Detect if a business is a skilled trade that should be excluded.
         Skilled trades are service-based businesses, not suitable for acquisition.
+        Uses comprehensive government Red Seal skilled trades list.
         """
         if not business_name:
             return False
-        
+
         # Convert to lowercase for matching
         name_lower = business_name.lower()
-        
-        # Skilled trade keywords that indicate service-based businesses
+
+        # Government Red Seal skilled trades keywords (comprehensive list)
+        # These are businesses typically owned/operated by skilled tradespeople
         skilled_trade_keywords = [
-            # Glass/Window trades
+            # Agricultural & Equipment
+            'agricultural equipment', 'farm equipment', 'tractor repair',
+
+            # Appliance Services
+            'appliance service', 'appliance repair',
+
+            # Automotive Trades
+            'auto body', 'collision', 'body shop', 'automotive refinishing',
+            'auto service', 'automotive service', 'mechanic', 'garage',
+            'motorcycle', 'rv service', 'recreation vehicle', 'trailer service',
+            'transport mechanic', 'truck repair', 'mobile crane', 'tower crane',
+
+            # Baking & Cooking
+            'baker', 'bakery', 'cook', 'restaurant', 'cafe', 'catering',
+
+            # Boilermaker
+            'boilermaker', 'boiler repair', 'pressure vessel',
+
+            # Bricklaying & Masonry
+            'bricklayer', 'masonry', 'stone work', 'block work',
+
+            # Cabinetmaking & Woodworking
+            'cabinetmaker', 'cabinet shop', 'millwork', 'custom cabinets',
+
+            # Carpentry
+            'carpenter', 'carpentry', 'framing', 'rough carpentry', 'finish carpentry',
+
+            # Concrete Work
+            'concrete finisher', 'concrete finishing', 'cement work',
+
+            # Construction & Building
+            'construction craft', 'general contractor', 'building contractor',
+
+            # Electrical Trades
+            'electrician', 'electrical contractor', 'construction electric',
+            'industrial electric', 'powerline', 'power line',
+
+            # Drywall & Plastering
+            'drywall', 'plasterer', 'taping', 'mudding',
+
+            # Flooring
+            'floorcovering', 'floor covering', 'floor install', 'carpet install',
+            'tile setter', 'tilesetter', 'tile install',
+
+            # Gas Fitting
+            'gasfitter', 'gas fitter', 'gas line', 'gas piping',
+
+            # Glass & Glazing
             'glass', 'glazing', 'glazier', 'window', 'windows', 'mirror',
-            
-            # Construction trades
-            'plumbing', 'plumber', 'electrical', 'electrician', 'hvac',
-            'roofing', 'roofer', 'flooring', 'tiling', 'carpenter', 'carpentry',
-            'painting', 'painter', 'drywall', 'insulation', 'siding',
-            
-            # Automotive trades  
-            'auto repair', 'automotive', 'mechanic', 'garage', 'collision',
-            'body shop', 'tire', 'muffler', 'brake',
-            
-            # Home services
-            'lawn care', 'landscaping', 'cleaning', 'pest control',
-            'appliance repair', 'handyman', 'maintenance',
-            
-            # Personal services
-            'salon', 'barber', 'spa', 'fitness', 'dental', 'medical',
-            'veterinary', 'daycare', 'restaurant', 'cafe',
-            
-            # Repair services
-            'repair', 'contractor', 'contracting',
-            
-            # Professional services (individual practitioners)
-            'law office', 'accounting', 'bookkeeping', 'consulting' 
+
+            # Hair & Beauty
+            'hairstylist', 'hair salon', 'barber', 'beauty salon', 'spa',
+
+            # Heavy Equipment
+            'heavy duty equipment', 'equipment technician', 'heavy equipment operator',
+            'dozer operator', 'excavator operator', 'backhoe', 'crane operator',
+
+            # HVAC & Refrigeration
+            'hvac', 'refrigeration', 'air conditioning', 'hvac mechanic',
+            'oil heat', 'heating system',
+
+            # Industrial Mechanics
+            'millwright', 'industrial mechanic', 'instrumentation', 'control technician',
+
+            # Insulation
+            'insulator', 'insulation', 'heat and frost',
+
+            # Ironwork
+            'ironworker', 'reinforcing', 'structural steel', 'ornamental iron',
+
+            # Landscaping
+            'landscape', 'landscaping', 'horticulturist', 'lawn care',
+
+            # Lather/Interior Systems
+            'lather', 'interior systems',
+
+            # Machining
+            'machinist', 'machine shop', 'cnc machining', 'tool and die',
+
+            # Metal Fabrication
+            'metal fabricat', 'metal fitter', 'sheet metal', 'fabrication shop', 'fabricating',
+
+            # Painting & Decorating
+            'painting', 'painter', 'decorator', 'paint contractor',
+
+            # Parts Services
+            'parts technician', 'auto parts',
+
+            # Plumbing & Pipefitting
+            'plumber', 'plumbing', 'steamfitter', 'pipefitter', 'sprinkler fitter',
+
+            # Roofing
+            'roofer', 'roofing', 'roof repair', 'roof install', 'shingles',
+
+            # Welding
+            'welder', 'welding', 'welding shop',
+
+            # Other Home Services
+            'cleaning', 'pest control', 'handyman', 'maintenance service',
+
+            # Medical/Dental
+            'dental', 'dentist', 'medical', 'clinic', 'veterinary',
+
+            # Childcare
+            'daycare', 'childcare', 'preschool'
         ]
         
         # Service-related terms that indicate trades
@@ -509,11 +597,16 @@ class BusinessValidationService:
             if lead.years_in_business < 0 or lead.years_in_business > 150:
                 issues.append(f"Unrealistic business age: {lead.years_in_business} years")
         
-        # Check employee count
+        # Check employee count - STRICT enforcement of max 30 employees
         if lead.employee_count is not None:
-            if lead.employee_count < 1 or lead.employee_count > 10000:
-                issues.append(f"Unrealistic employee count: {lead.employee_count}")
-        
+            if lead.employee_count < 1:
+                issues.append(f"Invalid employee count: {lead.employee_count}")
+            elif lead.employee_count > 30:
+                issues.append(f"Employee count {lead.employee_count} exceeds maximum of 30 - business too large for acquisition criteria")
+        else:
+            # Employee count is REQUIRED for proper validation
+            issues.append("Employee count is required but missing - cannot validate business size")
+
         # Check business name
         if not lead.business_name or len(lead.business_name) < 3:
             issues.append("Business name is too short or missing")
@@ -559,16 +652,24 @@ class BusinessValidationService:
         if confidence < 0 or confidence > 1:
             issues.append(f"Revenue confidence score {confidence} is invalid")
         
-        # Check if revenue fits our target criteria
+        # Check if revenue fits our target criteria (STRICT ENFORCEMENT)
         min_target = self.config.business_criteria.target_revenue_min
         max_target = self.config.business_criteria.target_revenue_max
-        
+
         if not (min_target <= revenue <= max_target):
             issues.append(
-                f"Revenue ${revenue:,} outside target range "
-                f"${min_target:,}-${max_target:,}"
+                f"Revenue ${revenue:,} outside STRICT target range "
+                f"${min_target:,}-${max_target:,} - LEAD REJECTED"
             )
-        
+            self.logger.error(
+                "revenue_criteria_violation",
+                business_name=lead.business_name if hasattr(lead, 'business_name') else 'unknown',
+                revenue=revenue,
+                min_required=min_target,
+                max_required=max_target,
+                violation_type="STRICT_REVENUE_ENFORCEMENT"
+            )
+
         return len(issues) == 0, issues
     
     async def batch_validate_leads(self, leads: List[BusinessLead]) -> Dict[str, Any]:
@@ -689,7 +790,14 @@ class BusinessValidationService:
                             break
 
             if not name_match_found:
-                issues.append(f"Business name '{lead.business_name}' does not appear to match website domain '{domain}'")
+                # WARNING: Domain abbreviations are common (e.g., AVL Mfg vs avlmfg.com)
+                # Only warn, don't fail validation
+                self.logger.warning(
+                    "domain_name_mismatch",
+                    business_name=lead.business_name,
+                    domain=domain,
+                    note="Domain may be abbreviated - manual review recommended"
+                )
 
         except Exception as e:
             self.logger.warning("website_content_validation_failed",
@@ -714,10 +822,16 @@ class BusinessValidationService:
                     if indicator in address_lower:
                         issues.append(f"Address contains suspicious content: '{indicator}'")
 
-                # Real-time address verification
+                # Real-time address verification (WARNING ONLY - address formats vary widely)
                 address_verification = await self._verify_address_exists(lead.location.address)
                 if not address_verification['valid']:
-                    issues.append(f"Address verification failed: {address_verification['reason']}")
+                    # Log warning but don't fail - many legitimate addresses don't match strict patterns
+                    self.logger.warning(
+                        "address_pattern_warning",
+                        address=lead.location.address,
+                        reason=address_verification['reason'],
+                        note="Address pattern mismatch - manual review recommended"
+                    )
 
                 # Verify Hamilton area postal codes
                 if hasattr(lead.location, 'postal_code') and lead.location.postal_code:
@@ -953,17 +1067,9 @@ class BusinessValidationService:
                 if postal_prefix not in hamilton_postal_areas:
                     issues.append(f"Postal code {postal_code} not in Hamilton area")
 
-                # Check city consistency with postal code
-                if hasattr(lead.location, 'city') and lead.location.city:
-                    city_lower = lead.location.city.lower()
-
-                    if postal_prefix == 'L9G' and 'ancaster' not in city_lower:
-                        issues.append("Postal code L9G indicates Ancaster but city field differs")
-                    elif postal_prefix == 'L9H' and 'dundas' not in city_lower:
-                        issues.append("Postal code L9H indicates Dundas but city field differs")
-                    elif postal_prefix.startswith('L8') and 'hamilton' not in city_lower:
-                        if city_lower not in ['stoney creek', 'waterdown']:
-                            issues.append(f"Postal code {postal_prefix} indicates Hamilton but city field is {lead.location.city}")
+                # NOTE: Ancaster, Dundas, Stoney Creek, Waterdown are all part of Greater Hamilton
+                # So we don't strictly enforce postal code-city matching as it's counterproductive
+                # City field differences are acceptable as long as they're in Hamilton area
 
             # Check phone area code vs location consistency
             if hasattr(lead.contact, 'phone') and lead.contact.phone:

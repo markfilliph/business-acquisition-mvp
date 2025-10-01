@@ -55,10 +55,11 @@ class WebsiteValidationConfig:
 @dataclass
 class BusinessCriteria:
     """Target business criteria for lead qualification."""
-    target_revenue_min: int = 800_000  # $800K
-    target_revenue_max: int = 1_500_000  # $1.5M
+    target_revenue_min: int = 1_000_000  # $1M (STRICT ENFORCEMENT)
+    target_revenue_max: int = 1_400_000  # $1.4M (STRICT ENFORCEMENT)
     min_years_in_business: int = 15
-    max_employee_count: int = 50
+    min_employee_count: int = 5
+    max_employee_count: int = 30  # STRICT: Small to mid-sized businesses only
     target_locations: List[str] = field(default_factory=lambda: [
         "Hamilton", "Dundas", "Ancaster", "Stoney Creek", "Waterdown"
     ])
