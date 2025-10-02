@@ -13,6 +13,7 @@ from ..core.config import SystemConfig
 from ..core.models import BusinessLead
 from ..core.exceptions import ValidationError
 from .noc_classification_service import NOCClassificationService
+from .business_type_classifier import BusinessTypeClassifier
 try:
     from .website_validation_service import WebsiteValidationService
     WEBSITE_VALIDATION_AVAILABLE = True
@@ -29,6 +30,7 @@ class BusinessValidationService:
         self.logger = structlog.get_logger(__name__)
         self._validated_websites = set()  # Track unique websites to prevent duplicates
         self.noc_service = NOCClassificationService()  # NOC classification service
+        self.business_type_classifier = BusinessTypeClassifier()  # Multi-source business type classifier
         self.website_validator = WebsiteValidationService() if WEBSITE_VALIDATION_AVAILABLE else None  # Website validation service
         self.validation_stats = {
             'total_validated': 0,
@@ -39,6 +41,7 @@ class BusinessValidationService:
             'website_duplicates_blocked': 0,
             'skilled_trades_blocked': 0,
             'noc_skilled_trades_blocked': 0,
+            'business_type_classifier_blocked': 0,
             'phone_validations': 0,
             'email_validations': 0,
             'address_validations': 0
@@ -69,19 +72,45 @@ class BusinessValidationService:
             # Mark website as validated to prevent future duplicates
             self._validated_websites.add(normalized_website)
         
-        # 0.5. Skilled trades exclusion (business type filtering)
-        # Check using keyword-based method first
+        # 0.5. Comprehensive Business Type Classification
+        # Use multi-source classifier to verify business type
+        is_suitable, classification_reason, evidence = await self.business_type_classifier.classify_business_type(lead)
+
+        if not is_suitable:
+            issues.append(f"Business type classification failed: {classification_reason}")
+            self.validation_stats['business_type_classifier_blocked'] += 1
+            self.logger.warning(
+                "business_type_classifier_blocked",
+                business_name=lead.business_name,
+                reason=classification_reason,
+                evidence_summary={
+                    'yellowpages_categories': evidence.get('yellowpages_category', {}).get('categories', []),
+                    'website_indicators': len(evidence.get('website_analysis', {}).get('category_indicators', [])),
+                    'keyword_matches': len(evidence.get('keyword_matches', []))
+                }
+            )
+            return False, issues
+
+        # Log successful classification
+        self.logger.info(
+            "business_type_classification_passed",
+            business_name=lead.business_name,
+            confidence=evidence.get('llm_classification', {}).get('confidence', 0.0)
+        )
+
+        # 0.6. Fallback: Skilled trades exclusion (keyword-based - backup only)
+        # This is now redundant but kept as safety net
         if self._is_skilled_trade_business(lead.business_name):
             issues.append(f"Business '{lead.business_name}' appears to be a skilled trade - not suitable for acquisition")
             self.validation_stats['skilled_trades_blocked'] += 1
             self.logger.warning(
                 "skilled_trade_business_blocked",
                 business_name=lead.business_name,
-                reason="keyword_based_classification"
+                reason="keyword_based_classification_fallback"
             )
             return False, issues
-        
-        # Check using NOC classification for government-verified trades
+
+        # Check using NOC classification for government-verified trades (backup only)
         is_noc_skilled_trade, noc_details = self.noc_service.is_skilled_trade_by_noc(lead.business_name)
         if is_noc_skilled_trade:
             noc_info = f" (NOC {noc_details['noc_code']}: {noc_details['title']})" if noc_details else ""
@@ -92,7 +121,7 @@ class BusinessValidationService:
                 business_name=lead.business_name,
                 noc_code=noc_details.get('noc_code') if noc_details else None,
                 noc_title=noc_details.get('title') if noc_details else None,
-                reason="government_noc_classification"
+                reason="government_noc_classification_fallback"
             )
             return False, issues
         
@@ -119,12 +148,14 @@ class BusinessValidationService:
                 else:
                     self.validation_stats['business_website_matches_passed'] += 1
         
-        # 2. Phone number format validation
-        phone_valid = self._validate_phone(lead.contact.phone)
-        if not phone_valid:
-            issues.append(f"Phone number {lead.contact.phone} format is invalid")
-        else:
-            self.validation_stats['phone_validations'] += 1
+        # 2. Phone number format validation (OPTIONAL - only validate if present)
+        if lead.contact.phone:
+            phone_valid = self._validate_phone(lead.contact.phone)
+            if not phone_valid:
+                issues.append(f"Phone number {lead.contact.phone} format is invalid")
+            else:
+                self.validation_stats['phone_validations'] += 1
+        # If missing, that's OK - keep whatever data we have
         
         # 3. Email format validation (if provided)
         if lead.contact.email:
@@ -591,21 +622,20 @@ class BusinessValidationService:
     def _validate_business_data(self, lead: BusinessLead) -> Tuple[bool, List[str]]:
         """Validate business-specific data for sanity."""
         issues = []
-        
-        # Check business age
+
+        # Check business age (OPTIONAL - only validate if present)
         if lead.years_in_business is not None:
             if lead.years_in_business < 0 or lead.years_in_business > 150:
                 issues.append(f"Unrealistic business age: {lead.years_in_business} years")
-        
-        # Check employee count - STRICT enforcement of max 30 employees
+        # If missing, that's OK - we don't estimate or reject
+
+        # Check employee count (OPTIONAL - only validate if present)
         if lead.employee_count is not None:
             if lead.employee_count < 1:
                 issues.append(f"Invalid employee count: {lead.employee_count}")
             elif lead.employee_count > 30:
                 issues.append(f"Employee count {lead.employee_count} exceeds maximum of 30 - business too large for acquisition criteria")
-        else:
-            # Employee count is REQUIRED for proper validation
-            issues.append("Employee count is required but missing - cannot validate business size")
+        # If missing, that's OK - we keep whatever data we have, no estimation
 
         # Check business name
         if not lead.business_name or len(lead.business_name) < 3:

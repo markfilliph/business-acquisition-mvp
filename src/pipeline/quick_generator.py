@@ -5,14 +5,20 @@ Generates qualified leads in under 1 minute using only validation.
 """
 import sys
 import asyncio
-sys.path.insert(0, '/mnt/d/AI_Automated_Potential_Business_outreach')
+import re
+import json
+from datetime import datetime
 
 from src.integrations.business_data_aggregator import BusinessDataAggregator
 from src.services.validation_service import BusinessValidationService
 from src.core.config import config
 from src.core.models import BusinessLead, ContactInfo, LocationInfo, RevenueEstimate
-import json
-from datetime import datetime
+
+async def search_business_website(business_name: str, city: str = "Hamilton") -> str:
+    """Search for business website if missing from OSM data."""
+    # Website search functionality removed - was using deleted web_search module
+    # TODO: Implement alternative website discovery method if needed
+    return ''
 
 async def generate_leads(count=20, show=False):
     """Generate leads without LLM enrichment for speed"""
@@ -23,12 +29,18 @@ async def generate_leads(count=20, show=False):
     print(f"Criteria: ${config.business_criteria.target_revenue_min:,}-${config.business_criteria.target_revenue_max:,}, {config.business_criteria.min_years_in_business}+ years, ≤30 employees")
     print(f"{'='*70}\n")
 
-    # Retail chains to exclude
+    # Retail chains and non-profits to exclude
     excluded_chains = {
+        # Major retail chains
         'fortinos', 'food basics', 'freshco', 'circle k', 'bell', 'goemans',
         'nations fresh foods', 'pet valu', 'first choice', 'pickwick',
         'once upon a child', 'the brick', 'main cycle', 'freewheel cycle',
-        'take the leap'  # Photography is consumer service
+        'take the leap', 'fastenal',  # Fastenal is retail chain
+        # Retail keywords
+        'supermarket', 'convenience', 'art supplies', 'community bikes',
+        # Non-profit indicators
+        'community', 'institute', 'foundation', 'society', 'association',
+        'non-profit', 'not-for-profit', 'charity', 'centre', 'center'
     }
 
     aggregator = BusinessDataAggregator()
@@ -41,6 +53,10 @@ async def generate_leads(count=20, show=False):
         'too_large': 0,
         'missing_data': 0,
         'validation_failed': 0,
+        'website_searched': 0,
+        'website_found': 0,
+        'retail_nonprofit': 0,
+        'content_validation_failed': 0,
         'other': 0
     }
 
@@ -48,7 +64,8 @@ async def generate_leads(count=20, show=False):
         # Fetch aggressively - get many businesses to ensure we hit target
         # Start with 10x multiplier to get enough candidates
         fetch_count = count * 10
-        print(f"🔍 Fetching {fetch_count} businesses to find {count} qualified leads...")
+        print(f"🔍 Fetching {fetch_count} businesses from OpenStreetMap...")
+        print(f"   (Will enrich with Yellow Pages, web scraping, and validation after)")
 
         businesses = await aggregator.fetch_hamilton_businesses(
             industry_types=config.business_criteria.target_industries,
@@ -60,46 +77,55 @@ async def generate_leads(count=20, show=False):
 
         for biz in businesses:
             try:
-                # Skip retail chains
+                # Skip retail chains and non-profits
                 business_name_lower = biz.get('business_name', '').lower()
                 if any(chain in business_name_lower for chain in excluded_chains):
-                    stats['other'] += 1
+                    stats['retail_nonprofit'] += 1
                     if show:
-                        print(f"❌ RETAIL CHAIN: {biz.get('business_name')}")
+                        print(f"❌ RETAIL/NON-PROFIT: {biz.get('business_name')}")
                     continue
 
-                # Estimate revenue based on industry and employee count
+                # Get industry and employee count (NO estimation)
+                # Keep whatever data we have - don't reject if missing
                 industry = biz.get('industry', 'professional_services')
-                employee_count = biz.get('employee_count', 15)
+                employee_count = biz.get('employee_count')  # May be None
+                years_in_business = biz.get('years_in_business')  # May be None
 
-                # Industry base revenue (per employee) - adjusted for small businesses
-                # Small businesses typically have higher revenue per employee
-                revenue_per_employee = {
-                    'manufacturing': 150000,         # $150K per employee (equipment-intensive)
-                    'wholesale': 180000,             # $180K per employee (high volume, low margin)
-                    'professional_services': 120000, # $120K per employee (service-based)
-                    'printing': 140000,              # $140K per employee
-                    'equipment_rental': 160000       # $160K per employee (asset-based)
-                }
+                # Log missing data for tracking but don't reject
+                if not employee_count:
+                    stats['missing_data'] += 1
+                    if show:
+                        print(f"ℹ️  Missing employee count: {biz.get('business_name')}")
 
-                # Calculate estimated revenue
-                base_per_employee = revenue_per_employee.get(industry, 120000)
-                estimated_revenue = base_per_employee * employee_count
+                if not years_in_business:
+                    stats['missing_data'] += 1
+                    if show:
+                        print(f"ℹ️  Missing years: {biz.get('business_name')}")
 
-                # Add base overhead (facilities, equipment)
-                base_overhead = 200000  # $200K base for small business
-                estimated_revenue += base_overhead
+                # NO REVENUE ESTIMATION - Revenue cannot be verified
 
-                # Clamp to our target range ($1M - $1.4M)
-                estimated_revenue = max(1000000, min(1400000, estimated_revenue))
+                # Get website - search if missing from OSM data
+                website = biz.get('website', '')
+                if not website:
+                    stats['website_searched'] += 1
+                    if show:
+                        print(f"🔍 Searching website for {biz.get('business_name')}...")
+                    website = await search_business_website(
+                        biz.get('business_name'),
+                        biz.get('city', 'Hamilton')
+                    )
+                    if website:
+                        stats['website_found'] += 1
+                        if show:
+                            print(f"   ✅ Found: {website}")
 
-                # Create lead object
+                # Create lead object (NO revenue estimation - use empty RevenueEstimate)
                 lead = BusinessLead(
                     business_name=biz.get('business_name'),
                     contact=ContactInfo(
                         phone=biz.get('phone', ''),
                         email=biz.get('email', ''),
-                        website=biz.get('website', '')
+                        website=website
                     ),
                     location=LocationInfo(
                         address=biz.get('address', ''),
@@ -109,22 +135,21 @@ async def generate_leads(count=20, show=False):
                         country='Canada'
                     ),
                     industry=industry,
-                    years_in_business=biz.get('years_in_business', 20),
+                    years_in_business=years_in_business,
                     employee_count=employee_count,
-                    revenue_estimate=RevenueEstimate(
-                        estimated_amount=estimated_revenue,
-                        confidence_score=0.6,  # Lower confidence since it's estimated
-                        estimation_method=['industry_average', 'employee_count']
-                    )
+                    revenue_estimate=RevenueEstimate()  # Empty - no estimation, cannot be verified
                 )
 
-                # Validate
+                # Validate with standard validation
                 is_valid, issues = await validator.validate_business_lead(lead)
 
                 if is_valid:
-                    valid_leads.append(lead)
+                    # Website content validation removed - module was deleted
                     if show:
                         print(f"✅ {lead.business_name}")
+
+                    valid_leads.append(lead)
+                    if show:
                         print(f"   📍 {lead.location.city}, ON | 👥 {lead.employee_count} emp | 📅 {lead.years_in_business} yrs")
                         if lead.contact.website:
                             print(f"   🌐 {lead.contact.website}")
@@ -160,11 +185,17 @@ async def generate_leads(count=20, show=False):
     print(f"\n{'='*70}")
     print(f"✅ QUALIFIED LEADS: {len(valid_leads)}/{stats['total']}")
     print(f"\n📊 Rejection Breakdown:")
+    print(f"   🏪 Retail/Non-Profit: {stats['retail_nonprofit']}")
     print(f"   🔨 Skilled Trades: {stats['skilled_trade']}")
+    print(f"   📄 Content Validation Failed: {stats['content_validation_failed']}")
     print(f"   📏 Too Large: {stats['too_large']}")
     print(f"   📋 Missing Data: {stats['missing_data']}")
     print(f"   ⚠️  Validation Failed: {stats['validation_failed']}")
     print(f"   ❓ Other: {stats['other']}")
+    if stats['website_searched'] > 0:
+        print(f"\n🔍 Website Search:")
+        print(f"   Searched: {stats['website_searched']}")
+        print(f"   Found: {stats['website_found']} ({stats['website_found']*100//stats['website_searched'] if stats['website_searched'] > 0 else 0}%)")
     print(f"{'='*70}\n")
 
     if valid_leads:
@@ -184,7 +215,7 @@ async def generate_leads(count=20, show=False):
                 'industry': lead.industry,
                 'years_in_business': lead.years_in_business,
                 'employee_count': lead.employee_count,
-                'estimated_revenue': lead.revenue_estimate.estimated_amount
+                'estimated_revenue': None  # No revenue estimation - cannot be verified
             })
 
         with open(output_file, 'w') as f:

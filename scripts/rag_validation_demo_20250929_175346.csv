@@ -1,0 +1,13 @@
+business_name,address,industry,estimated_revenue,years_in_business,is_valid,confidence,evidence,issues,recommendation,lead_id,validated_at,sources_checked,retrieved_context,status
+Hamilton Steel Works,123 Industrial Ave,Manufacturing,1800000,29,True,0.85,Found business information in verified records,[],accept,Hamilton Steel Works,2025-09-29T17:53:46.407826,3,"Hamilton Steel Works - 123 Industrial Ave, Hamilton, ON. Manufacturing company operating since 1995. Revenue approximately $1.8M annually. 45 employees. Single location.
+
+Mike's Auto Shop - 456 Main S...",approved
+Mike's Auto Shop,456 Main St,Automotive,1200000,23,True,0.85,Found business information in verified records,[],accept,Mike's Auto Shop,2025-09-29T17:53:46.408577,3,"Mike's Auto Shop - 456 Main St, Hamilton, ON. Automotive repair since 2001. Family-owned business. Revenue around $1.2M. 12 employees. One location only.
+
+Hamilton Steel Works - 123 Industrial Ave, Ha...",approved
+Fake Company Ltd,999 Nonexistent St,Consulting,1500000,15,False,0.2,No matching information found in verified sources,['Business not found in verified database'],reject,Fake Company Ltd,2025-09-29T17:53:46.408597,3,"Hamilton Steel Works - 123 Industrial Ave, Hamilton, ON. Manufacturing company operating since 1995. Revenue approximately $1.8M annually. 45 employees. Single location.
+
+Mike's Auto Shop - 456 Main S...",rejected
+TechStart Solutions,789 Innovation Drive,Technology,2100000,14,True,0.85,Found business information in verified records,[],accept,TechStart Solutions,2025-09-29T17:53:46.408609,3,"TechStart Solutions Inc - 789 Innovation Drive, Hamilton, ON. IT consulting firm established 2010. Growing rapidly with $2.1M revenue. 25 employees across 3 locations.
+
+Hamilton Steel Works - 123 Indu...",approved

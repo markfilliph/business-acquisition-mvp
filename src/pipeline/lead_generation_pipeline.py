@@ -4,7 +4,7 @@ Complete Local LLM Lead Generation Pipeline
 Implements the full pipeline as specified in Local-model-setup-instructions.md
 
 Usage:
-    python scripts/run_pipeline.py --source "hamilton" --count 45 --min-effectiveness 0.7 --validate --enrich
+    python -m src.pipeline.lead_generation_pipeline --source "hamilton" --count 45 --min-effectiveness 0.7 --validate --enrich
 """
 
 import os
@@ -18,11 +18,8 @@ from datetime import datetime
 import pandas as pd
 from dotenv import load_dotenv
 
-# Add current directory to path for local imports
-sys.path.insert(0, str(Path(__file__).parent))
-
-from local_lead_generator import LocalLLMLeadGenerator, LeadGenerationResult
-from rag_validator_complete import RAGLeadValidator, SmartLeadEnricher
+from src.pipeline.local_llm_generator import LocalLLMLeadGenerator, LeadGenerationResult
+from src.pipeline.rag_validator import RAGLeadValidator, SmartLeadEnricher
 
 # Load environment variables
 load_dotenv('.env.local')
@@ -91,109 +88,19 @@ class LeadGenerationPipeline:
 
     def load_sample_data(self, source: str, count: int) -> List[Dict[str, Any]]:
         """
-        Load or generate sample business data
-        In production, this would connect to web scrapers
+        REMOVED: Sample business data - NO HARDCODED/FAKE DATA ALLOWED.
+        This function now raises an error. All businesses must come from real-time external sources.
         """
-        logger.info(f"Loading sample data for source: {source}, count: {count}")
+        logger.error("sample_data_disabled",
+                    extra={"reason": "No sample/fake data allowed - use real sources only"})
 
-        # Sample Hamilton business data
-        sample_businesses = [
-            {
-                "name": "Hamilton Steel Works Ltd",
-                "address": "123 Industrial Avenue, Hamilton, ON L8P 4R6",
-                "industry": "Manufacturing",
-                "phone": "905-555-0123",
-                "website": "www.hamiltonsteelworks.com",
-                "description": "Steel fabrication and manufacturing company serving Ontario since 1995. Specializes in custom metal work.",
-                "employees": "35-50",
-                "established": "1995"
-            },
-            {
-                "name": "Citywide Auto Repair",
-                "address": "456 Main Street West, Hamilton, ON L8S 1G5",
-                "industry": "Automotive",
-                "phone": "905-555-0456",
-                "website": None,
-                "description": "Family-owned automotive repair shop providing quality service for 25 years.",
-                "employees": "8-12",
-                "established": "1999"
-            },
-            {
-                "name": "Mountain View Landscaping",
-                "address": "789 Concession Street, Hamilton, ON L8V 1B3",
-                "industry": "Landscaping",
-                "phone": "905-555-0789",
-                "website": "www.mountainviewlandscaping.ca",
-                "description": "Professional landscaping services for residential and commercial properties since 2001.",
-                "employees": "15-20",
-                "established": "2001"
-            },
-            {
-                "name": "TechStart Solutions Inc",
-                "address": "321 Innovation Drive, Hamilton, ON L8N 3K7",
-                "industry": "Technology",
-                "phone": "905-555-0321",
-                "website": "www.techstartsolutions.com",
-                "description": "Software development and IT consulting startup founded in 2020.",
-                "employees": "5-10",
-                "established": "2020"
-            },
-            {
-                "name": "Harbor View Restaurant",
-                "address": "654 James Street North, Hamilton, ON L8L 1K4",
-                "industry": "Food Service",
-                "phone": "905-555-0654",
-                "website": "www.harborviewrestaurant.com",
-                "description": "Fine dining restaurant with waterfront views, established 1987.",
-                "employees": "25-30",
-                "established": "1987"
-            },
-            {
-                "name": "Hamilton HVAC Solutions",
-                "address": "987 Burlington Street East, Hamilton, ON L8L 0B2",
-                "industry": "HVAC",
-                "phone": "905-555-0987",
-                "website": None,
-                "description": "Heating, ventilation, and air conditioning services for commercial and residential clients since 1992.",
-                "employees": "18-22",
-                "established": "1992"
-            },
-            {
-                "name": "Precision Tool & Die",
-                "address": "147 Kenilworth Avenue North, Hamilton, ON L8H 4S1",
-                "industry": "Manufacturing",
-                "phone": "905-555-0147",
-                "website": "www.precisiontooldie.ca",
-                "description": "Custom tool and die manufacturing for automotive and aerospace industries since 1988.",
-                "employees": "40-55",
-                "established": "1988"
-            },
-            {
-                "name": "Ancaster Dental Clinic",
-                "address": "258 Wilson Street East, Ancaster, ON L9G 2B8",
-                "industry": "Healthcare",
-                "phone": "905-555-0258",
-                "website": "www.ancasterdental.com",
-                "description": "Family dental practice serving the Hamilton area for over 20 years.",
-                "employees": "12-15",
-                "established": "2003"
-            }
-        ]
-
-        # Expand to meet count requirement by cycling through samples
-        expanded_data = []
-        for i in range(count):
-            base_business = sample_businesses[i % len(sample_businesses)].copy()
-
-            # Modify slightly to create variations
-            if i >= len(sample_businesses):
-                suffix = f" #{i//len(sample_businesses) + 1}"
-                base_business["name"] += suffix
-
-            expanded_data.append(base_business)
-
-        logger.info(f"Generated {len(expanded_data)} sample business records")
-        return expanded_data
+        # CRITICAL FIX: Do not return fake sample data
+        # Must connect to real data sources (OSM, YellowPages, government sources)
+        raise NotImplementedError(
+            "Sample data generation is disabled. "
+            "All business data must come from verified external sources. "
+            "Use BusinessDataAggregator instead."
+        )
 
     async def run_full_pipeline(self, source: str, count: int,
                               min_effectiveness: float = 0.7,

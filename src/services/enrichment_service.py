@@ -70,8 +70,8 @@ class BusinessEnrichmentService:
             # Email discovery
             lead = await self._discover_email(lead)
 
-            # Revenue estimation
-            lead = await self._estimate_revenue(lead)
+            # REMOVED: Revenue estimation - cannot be verified from public sources
+            # Revenue data is not available for small businesses
 
             # Business intelligence gathering
             lead = await self._gather_business_intelligence(lead)
@@ -95,160 +95,11 @@ class BusinessEnrichmentService:
             self.enrichment_stats['enrichment_failures'] += 1
             return lead
     
-    async def _estimate_revenue(self, lead: BusinessLead) -> BusinessLead:
-        """Estimate business revenue using multiple methodologies."""
-        
-        revenue_estimates = []
-        confidence_factors = []
-        estimation_methods = []
-        indicators = []
-        
-        # Method 1: Employee-based estimation
-        if lead.employee_count and lead.industry:
-            employee_estimate, employee_confidence = self._estimate_from_employees(lead)
-            if employee_estimate:
-                revenue_estimates.append(employee_estimate)
-                confidence_factors.append(employee_confidence)
-                estimation_methods.append("employee_count")
-                indicators.append(f"Employee count ({lead.employee_count}) analysis")
-        
-        # Method 2: Industry and age-based estimation
-        if lead.industry and lead.years_in_business:
-            age_estimate, age_confidence = self._estimate_from_business_age(lead)
-            if age_estimate:
-                revenue_estimates.append(age_estimate)
-                confidence_factors.append(age_confidence)
-                estimation_methods.append("business_maturity")
-                indicators.append(f"Business maturity ({lead.years_in_business} years) analysis")
-        
-        # Method 3: Location-based adjustment
-        if lead.location.is_hamilton_area():
-            location_factor = 0.85  # Hamilton has lower operating costs than Toronto
-            indicators.append("Hamilton market adjustment applied")
-        
-        # Method 4: Industry-specific indicators
-        if lead.industry and lead.industry in self.benchmarks:
-            industry_estimate, industry_confidence = self._estimate_from_industry_profile(lead)
-            if industry_estimate:
-                revenue_estimates.append(industry_estimate)
-                confidence_factors.append(industry_confidence)
-                estimation_methods.append("industry_benchmarking")
-                indicators.append(f"Industry ({lead.industry}) benchmarking")
-        
-        # Calculate weighted average estimate
-        if revenue_estimates and confidence_factors:
-            # Weighted average based on confidence
-            total_weight = sum(confidence_factors)
-            weighted_revenue = sum(est * conf for est, conf in zip(revenue_estimates, confidence_factors))
-            final_estimate = int(weighted_revenue / total_weight) if total_weight > 0 else 0
-            
-            # Average confidence
-            average_confidence = sum(confidence_factors) / len(confidence_factors)
-            
-            # Apply location adjustment
-            if lead.location.is_hamilton_area():
-                final_estimate = int(final_estimate * 0.85)  # 15% lower costs
-            
-            # Create revenue estimate
-            lead.revenue_estimate = RevenueEstimate(
-                estimated_amount=final_estimate,
-                confidence_score=min(average_confidence, 1.0),
-                estimation_method=estimation_methods,
-                indicators=indicators
-            )
-            
-            self.enrichment_stats['revenue_estimates_generated'] += 1
-            
-            if average_confidence >= 0.7:
-                self.enrichment_stats['high_confidence_estimates'] += 1
-        
-        else:
-            # No reliable estimation possible
-            lead.revenue_estimate = RevenueEstimate(
-                indicators=["Insufficient data for revenue estimation"]
-            )
-        
-        return lead
-    
-    def _estimate_from_employees(self, lead: BusinessLead) -> tuple[Optional[int], float]:
-        """Estimate revenue based on employee count and industry."""
-        
-        if not lead.employee_count or not lead.industry:
-            return None, 0.0
-        
-        industry_key = lead.industry.lower()
-        benchmark = self.benchmarks.get(industry_key, self.benchmarks.get('manufacturing'))
-        
-        if not benchmark:
-            return None, 0.0
-        
-        # Base calculation
-        estimated_revenue = lead.employee_count * benchmark['revenue_per_employee']
-        
-        # Confidence based on how well employee count fits typical range
-        min_employees, max_employees = benchmark['employee_range']
-        
-        if min_employees <= lead.employee_count <= max_employees:
-            confidence = benchmark['confidence_multiplier'] * 1.2  # Boost for fitting range
-        elif min_employees * 0.7 <= lead.employee_count <= max_employees * 1.3:
-            confidence = benchmark['confidence_multiplier'] * 0.8  # Reduce for being outside typical range
-        else:
-            confidence = benchmark['confidence_multiplier'] * 0.5  # Low confidence for outliers
-        
-        return estimated_revenue, min(confidence, 1.0)
-    
-    def _estimate_from_business_age(self, lead: BusinessLead) -> tuple[Optional[int], float]:
-        """Estimate revenue based on business age and stability indicators."""
-        
-        if not lead.years_in_business:
-            return None, 0.0
-        
-        # Base estimate for established businesses
-        if lead.years_in_business >= 25:
-            base_estimate = 1_800_000  # Very established
-            confidence = 0.4
-        elif lead.years_in_business >= 20:
-            base_estimate = 1_500_000  # Well established
-            confidence = 0.35
-        elif lead.years_in_business >= 15:
-            base_estimate = 1_200_000  # Established
-            confidence = 0.3
-        else:
-            return None, 0.0  # Too young for reliable age-based estimation
-        
-        # Adjust for industry if known
-        if lead.industry and lead.industry in self.benchmarks:
-            benchmark = self.benchmarks[lead.industry]
-            growth_factor = 1.0 + (benchmark['growth_rate'] * lead.years_in_business)
-            base_estimate = int(base_estimate * growth_factor)
-        
-        return base_estimate, confidence
-    
-    def _estimate_from_industry_profile(self, lead: BusinessLead) -> tuple[Optional[int], float]:
-        """Estimate revenue based on industry profile and typical business characteristics."""
-        
-        if not lead.industry or lead.industry not in self.benchmarks:
-            return None, 0.0
-        
-        benchmark = self.benchmarks[lead.industry]
-        
-        # Use middle of typical employee range for baseline
-        min_emp, max_emp = benchmark['employee_range']
-        typical_employees = (min_emp + max_emp) // 2
-        
-        base_estimate = typical_employees * benchmark['revenue_per_employee']
-        
-        # Adjust confidence based on how much data we have
-        confidence = benchmark['confidence_multiplier'] * 0.6  # Lower than employee-based
-        
-        # Adjust for known employee count
-        if lead.employee_count:
-            if min_emp <= lead.employee_count <= max_emp:
-                confidence *= 1.3  # Boost confidence
-            else:
-                confidence *= 0.7  # Reduce confidence
-        
-        return base_estimate, min(confidence, 1.0)
+    # REMOVED: _estimate_revenue - NO REVENUE ESTIMATION ALLOWED
+    # REMOVED: _estimate_from_employees - NO REVENUE ESTIMATION ALLOWED
+    # REMOVED: _estimate_from_business_age - NO REVENUE ESTIMATION ALLOWED
+    # REMOVED: _estimate_from_industry_profile - NO REVENUE ESTIMATION ALLOWED
+    # Revenue data cannot be verified from public sources for small businesses
     
     async def _gather_business_intelligence(self, lead: BusinessLead) -> BusinessLead:
         """Gather additional business intelligence from available sources."""

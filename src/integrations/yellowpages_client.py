@@ -70,16 +70,93 @@ class YellowPagesClient:
         if self._should_close_session and self.session:
             await self.session.close()
     
-    async def search_hamilton_businesses(self, 
+    async def search_business(self,
+                            business_name: str,
+                            city: str = "Hamilton") -> Optional[Dict[str, Any]]:
+        """
+        Search for a specific business by name and extract its categories.
+
+        Args:
+            business_name: Name of the business to search for
+            city: City location (default: Hamilton)
+
+        Returns:
+            Dictionary with business data including categories, or None if not found
+        """
+
+        try:
+            # Build search URL for specific business
+            search_params = {
+                'what': quote(business_name),
+                'where': quote(f"{city} ON"),
+                'pgLen': 5  # Only need first few results
+            }
+
+            url = f"{self.SEARCH_URL}?what={search_params['what']}&where={search_params['where']}&pgLen={search_params['pgLen']}"
+
+            self.logger.debug("yellowpages_business_search", business_name=business_name, url=url)
+
+            async with self.session.get(url) as response:
+                if response.status != 200:
+                    self.logger.warning("yellowpages_business_search_failed",
+                                      status=response.status,
+                                      business_name=business_name)
+                    return None
+
+                html = await response.text()
+                soup = BeautifulSoup(html, 'html.parser')
+
+                # Find the first matching listing
+                listing_selectors = [
+                    '.listing',
+                    '.organic__item',
+                    '.result',
+                    '[data-yext]'
+                ]
+
+                listings = []
+                for selector in listing_selectors:
+                    found = soup.select(selector)
+                    if found:
+                        listings = found
+                        break
+
+                if not listings:
+                    return None
+
+                # Extract business data and categories from first match
+                first_listing = listings[0]
+                business_data = self._extract_business_data(first_listing)
+
+                if business_data:
+                    # Extract categories
+                    categories = self._extract_categories(first_listing)
+                    business_data['categories'] = categories
+
+                    self.logger.info("yellowpages_business_found",
+                                   business_name=business_name,
+                                   categories=categories)
+
+                    return business_data
+
+                return None
+
+        except Exception as e:
+            self.logger.error("yellowpages_business_search_error",
+                            business_name=business_name,
+                            error=str(e))
+            return None
+
+    async def search_hamilton_businesses(self,
                                        industry_category: str = "manufacturing",
                                        max_results: int = 20) -> List[Dict[str, Any]]:
         """
         Search for Hamilton-area businesses in target industries.
-        
+
         Args:
             industry_category: Target industry category
             max_results: Maximum number of results to return
-            
+
         Returns:
             List of business data dictionaries
         """
@@ -213,24 +290,69 @@ class YellowPagesClient:
             self.logger.error("yellowpages_parse_failed", error=str(e), keyword=keyword)
             return []
     
+    def _extract_categories(self, listing) -> List[str]:
+        """Extract business categories from YellowPages listing."""
+
+        categories = []
+
+        try:
+            # Category selectors (YellowPages shows business categories)
+            category_selectors = [
+                '.listing__categories',
+                '.organic__categories',
+                '.result__categories',
+                '[data-cy="categories"]',
+                '.mlr__item__category',
+                '.categories'
+            ]
+
+            for selector in category_selectors:
+                category_elements = listing.select(selector)
+                if category_elements:
+                    for elem in category_elements:
+                        category_text = self._clean_text(elem.get_text())
+                        if category_text and category_text not in categories:
+                            categories.append(category_text)
+
+            # Also check for category links
+            category_link_selectors = [
+                'a[href*="/categories/"]',
+                'a.category',
+                'a.listing__category'
+            ]
+
+            for selector in category_link_selectors:
+                category_links = listing.select(selector)
+                for link in category_links:
+                    category_text = self._clean_text(link.get_text())
+                    if category_text and category_text not in categories:
+                        categories.append(category_text)
+
+            self.logger.debug("yellowpages_categories_extracted", count=len(categories), categories=categories)
+
+        except Exception as e:
+            self.logger.warning("yellowpages_category_extract_failed", error=str(e))
+
+        return categories
+
     def _extract_business_data(self, listing) -> Optional[Dict[str, Any]]:
         """Extract business data from a YellowPages listing element."""
-        
+
         try:
             business = {}
-            
+
             # Business name
             name_selectors = [
                 '.businessName a', '.listing__name a', '.organic__title a',
                 'h3 a', '.result__title a', '[data-cy="businessName"] a'
             ]
-            
+
             for selector in name_selectors:
                 name_elem = listing.select_one(selector)
                 if name_elem:
                     business['business_name'] = self._clean_text(name_elem.get_text())
                     break
-            
+
             if not business.get('business_name'):
                 return None
             
@@ -305,34 +427,31 @@ class YellowPagesClient:
         return True
     
     def _enhance_business_data(self, business: Dict[str, Any], industry: str) -> Dict[str, Any]:
-        """Enhance business data with additional estimated information."""
-        
+        """Enhance business data ONLY with real data - NO estimation."""
+
         enhanced = business.copy()
-        
+
         # Add data source
         enhanced['data_source'] = DataSource.YELLOWPAGES
-        
+
         # Add industry
         enhanced['industry'] = industry
-        
-        # Estimate years in business (placeholder - would need additional research)
-        enhanced['years_in_business'] = self._estimate_years_in_business(business['business_name'])
-        
-        # Estimate employee count based on business type and name
-        enhanced['employee_count'] = self._estimate_employee_count(business['business_name'], industry)
-        
+
+        # REMOVED: No estimation of years_in_business or employee_count
+        # These fields will be None/missing - leads without them will be rejected
+
         # Clean and standardize phone format
         if business.get('phone'):
             enhanced['phone'] = self._format_phone(business['phone'])
-        
+
         # Ensure website has protocol
         if business.get('website'):
             enhanced['website'] = self._format_website(business['website'])
-        
+
         # Extract city from address
         if business.get('address'):
             enhanced['city'] = self._extract_city(business['address'])
-        
+
         return enhanced
     
     def _clean_text(self, text: str) -> str:
@@ -375,49 +494,9 @@ class YellowPagesClient:
         
         return url_pattern.match(url) is not None
     
-    def _estimate_years_in_business(self, business_name: str) -> int:
-        """Estimate years in business based on business name patterns."""
-        
-        # Look for year indicators
-        year_match = re.search(r'\b(19|20)\d{2}\b', business_name)
-        if year_match:
-            year = int(year_match.group())
-            return max(1, 2025 - year)
-        
-        # Look for "since" indicators  
-        since_match = re.search(r'since\s+(19|20)\d{2}', business_name.lower())
-        if since_match:
-            year = int(since_match.group(1) + since_match.group(2))
-            return max(1, 2025 - year)
-        
-        # Default estimate based on business maturity indicators
-        maturity_indicators = ['ltd', 'limited', 'inc', 'incorporated', 'corp', 'company']
-        if any(indicator in business_name.lower() for indicator in maturity_indicators):
-            return 20  # Assume established business
-        
-        return 15  # Default minimum for our criteria
-    
-    def _estimate_employee_count(self, business_name: str, industry: str) -> int:
-        """Estimate employee count based on business characteristics."""
-        
-        # Size indicators in name
-        if any(word in business_name.lower() for word in ['micro', 'small', 'boutique']):
-            return 3
-        elif any(word in business_name.lower() for word in ['group', 'systems', 'solutions', 'international']):
-            return 12
-        elif any(word in business_name.lower() for word in ['corporation', 'enterprises', 'industries']):
-            return 25
-        
-        # Industry-based estimates
-        industry_estimates = {
-            'manufacturing': 8,
-            'professional_services': 6,
-            'printing': 5,
-            'equipment_rental': 7,
-            'wholesale': 10
-        }
-        
-        return industry_estimates.get(industry, 7)
+    # REMOVED: _estimate_years_in_business - NO ESTIMATION ALLOWED
+    # REMOVED: _estimate_employee_count - NO ESTIMATION ALLOWED
+    # All data must be from verified sources or lead is rejected
     
     def _format_phone(self, phone: str) -> str:
         """Format phone number consistently."""

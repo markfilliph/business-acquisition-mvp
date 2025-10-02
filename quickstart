@@ -23,7 +23,7 @@ echo "Generating $COUNT qualified leads..."
 echo ""
 
 # Run the fast generator directly with system Python
-python3 scripts/quick_lead_gen.py "$COUNT" $SHOW_FLAG
+PYTHONPATH="$SCRIPT_DIR" python3 src/pipeline/quick_generator.py "$COUNT" $SHOW_FLAG
 
 exit_code=$?
 

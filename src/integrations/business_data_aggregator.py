@@ -403,193 +403,44 @@ out skel qt;
     async def _enhance_business_data(self, business: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         """
         Enhance business data with additional information and validation.
+        ONLY real data - NO estimation allowed. Keep whatever data we have.
         """
-        
+
         enhanced = business.copy()
-        
-        # Estimate business metrics
-        enhanced['years_in_business'] = self._estimate_years_in_business(business['business_name'])
-        enhanced['employee_count'] = self._estimate_employee_count(business['business_name'])
-        
+
+        # Log missing data but DON'T reject - keep what we have
+        if not enhanced.get('years_in_business'):
+            self.logger.info("lead_missing_years", business=business.get('business_name'))
+            # Leave as None - no estimation
+        if not enhanced.get('employee_count'):
+            self.logger.info("lead_missing_employees", business=business.get('business_name'))
+            # Leave as None - no estimation
+
         # Ensure required fields
         if not enhanced.get('address') and enhanced.get('latitude'):
             enhanced['address'] = f"Hamilton, ON (Lat: {enhanced['latitude']:.4f})"
-        
+
         # Default city if not specified
         if not enhanced.get('city'):
             enhanced['city'] = 'Hamilton'
-        
+
         return enhanced
     
-    def _estimate_years_in_business(self, business_name: str) -> int:
-        """Estimate years in business based on name patterns."""
-        
-        # Look for establishment indicators
-        if any(word in business_name.lower() for word in ['ltd', 'limited', 'inc', 'corp']):
-            return 22  # Established business
-        elif any(word in business_name.lower() for word in ['group', 'systems', 'solutions']):
-            return 18
-        else:
-            return 16  # Default
-    
-    def _estimate_employee_count(self, business_name: str) -> int:
-        """Estimate employee count based on business indicators."""
-        
-        if any(word in business_name.lower() for word in ['international', 'group', 'corporation']):
-            return 15
-        elif any(word in business_name.lower() for word in ['systems', 'solutions', 'services']):
-            return 8
-        else:
-            return 6  # Small business default
+    # REMOVED: _estimate_years_in_business - NO ESTIMATION ALLOWED
+    # REMOVED: _estimate_employee_count - NO ESTIMATION ALLOWED
+    # All data must be from verified sources or lead is rejected
 
     def _get_fallback_hamilton_businesses(self,
                                         industry_types: List[str],
                                         max_results: int) -> List[Dict[str, Any]]:
         """
-        Returns ONLY real, verified businesses. NO fabricated data.
+        REMOVED: Hardcoded business list - NO HARDCODED DATA ALLOWED.
+        This function now returns empty list. All businesses must come from real-time external sources.
         """
 
-        self.logger.info("using_verified_real_businesses_only")
+        self.logger.warning("fallback_businesses_disabled",
+                          reason="No hardcoded data allowed - use real sources only")
 
-        # ONLY Hamilton area businesses with 100% VERIFIED accurate information from their websites
-        real_verified_businesses = [
-            {
-                'business_name': 'A.H. Burns Energy Systems Ltd.',
-                'address': '1-1370 Sandhill Drive, Ancaster, ON L9G 4V5',
-                'phone': '(905) 525-6321',
-                'website': 'https://burnsenergy.ca',
-                'industry': 'professional_services',
-                'years_in_business': 22,
-                'employee_count': 9,
-                'data_source': DataSource.VERIFIED_DATABASE
-            },
-            {
-                'business_name': '360 Energy Inc',
-                'address': '1480 Sandhill Drive Unit 8B, Ancaster, ON L9G 4V5',
-                'phone': '(877) 431-0332',
-                'website': 'https://360energy.net',
-                'industry': 'professional_services',
-                'years_in_business': 30,
-                'employee_count': 12,
-                'data_source': DataSource.VERIFIED_DATABASE
-            },
-            {
-                'business_name': 'AVL Manufacturing Inc.',
-                'address': 'Hamilton, ON',
-                'phone': '(905) 544-0606',
-                'website': 'https://avlmfg.com',
-                'industry': 'manufacturing',
-                'years_in_business': 27,  # Founded 1998
-                'employee_count': 45,
-                'data_source': DataSource.VERIFIED_DATABASE
-            },
-            {
-                'business_name': 'VSX Web Design',
-                'address': 'Stoney Creek, ON',
-                'phone': '(905) 662-8679',
-                'website': 'https://vsxwebdesign.com',
-                'industry': 'professional_services',
-                'years_in_business': 18,
-                'employee_count': 8,
-                'data_source': DataSource.VERIFIED_DATABASE
-            },
-            {
-                'business_name': 'Hamilton Cleaning Services',
-                'address': 'Hamilton, ON',
-                'phone': '(289) 389-5850',
-                'website': 'https://www.hamiltoncleaningservices.ca',
-                'industry': 'professional_services',
-                'years_in_business': 15,
-                'employee_count': 18,
-                'data_source': DataSource.VERIFIED_DATABASE
-            },
-            {
-                'business_name': 'Premier Printing and Signs Ltd',
-                'address': 'Hamilton, ON',
-                'phone': '(905) 544-9999',
-                'website': 'http://www.vehiclegraphicshamilton.ca',
-                'industry': 'printing',
-                'years_in_business': 25,
-                'employee_count': 12,
-                'data_source': DataSource.VERIFIED_DATABASE
-            },
-            {
-                'business_name': 'Affinity Biologicals Inc',
-                'address': 'Ancaster, ON',
-                'phone': '(905) 304-7555',
-                'website': 'https://www.affinitybiologicals.com',
-                'industry': 'manufacturing',
-                'years_in_business': 28,
-                'employee_count': 22,
-                'data_source': DataSource.VERIFIED_DATABASE
-            },
-            {
-                'business_name': 'Nova Filtration Technologies Inc',
-                'address': 'Ancaster, ON',
-                'phone': '(905) 648-6400',
-                'website': 'https://www.novafiltration.com',
-                'industry': 'manufacturing',
-                'years_in_business': 24,
-                'employee_count': 16,
-                'data_source': DataSource.VERIFIED_DATABASE
-            },
-            {
-                'business_name': 'Steel & Timber Supply Co Inc',
-                'address': 'Ancaster, ON',
-                'phone': '(905) 648-4449',
-                'website': 'https://www.steelandtimber.com',
-                'industry': 'wholesale',
-                'years_in_business': 41,
-                'employee_count': 28,
-                'data_source': DataSource.VERIFIED_DATABASE
-            },
-            {
-                'business_name': 'POSH Home Cleaning & Sanitizing',
-                'address': 'Ancaster, ON',
-                'phone': '(905) 304-7674',
-                'website': 'https://www.findthedustbunny.com',
-                'industry': 'professional_services',
-                'years_in_business': 16,
-                'employee_count': 15,
-                'data_source': DataSource.VERIFIED_DATABASE
-            },
-            {
-                'business_name': 'Access Point Lowering Systems Inc',
-                'address': 'Ancaster, ON',
-                'phone': '(905) 648-3212',
-                'website': 'https://www.accesspoint.ca',
-                'industry': 'manufacturing',
-                'years_in_business': 22,
-                'employee_count': 18,
-                'data_source': DataSource.VERIFIED_DATABASE
-            },
-            {
-                'business_name': 'Can-Dan Rehatec Ltd',
-                'address': 'Ancaster, ON',
-                'phone': '(905) 648-0770',
-                'website': 'https://www.candanrehatec.com',
-                'industry': 'manufacturing',
-                'years_in_business': 26,
-                'employee_count': 12,
-                'data_source': DataSource.VERIFIED_DATABASE
-            },
-            {
-                'business_name': 'Niagara Belco Elevator Inc',
-                'address': 'Ancaster, ON',
-                'phone': '(905) 648-4200',
-                'website': 'https://www.niagarabelco.com',
-                'industry': 'manufacturing',
-                'years_in_business': 31,
-                'employee_count': 24,
-                'data_source': DataSource.VERIFIED_DATABASE
-            },
-        ]
-
-        # Filter by requested industries
-        filtered_businesses = []
-        for business in real_verified_businesses:
-            if business['industry'] in industry_types:
-                filtered_businesses.append(business)
-
-        # Return only what we have - no fake data to fill quotas
-        return filtered_businesses[:max_results]
+        # CRITICAL FIX: Return empty list instead of hardcoded data
+        # All businesses must come from OSM, YellowPages, or government sources
+        return []

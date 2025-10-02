@@ -22,4 +22,4 @@ echo "🎯 Generating $COUNT leads..."
 
 # Activate virtual environment and run
 source automation_env/bin/activate
-PYTHONPATH="$SCRIPT_DIR" python3 scripts/generate_leads.py --count "$COUNT" $SHOW_FLAG
+PYTHONPATH="$SCRIPT_DIR" python3 cli/generate.py --count "$COUNT" $SHOW_FLAG

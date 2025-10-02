@@ -1,0 +1,338 @@
+================================================================================
+LEAD ENRICHMENT - 20 BUSINESSES
+================================================================================
+Started: 2025-10-02 09:31:55
+
+
+[1/20]
+
+================================================================================
+ENRICHING: A.H. Burns Energy Systems Ltd.
+================================================================================
+📂 Scraping website: https://burnsenergy.ca
+   ✅ Website scraped successfully
+🔍 Searching LinkedIn...
+
+📊 ENRICHMENT SUMMARY:
+   Employee Count: Not found
+   Years in Business: Not found
+   Founded Year: Not found
+   Revenue: Not found
+   Sources: None
+
+[2/20]
+
+================================================================================
+ENRICHING: 360 Energy Inc
+================================================================================
+📂 Scraping website: https://360energy.net
+   ✅ Website scraped successfully
+   📅 Found founding year: 1995 (30 years)
+🔍 Searching LinkedIn...
+
+📊 ENRICHMENT SUMMARY:
+   Employee Count: Not found
+   Years in Business: 30
+   Founded Year: 1995
+   Revenue: Not found
+   Sources: website_founded_1995
+
+[3/20]
+
+================================================================================
+ENRICHING: AVL Manufacturing Inc.
+================================================================================
+📂 Scraping website: https://avlmfg.com
+   ✅ Website scraped successfully
+   📅 Found founding year: 1998 (27 years)
+🔍 Searching LinkedIn...
+
+📊 ENRICHMENT SUMMARY:
+   Employee Count: Not found
+   Years in Business: 27
+   Founded Year: 1998
+   Revenue: Not found
+   Sources: website_founded_1998
+
+[4/20]
+
+================================================================================
+ENRICHING: VSX Web Design
+================================================================================
+📂 Scraping website: https://vsxwebdesign.com
+   ✅ Website scraped successfully
+🔍 Searching LinkedIn...
+
+📊 ENRICHMENT SUMMARY:
+   Employee Count: Not found
+   Years in Business: Not found
+   Founded Year: Not found
+   Revenue: Not found
+   Sources: None
+
+[5/20]
+
+================================================================================
+ENRICHING: Premier Printing and Signs Ltd
+================================================================================
+📂 Scraping website: http://www.vehiclegraphicshamilton.ca
+   ✅ Website scraped successfully
+   📅 Found founding year: 2001 (24 years)
+🔍 Searching LinkedIn...
+
+📊 ENRICHMENT SUMMARY:
+   Employee Count: Not found
+   Years in Business: 24
+   Founded Year: 2001
+   Revenue: Not found
+   Sources: website_founded_2001
+
+[6/20]
+
+================================================================================
+ENRICHING: Affinity Biologicals Inc
+================================================================================
+📂 Scraping website: https://www.affinitybiologicals.com
+   ✅ Website scraped successfully
+🔍 Searching LinkedIn...
+
+📊 ENRICHMENT SUMMARY:
+   Employee Count: Not found
+   Years in Business: Not found
+   Founded Year: Not found
+   Revenue: Not found
+   Sources: None
+
+[7/20]
+
+================================================================================
+ENRICHING: Nova Filtration Technologies Inc
+================================================================================
+📂 Scraping website: https://www.novafiltration.com
+   ✅ Website scraped successfully
+   📅 Found founding year: 1974 (51 years)
+🔍 Searching LinkedIn...
+
+📊 ENRICHMENT SUMMARY:
+   Employee Count: Not found
+   Years in Business: 51
+   Founded Year: 1974
+   Revenue: Not found
+   Sources: website_founded_1974
+
+[8/20]
+
+================================================================================
+ENRICHING: Steel & Timber Supply Co Inc
+================================================================================
+📂 Scraping website: https://www.steelandtimber.com
+   ✅ Website scraped successfully
+🔍 Searching LinkedIn...
+
+📊 ENRICHMENT SUMMARY:
+   Employee Count: Not found
+   Years in Business: Not found
+   Founded Year: Not found
+   Revenue: Not found
+   Sources: None
+
+[9/20]
+
+================================================================================
+ENRICHING: Access Point Lowering Systems Inc
+================================================================================
+📂 Scraping website: https://www.accesspoint.ca
+   ✅ Website scraped successfully
+🔍 Searching LinkedIn...
+
+📊 ENRICHMENT SUMMARY:
+   Employee Count: Not found
+   Years in Business: Not found
+   Founded Year: Not found
+   Revenue: Not found
+   Sources: None
+
+[10/20]
+
+================================================================================
+ENRICHING: Niagara Belco Elevator Inc
+================================================================================
+📂 Scraping website: https://www.niagarabelco.com
+   ✅ Website scraped successfully
+🔍 Searching LinkedIn...
+
+📊 ENRICHMENT SUMMARY:
+   Employee Count: Not found
+   Years in Business: Not found
+   Founded Year: Not found
+   Revenue: Not found
+   Sources: None
+
+[11/20]
+
+================================================================================
+ENRICHING: Tan Thanh Supermarket & Houseware
+================================================================================
+🔍 Searching LinkedIn...
+
+📊 ENRICHMENT SUMMARY:
+   Employee Count: Not found
+   Years in Business: Not found
+   Founded Year: Not found
+   Revenue: Not found
+   Sources: None
+
+[12/20]
+
+================================================================================
+ENRICHING: Dee Signs
+================================================================================
+📂 Scraping website: https://www.deesigns.ca/
+   ✅ Website scraped successfully
+🔍 Searching LinkedIn...
+
+📊 ENRICHMENT SUMMARY:
+   Employee Count: Not found
+   Years in Business: Not found
+   Founded Year: Not found
+   Revenue: Not found
+   Sources: None
+
+[13/20]
+
+================================================================================
+ENRICHING: Curry's Art Supplies
+================================================================================
+📂 Scraping website: https://www.currys.com
+   ✅ Website scraped successfully
+   📅 Found founding year: 1911 (114 years)
+🔍 Searching LinkedIn...
+
+📊 ENRICHMENT SUMMARY:
+   Employee Count: Not found
+   Years in Business: 114
+   Founded Year: 1911
+   Revenue: Not found
+   Sources: website_founded_1911
+
+[14/20]
+
+================================================================================
+ENRICHING: New Hope Community Bikes
+================================================================================
+📂 Scraping website: https://www.newhopecommunitybikes.com/
+   ✅ Website scraped successfully
+   📅 Found founding year: 2008 (17 years)
+🔍 Searching LinkedIn...
+
+📊 ENRICHMENT SUMMARY:
+   Employee Count: Not found
+   Years in Business: 17
+   Founded Year: 2008
+   Revenue: Not found
+   Sources: website_founded_2008
+
+[15/20]
+
+================================================================================
+ENRICHING: Fastenal
+================================================================================
+📂 Scraping website: https://www.fastenal.com/locations/details/onha1
+   ⚠️  Could not scrape website
+🔍 Searching LinkedIn...
+
+📊 ENRICHMENT SUMMARY:
+   Employee Count: Not found
+   Years in Business: Not found
+   Founded Year: Not found
+   Revenue: Not found
+   Sources: None
+
+[16/20]
+
+================================================================================
+ENRICHING: Pardon Applications of Canada
+================================================================================
+📂 Scraping website: https://www.pardonapplications.ca/
+   ⚠️  Could not scrape website
+🔍 Searching LinkedIn...
+
+📊 ENRICHMENT SUMMARY:
+   Employee Count: Not found
+   Years in Business: Not found
+   Founded Year: Not found
+   Revenue: Not found
+   Sources: None
+
+[17/20]
+
+================================================================================
+ENRICHING: Central Health Institute
+================================================================================
+🔍 Searching LinkedIn...
+
+📊 ENRICHMENT SUMMARY:
+   Employee Count: Not found
+   Years in Business: Not found
+   Founded Year: Not found
+   Revenue: Not found
+   Sources: None
+
+[18/20]
+
+================================================================================
+ENRICHING: Bicycle Works
+================================================================================
+🔍 Searching LinkedIn...
+
+📊 ENRICHMENT SUMMARY:
+   Employee Count: Not found
+   Years in Business: Not found
+   Founded Year: Not found
+   Revenue: Not found
+   Sources: None
+
+[19/20]
+
+================================================================================
+ENRICHING: Anytime Convenience
+================================================================================
+🔍 Searching LinkedIn...
+
+📊 ENRICHMENT SUMMARY:
+   Employee Count: Not found
+   Years in Business: Not found
+   Founded Year: Not found
+   Revenue: Not found
+   Sources: None
+
+[20/20]
+
+================================================================================
+ENRICHING: Nardini Specialties
+================================================================================
+📂 Scraping website: https://www.nardinispecialties.ca/
+   ✅ Website scraped successfully
+   📅 Found founding year: 1977 (48 years)
+🔍 Searching LinkedIn...
+
+📊 ENRICHMENT SUMMARY:
+   Employee Count: Not found
+   Years in Business: 48
+   Founded Year: 1977
+   Revenue: Not found
+   Sources: website_founded_1977
+
+================================================================================
+ENRICHMENT COMPLETE
+================================================================================
+
+📊 STATISTICS:
+   Total businesses: 20
+   With employee count: 0/20 (0.0%)
+   With years in business: 7/20 (35.0%)
+   With revenue: 0/20 (0.0%)
+
+💾 Saved to: output/enriched_leads_20251002_093257.json
+📄 Updated summary: output/revalidation_summary_20251002_082005.txt
+

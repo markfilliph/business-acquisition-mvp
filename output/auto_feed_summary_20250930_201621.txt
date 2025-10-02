@@ -1,0 +1,43 @@
+AUTOMATED HAMILTON BUSINESS FEED - SUMMARY REPORT
+======================================================================
+Generated: 2025-09-30 20:16:21
+Run ID: 20250930_201621
+
+CRITERIA ENFORCEMENT
+----------------------------------------------------------------------
+Revenue Range: $1,000,000 - $1,400,000 (STRICT)
+Minimum Age: 15+ years
+Location: Hamilton, Dundas, Ancaster, Stoney Creek, Waterdown
+Industries: manufacturing, wholesale, professional_services, printing, equipment_rental
+Employees: 5-50
+
+RESULTS
+----------------------------------------------------------------------
+Total Qualified Leads: 2
+
+Average Revenue: $0
+Average Age: 19.0 years
+
+DETAILED LEADS
+----------------------------------------------------------------------
+
+1. VSX Web Design
+   Address: Stoney Creek, ON
+   Phone: (905) 662-8679
+   Website: https://vsxwebdesign.com
+   Industry: professional_services
+   Revenue: $0
+   Years: 15
+   Employees: None
+   ✅ RAG Validated (confidence: 1.00)
+
+2. Affinity Biologicals Inc
+   Address: Ancaster, ON
+   Phone: (905) 304-7555
+   Website: https://www.affinitybiologicals.com
+   Industry: Manufacturing
+   Revenue: $0
+   Years: 23
+   Employees: None
+   ✅ RAG Validated (confidence: 1.00)
+

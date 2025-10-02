@@ -1,0 +1,27 @@
+#!/bin/bash
+# Automated Hamilton Business Feed - Simple Command
+# Automatically discovers, validates, and generates qualified leads using multi-LLM system
+#
+# Usage: ./auto-feed [target_count]
+# Examples:
+#   ./auto-feed         # Generate 50 qualified leads (default)
+#   ./auto-feed 25      # Generate 25 qualified leads
+#   ./auto-feed 100     # Generate 100 qualified leads
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
+cd "$SCRIPT_DIR"
+
+# Default target
+TARGET=${1:-50}
+
+echo "🤖 AUTOMATED HAMILTON BUSINESS FEED"
+echo "=================================="
+echo "Target: $TARGET qualified leads"
+echo "Criteria: \$1M-\$1.4M revenue, 15+ years, Hamilton area"
+echo "Method: Multi-LLM validation with RAG"
+echo "=================================="
+echo ""
+
+# Activate virtual environment and run
+source automation_env/bin/activate
+PYTHONPATH="$SCRIPT_DIR" python3 cli/auto_feed.py --target "$TARGET"
