@@ -36,7 +36,8 @@ def compute_fingerprint(business: Dict) -> str:
 
     # City + postal prefix
     city = business.get('city', '').lower().strip()
-    postal = business.get('postal_code', '').upper().replace(' ', '')[:3]
+    postal_raw = business.get('postal_code', '') or ''  # Handle None
+    postal = postal_raw.upper().replace(' ', '')[:3] if postal_raw else ''
 
     # Phone digits only
     phone = business.get('phone', '')

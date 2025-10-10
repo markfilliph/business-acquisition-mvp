@@ -297,6 +297,7 @@ class EvidenceBasedLeadGenerator:
             print(f"📊 Discovered {len(businesses)} raw businesses\n")
 
             for idx, biz in enumerate(businesses, 1):
+                business_id = None  # Initialize to avoid UnboundLocalError
                 try:
                     # Step 1: Discover & Persist
                     business_data = {

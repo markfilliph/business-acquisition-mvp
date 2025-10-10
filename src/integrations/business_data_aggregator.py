@@ -10,6 +10,10 @@ import structlog
 
 from ..core.models import DataSource
 from ..core.exceptions import DataSourceError
+from ..sources.yellowpages import YellowPagesSearcher
+from ..sources.hamilton_chamber import HamiltonChamberSearcher
+from ..sources.canadian_importers import CanadianImportersSearcher
+from ..services.source_validator import SourceCrossValidator
 
 
 class BusinessDataAggregator:
@@ -78,34 +82,46 @@ class BusinessDataAggregator:
         all_businesses = []
         
         try:
-            # 1. Prioritize official government and registry sources first
-            try:
-                gov_businesses = await self._fetch_from_government_sources(industry_types, max_results)
-                all_businesses.extend(gov_businesses)
-                self.logger.info("government_sources_fetched", count=len(gov_businesses))
-            except Exception as e:
-                self.logger.warning("government_sources_failed", error=str(e))
-
-            # 2. Add verified fallback businesses (real businesses only)
-            if len(all_businesses) < max_results:
-                fallback_businesses = self._get_fallback_hamilton_businesses(
-                    industry_types, max_results - len(all_businesses)
-                )
-                all_businesses.extend(fallback_businesses)
-                self.logger.info("fallback_businesses_added", count=len(fallback_businesses))
-
-            # 3. Try OpenStreetMap as supplementary source (if still needed)
+            # 1. PRIORITY: Yellow Pages Canada (Established B2B directory, FREE)
             if len(all_businesses) < max_results:
                 try:
-                    osm_businesses = await self._fetch_from_openstreetmap(industry_types, max_results - len(all_businesses))
-                    all_businesses.extend(osm_businesses)
-                    self.logger.info("osm_businesses_added", count=len(osm_businesses))
+                    yp_businesses = await self._fetch_from_yellowpages(industry_types, max_results - len(all_businesses))
+                    all_businesses.extend(yp_businesses)
+                    self.logger.info("yellowpages_businesses_added", count=len(yp_businesses))
                 except Exception as e:
-                    self.logger.warning("osm_fetch_failed", error=str(e))
-            
+                    self.logger.warning("yellowpages_fetch_failed", error=str(e))
+
+            # 2. Hamilton Chamber of Commerce (Verified members, HIGH QUALITY)
+            if len(all_businesses) < max_results:
+                try:
+                    chamber_businesses = await self._fetch_from_hamilton_chamber(industry_types, max_results - len(all_businesses))
+                    all_businesses.extend(chamber_businesses)
+                    self.logger.info("hamilton_chamber_businesses_added", count=len(chamber_businesses))
+                except Exception as e:
+                    self.logger.warning("hamilton_chamber_fetch_failed", error=str(e))
+
+            # 3. Canadian Importers Database (Government data, official)
+            if len(all_businesses) < max_results:
+                try:
+                    importers_businesses = await self._fetch_from_canadian_importers(industry_types, max_results - len(all_businesses))
+                    all_businesses.extend(importers_businesses)
+                    self.logger.info("canadian_importers_businesses_added", count=len(importers_businesses))
+                except Exception as e:
+                    self.logger.warning("canadian_importers_fetch_failed", error=str(e))
+
+            # CROSS-VALIDATION: Group businesses by name and validate multi-source data
+            self.logger.info("cross_validation_started", total_businesses=len(all_businesses))
+
+            validator = SourceCrossValidator()
+            validated_businesses = await self._cross_validate_businesses(all_businesses, validator)
+
+            self.logger.info("cross_validation_complete",
+                           validated_businesses=len(validated_businesses),
+                           original_count=len(all_businesses))
+
             # Enhance with additional data
             enhanced_businesses = []
-            for business in all_businesses[:max_results]:
+            for business in validated_businesses[:max_results]:
                 enhanced = await self._enhance_business_data(business)
                 if enhanced:
                     enhanced_businesses.append(enhanced)
@@ -118,288 +134,248 @@ class BusinessDataAggregator:
         except Exception as e:
             self.logger.error("business_aggregation_failed", error=str(e))
             # Return fallback data if all sources fail
-            return self._get_fallback_hamilton_businesses(industry_types, max_results)
-    
-    async def _fetch_from_openstreetmap(self, 
-                                      industry_types: List[str], 
-                                      max_results: int) -> List[Dict[str, Any]]:
-        """
-        Fetch business data from OpenStreetMap using Overpass API.
-        This is publicly accessible and doesn't require authentication.
-        """
-        
-        businesses = []
-        
-        try:
-            # Build Overpass query for Hamilton area businesses
-            query = self._build_overpass_query(industry_types)
-            
-            self.logger.debug("osm_query_started", query_preview=query[:200])
-            
-            async with self.session.post(
-                self.overpass_url, 
-                data=query,
-                headers={'Content-Type': 'text/plain'}
-            ) as response:
-                
-                if response.status == 200:
-                    data = await response.json()
-                    businesses = self._parse_overpass_results(data)
-                    self.logger.info("osm_businesses_found", count=len(businesses))
-                else:
-                    self.logger.warning("osm_request_failed", status=response.status)
-                    
-        except Exception as e:
-            self.logger.error("osm_fetch_failed", error=str(e))
-        
-        return businesses[:max_results]
-    
-    def _build_overpass_query(self, industry_types: List[str]) -> str:
-        """
-        Build an Overpass API query to find businesses in Hamilton area.
-        Fixed to use proper OSM tag syntax.
-        """
-
-        # Hamilton area bounding box (south, west, north, east)
-        bbox = "43.15,-80.05,43.4,-79.6"
-
-        # Simplified query focusing on businesses with names
-        # Using shop=* and office=* which are most reliable for businesses
-        query = f"""
-[out:json][timeout:25];
-(
-  node["shop"]["name"]({bbox});
-  way["shop"]["name"]({bbox});
-  node["office"]["name"]({bbox});
-  way["office"]["name"]({bbox});
-  node["craft"]["name"]({bbox});
-  way["craft"]["name"]({bbox});
-);
-out body;
->;
-out skel qt;
-"""
-
-        return query
-    
-    def _parse_overpass_results(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """Parse OpenStreetMap Overpass API results."""
-        
-        businesses = []
-        
-        try:
-            elements = data.get('elements', [])
-            
-            for element in elements:
-                tags = element.get('tags', {})
-                
-                # Extract business information
-                business = {}
-                
-                # Name
-                name = tags.get('name') or tags.get('operator') or tags.get('brand')
-                if not name:
-                    continue
-                
-                business['business_name'] = name
-                
-                # Address information
-                address_parts = []
-                if tags.get('addr:housenumber'):
-                    address_parts.append(tags['addr:housenumber'])
-                if tags.get('addr:street'):
-                    address_parts.append(tags['addr:street'])
-                if tags.get('addr:city'):
-                    address_parts.append(tags['addr:city'])
-                if tags.get('addr:postcode'):
-                    address_parts.append(tags['addr:postcode'])
-                
-                if address_parts:
-                    business['address'] = ', '.join(address_parts)
-                
-                # Phone
-                phone = tags.get('phone') or tags.get('contact:phone')
-                if phone:
-                    business['phone'] = phone
-                
-                # Website
-                website = tags.get('website') or tags.get('contact:website') or tags.get('url')
-                if website:
-                    business['website'] = website
-                
-                # Industry classification
-                business['industry'] = self._classify_osm_business(tags)
-                
-                # Coordinates
-                if element.get('lat') and element.get('lon'):
-                    business['latitude'] = element['lat']
-                    business['longitude'] = element['lon']
-                
-                # Data source
-                business['data_source'] = DataSource.OPENSTREETMAP
-                
-                if self._is_hamilton_area_business(business):
-                    businesses.append(business)
-                    
-        except Exception as e:
-            self.logger.error("osm_parse_failed", error=str(e))
-        
-        return businesses
-    
-    def _classify_osm_business(self, tags: Dict[str, str]) -> str:
-        """Classify business based on OSM tags."""
-        
-        if any(tag in tags for tag in ['craft', 'industrial']):
-            return 'manufacturing'
-        elif 'office' in tags:
-            return 'professional_services'
-        elif tags.get('craft') == 'printer' or tags.get('shop') == 'copyshop':
-            return 'printing'
-        elif 'rental' in str(tags.values()).lower():
-            return 'equipment_rental'
-        elif tags.get('shop') == 'wholesale':
-            return 'wholesale'
-        else:
-            return 'professional_services'  # Default
-    
-    def _is_hamilton_area_business(self, business: Dict[str, Any]) -> bool:
-        """Check if business is in Hamilton area."""
-        
-        address = business.get('address', '').lower()
-        city_indicators = ['hamilton', 'ancaster', 'dundas', 'stoney creek', 'waterdown']
-        
-        return any(city in address for city in city_indicators)
-    
-    async def _fetch_from_government_sources(self,
-                                           industry_types: List[str],
-                                           max_results: int) -> List[Dict[str, Any]]:
-        """
-        Fetch from Canadian government business directories and official registries.
-        Uses publicly accessible business registry data.
-        """
-
-        businesses = []
-
-        try:
-            # Hamilton Chamber of Commerce verified members
-            chamber_businesses = await self._fetch_from_hamilton_chamber(industry_types, max_results)
-            businesses.extend(chamber_businesses)
-
-            # Ontario Business Registry (publicly accessible filings)
-            if len(businesses) < max_results:
-                ontario_businesses = await self._fetch_from_ontario_registry(industry_types, max_results - len(businesses))
-                businesses.extend(ontario_businesses)
-
-            # Canada Business Directory
-            if len(businesses) < max_results:
-                canada_businesses = await self._fetch_from_canada_business_directory(industry_types, max_results - len(businesses))
-                businesses.extend(canada_businesses)
-
-        except Exception as e:
-            self.logger.error("government_sources_fetch_failed", error=str(e))
-
-        return businesses
+            return []  # No fallback - rely on 3 quality sources
 
     async def _fetch_from_hamilton_chamber(self,
-                                         industry_types: List[str],
-                                         max_results: int) -> List[Dict[str, Any]]:
+                                          industry_types: List[str],
+                                          max_results: int) -> List[Dict[str, Any]]:
         """
         Fetch businesses from Hamilton Chamber of Commerce member directory.
-        These are verified, paying members with real business operations.
+        Verified, paying members with high quality data.
         """
-
         businesses = []
 
         try:
-            # Hamilton Chamber of Commerce has a publicly accessible member directory
-            # In production, this would use their API or scrape their public directory
-            # For now, we'll use verified Chamber members we know exist
+            chamber_searcher = HamiltonChamberSearcher()
 
-            # NOTE: These are placeholder businesses for demonstration
-            # In production, would verify ALL data through Chamber of Commerce API/directory
-            verified_chamber_members = [
-                # Temporarily empty - all businesses must be individually verified for accuracy
-                # before adding to avoid data quality issues
-            ]
+            # Search by industry if specified
+            for industry in industry_types:
+                results = await chamber_searcher.search_members(
+                    industry_type=industry,
+                    max_results=max_results // len(industry_types)
+                )
 
-            # Filter by industry and return
-            for business in verified_chamber_members:
-                if business['industry'] in industry_types and len(businesses) < max_results:
+                # Convert to standard format
+                for biz in results:
+                    business = {
+                        'business_name': biz.get('name'),
+                        'address': biz.get('address'),
+                        'city': biz.get('city', 'Hamilton'),
+                        'postal_code': biz.get('postal_code'),
+                        'phone': biz.get('phone'),
+                        'website': biz.get('website'),
+                        'industry': industry,
+                        'category': biz.get('category'),
+                        'description': biz.get('description'),
+                        'data_source': 'hamilton_chamber'
+                    }
                     businesses.append(business)
+
+                # Rate limiting
+                await asyncio.sleep(3)
+
+                if len(businesses) >= max_results:
+                    break
 
             self.logger.info("hamilton_chamber_fetch_complete", count=len(businesses))
 
         except Exception as e:
             self.logger.error("hamilton_chamber_fetch_failed", error=str(e))
 
-        return businesses
+        return businesses[:max_results]
 
-    async def _fetch_from_ontario_registry(self,
-                                         industry_types: List[str],
-                                         max_results: int) -> List[Dict[str, Any]]:
+    async def _fetch_from_canadian_importers(self,
+                                            industry_types: List[str],
+                                            max_results: int) -> List[Dict[str, Any]]:
         """
-        Fetch from Ontario Business Registry - publicly accessible corporate filings.
-        These businesses have official government registration.
+        Fetch businesses from Canadian Importers Database.
+        Government data - official and free.
         """
-
         businesses = []
 
         try:
-            # Ontario Business Registry contains official corporate filings
-            # In production, this would query the official ServiceOntario API
-            # For now, use businesses we can verify through public registry data
+            importers_searcher = CanadianImportersSearcher()
 
-            # NOTE: All businesses must be individually verified before adding to avoid data accuracy issues
-            registry_verified_businesses = [
-                # Temporarily empty - need to verify each business through actual Ontario Registry lookup
-                # to ensure 100% accurate address, phone, and business details
-            ]
+            # Map industry types to product keywords
+            product_keywords = {
+                'manufacturing': ['machinery', 'equipment', 'metal', 'industrial'],
+                'printing': ['printing equipment', 'paper', 'ink'],
+                'wholesale': ['raw materials', 'supplies', 'bulk goods'],
+                'equipment_rental': ['equipment', 'tools', 'machinery'],
+                'professional_services': ['office equipment', 'supplies']
+            }
 
-            # Filter by industry and return
-            for business in registry_verified_businesses:
-                if business['industry'] in industry_types and len(businesses) < max_results:
-                    businesses.append(business)
+            # Collect all relevant keywords
+            all_keywords = []
+            for industry in industry_types:
+                all_keywords.extend(product_keywords.get(industry, []))
 
-            self.logger.info("ontario_registry_fetch_complete", count=len(businesses))
+            # Remove duplicates
+            all_keywords = list(set(all_keywords))
+
+            results = await importers_searcher.search_importers(
+                city='Hamilton',
+                province='Ontario',
+                product_keywords=all_keywords,
+                max_results=max_results
+            )
+
+            # Convert to standard format
+            for biz in results:
+                # Determine industry from products imported
+                products = biz.get('products_imported', '').lower()
+                industry = 'manufacturing'  # Default
+                if 'printing' in products:
+                    industry = 'printing'
+                elif 'wholesale' in products or 'distribution' in products:
+                    industry = 'wholesale'
+
+                business = {
+                    'business_name': biz.get('name'),
+                    'address': biz.get('address'),
+                    'city': biz.get('city', 'Hamilton'),
+                    'province': biz.get('province', 'Ontario'),
+                    'postal_code': biz.get('postal_code'),
+                    'phone': biz.get('phone'),
+                    'website': biz.get('website'),
+                    'industry': industry,
+                    'products_imported': biz.get('products_imported'),
+                    'data_source': 'canadian_importers'
+                }
+                businesses.append(business)
+
+            self.logger.info("canadian_importers_fetch_complete", count=len(businesses))
 
         except Exception as e:
-            self.logger.error("ontario_registry_fetch_failed", error=str(e))
+            self.logger.error("canadian_importers_fetch_failed", error=str(e))
 
-        return businesses
+        return businesses[:max_results]
 
-    async def _fetch_from_canada_business_directory(self,
-                                                  industry_types: List[str],
-                                                  max_results: int) -> List[Dict[str, Any]]:
+    async def _cross_validate_businesses(
+        self,
+        businesses: List[Dict[str, Any]],
+        validator: SourceCrossValidator
+    ) -> List[Dict[str, Any]]:
         """
-        Fetch from Canada Business Directory - official federal business listings.
-        These are businesses with federal business numbers and GST registration.
+        Cross-validate businesses from multiple sources.
+
+        Groups businesses by normalized name and validates consistency.
+        Merges consensus data from multiple sources.
+
+        Args:
+            businesses: List of all businesses from all sources
+            validator: SourceCrossValidator instance
+
+        Returns:
+            List of validated businesses with consensus data
         """
+        if not businesses:
+            return []
 
-        businesses = []
+        # Helper function to normalize business names for grouping
+        def normalize_business_name(name: str) -> str:
+            """Normalize business name for grouping."""
+            if not name:
+                return ""
+            normalized = name.lower().strip()
+            # Remove common suffixes
+            for suffix in ['ltd', 'limited', 'inc', 'incorporated', 'corp', 'corporation', 'llc', 'co']:
+                normalized = normalized.replace(f' {suffix}', '').replace(f'.{suffix}', '')
+            # Remove punctuation
+            normalized = normalized.replace('.', '').replace(',', '').replace('&', 'and')
+            # Remove extra spaces
+            normalized = ' '.join(normalized.split())
+            return normalized
 
-        try:
-            # Canada Business Directory is the official federal business registry
-            # In production, this would use the official government API
-            # For now, use businesses we can verify through federal registration
+        # Group businesses by normalized name
+        business_groups = {}
+        for biz in businesses:
+            name = biz.get('business_name', '')
+            if not name:
+                continue
 
-            # NOTE: All businesses must be individually verified before adding to avoid data accuracy issues
-            federal_registered_businesses = [
-                # Temporarily empty - need to verify each business through actual Canada Business Registry
-                # to ensure 100% accurate address, phone, and business details
-            ]
+            normalized_name = normalize_business_name(name)
+            if normalized_name not in business_groups:
+                business_groups[normalized_name] = []
+            business_groups[normalized_name].append(biz)
 
-            # Filter by industry and return
-            for business in federal_registered_businesses:
-                if business['industry'] in industry_types and len(businesses) < max_results:
-                    businesses.append(business)
+        # Validate each group
+        validated_businesses = []
+        multi_source_count = 0
+        single_source_count = 0
+        excluded_count = 0
 
-            self.logger.info("canada_business_directory_fetch_complete", count=len(businesses))
+        for normalized_name, group in business_groups.items():
+            if len(group) > 1:
+                # Multiple sources - cross-validate
+                multi_source_count += 1
 
-        except Exception as e:
-            self.logger.error("canada_business_directory_fetch_failed", error=str(e))
+                try:
+                    is_valid, issues, consensus_data = await validator.validate_multi_source_business(
+                        group,
+                        group[0].get('business_name', '')
+                    )
 
-        return businesses
-    
+                    if is_valid:
+                        # Merge consensus data into first business record
+                        merged = group[0].copy()
+
+                        # Update with consensus values (prefer consensus over single source)
+                        if consensus_data.get('address'):
+                            merged['address'] = consensus_data['address']
+                        if consensus_data.get('phone'):
+                            merged['phone'] = consensus_data['phone']
+                        if consensus_data.get('website'):
+                            merged['website'] = consensus_data['website']
+                        if consensus_data.get('industry'):
+                            merged['industry'] = consensus_data['industry']
+
+                        # Add validation metadata
+                        merged['validation_confidence'] = consensus_data.get('validation_confidence', 0.0)
+                        merged['validation_issues'] = issues if issues else []
+                        merged['source_count'] = len(group)
+                        merged['data_sources'] = ','.join([b.get('data_source', 'unknown') for b in group])
+
+                        validated_businesses.append(merged)
+
+                        self.logger.info("multi_source_business_validated",
+                                       business_name=group[0].get('business_name'),
+                                       source_count=len(group),
+                                       confidence=consensus_data.get('validation_confidence', 0.0),
+                                       issues_count=len(issues))
+                    else:
+                        # Failed validation - exclude
+                        excluded_count += 1
+                        self.logger.warning("multi_source_business_excluded",
+                                          business_name=group[0].get('business_name'),
+                                          source_count=len(group),
+                                          issues=issues)
+
+                except Exception as e:
+                    self.logger.error("cross_validation_error",
+                                    business_name=group[0].get('business_name', ''),
+                                    error=str(e))
+                    # On validation error, keep first source
+                    validated_businesses.append(group[0])
+            else:
+                # Single source - accept as-is with metadata
+                single_source_count += 1
+                single = group[0].copy()
+                single['validation_confidence'] = 0.6  # Lower confidence for single source
+                single['validation_issues'] = []
+                single['source_count'] = 1
+                single['data_sources'] = single.get('data_source', 'unknown')
+                validated_businesses.append(single)
+
+        self.logger.info("cross_validation_summary",
+                        total_groups=len(business_groups),
+                        multi_source=multi_source_count,
+                        single_source=single_source_count,
+                        excluded=excluded_count,
+                        validated=len(validated_businesses))
+
+        return validated_businesses
+
     async def _enhance_business_data(self, business: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         """
         Enhance business data with additional information and validation.
@@ -429,6 +405,63 @@ out skel qt;
     # REMOVED: _estimate_years_in_business - NO ESTIMATION ALLOWED
     # REMOVED: _estimate_employee_count - NO ESTIMATION ALLOWED
     # All data must be from verified sources or lead is rejected
+
+    async def _fetch_from_yellowpages(self,
+                                     industry_types: List[str],
+                                     max_results: int) -> List[Dict[str, Any]]:
+        """
+        Fetch businesses from Yellow Pages Canada.
+        Best B2B coverage of manufacturing/industrial businesses.
+        """
+        businesses = []
+
+        try:
+            yp_searcher = YellowPagesSearcher()
+
+            # Map industry types to Yellow Pages search terms
+            search_terms = {
+                'manufacturing': ['manufacturing', 'machine shop', 'metal fabrication'],
+                'printing': ['printing services', 'commercial printing'],
+                'wholesale': ['wholesale distributor', 'industrial supplier'],
+                'equipment_rental': ['equipment rental', 'industrial equipment'],
+                'professional_services': ['business services']
+            }
+
+            # Search for relevant industries
+            for industry in industry_types:
+                terms = search_terms.get(industry, [industry])
+                for term in terms:
+                    results = await yp_searcher.search_businesses(term, "Hamilton, ON", max_results // len(terms))
+
+                    # Convert to standard format
+                    for biz in results:
+                        business = {
+                            'business_name': biz.get('name'),
+                            'address': biz.get('street'),
+                            'city': biz.get('city', 'Hamilton'),
+                            'postal_code': biz.get('postal_code'),
+                            'phone': biz.get('phone'),
+                            'website': biz.get('website'),
+                            'industry': industry,
+                            'data_source': 'yellowpages'
+                        }
+                        businesses.append(business)
+
+                    # Rate limiting
+                    await asyncio.sleep(2)
+
+                    if len(businesses) >= max_results:
+                        break
+
+                if len(businesses) >= max_results:
+                    break
+
+            self.logger.info("yellowpages_fetch_complete", count=len(businesses))
+
+        except Exception as e:
+            self.logger.error("yellowpages_fetch_failed", error=str(e))
+
+        return businesses[:max_results]
 
     def _get_fallback_hamilton_businesses(self,
                                         industry_types: List[str],
