@@ -18,13 +18,14 @@ from difflib import SequenceMatcher
 
 from src.core.exceptions import ValidationError
 from src.utils.logging_config import get_logger
+from src.services.wayback_service import check_website_age_gate
 
 logger = get_logger(__name__)
 
 
 class WebsiteValidationResult:
     """Result of website validation."""
-    
+
     def __init__(
         self,
         url: str,
@@ -36,7 +37,13 @@ class WebsiteValidationResult:
         contact_info_match: bool = False,
         has_business_content: bool = False,
         validation_timestamp: Optional[datetime] = None,
-        error_message: Optional[str] = None
+        error_message: Optional[str] = None,
+        # Website age fields (Task 3)
+        website_age_years: float = 0.0,
+        website_first_seen: Optional[datetime] = None,
+        is_parked: bool = False,
+        passes_age_gate: bool = False,
+        age_gate_rejection_reason: Optional[str] = None
     ):
         self.url = url
         self.is_accessible = is_accessible
@@ -48,7 +55,13 @@ class WebsiteValidationResult:
         self.has_business_content = has_business_content
         self.validation_timestamp = validation_timestamp or datetime.utcnow()
         self.error_message = error_message
-        
+        # Website age
+        self.website_age_years = website_age_years
+        self.website_first_seen = website_first_seen
+        self.is_parked = is_parked
+        self.passes_age_gate = passes_age_gate
+        self.age_gate_rejection_reason = age_gate_rejection_reason
+
     @property
     def is_valid(self) -> bool:
         """Check if website meets all validation criteria."""
@@ -57,7 +70,8 @@ class WebsiteValidationResult:
             self.status_code == 200 and
             self.business_name_match >= 0.6 and
             self.has_business_content and
-            self.response_time and self.response_time < 10.0
+            self.response_time and self.response_time < 10.0 and
+            self.passes_age_gate  # Task 3: Require age gate pass
         )
         
     def to_dict(self) -> Dict:
@@ -73,16 +87,30 @@ class WebsiteValidationResult:
             'has_business_content': self.has_business_content,
             'validation_timestamp': self.validation_timestamp.isoformat(),
             'error_message': self.error_message,
-            'is_valid': self.is_valid
+            'is_valid': self.is_valid,
+            # Website age fields
+            'website_age_years': self.website_age_years,
+            'website_first_seen': self.website_first_seen.isoformat() if self.website_first_seen else None,
+            'is_parked': self.is_parked,
+            'passes_age_gate': self.passes_age_gate,
+            'age_gate_rejection_reason': self.age_gate_rejection_reason
         }
 
 
 class WebsiteValidationService:
     """Service for validating business websites."""
-    
-    def __init__(self, timeout: float = 10.0, max_retries: int = 3):
+
+    def __init__(
+        self,
+        timeout: float = 10.0,
+        max_retries: int = 3,
+        min_website_age_years: float = 3.0,
+        check_parked: bool = True
+    ):
         self.timeout = timeout
         self.max_retries = max_retries
+        self.min_website_age_years = min_website_age_years
+        self.check_parked = check_parked
         self._session: Optional[aiohttp.ClientSession] = None
         
     async def __aenter__(self):
@@ -167,7 +195,14 @@ class WebsiteValidationService:
             
             # Business content validation
             has_business_content = self._validate_business_content(soup)
-            
+
+            # Website age gate (Task 3)
+            age_gate_result = check_website_age_gate(
+                normalized_url,
+                min_age_years=self.min_website_age_years,
+                check_parked=self.check_parked
+            )
+
             return WebsiteValidationResult(
                 url=normalized_url,
                 is_accessible=True,
@@ -176,7 +211,13 @@ class WebsiteValidationService:
                 has_ssl=has_ssl,
                 business_name_match=business_name_match,
                 contact_info_match=contact_info_match,
-                has_business_content=has_business_content
+                has_business_content=has_business_content,
+                # Website age fields
+                website_age_years=age_gate_result['age_years'],
+                website_first_seen=age_gate_result.get('first_seen'),
+                is_parked=age_gate_result['is_parked'],
+                passes_age_gate=age_gate_result['passes_gate'],
+                age_gate_rejection_reason=age_gate_result.get('rejection_reason')
             )
             
         except Exception as e:
