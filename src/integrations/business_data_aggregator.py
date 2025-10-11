@@ -14,6 +14,7 @@ from ..sources.yellowpages import YellowPagesSearcher
 from ..sources.hamilton_chamber import HamiltonChamberSearcher
 from ..sources.canadian_importers import CanadianImportersSearcher
 from ..services.source_validator import SourceCrossValidator
+from ..utils.fingerprinting import compute_business_fingerprint, businesses_are_duplicates
 
 
 class BusinessDataAggregator:
@@ -109,15 +110,22 @@ class BusinessDataAggregator:
                 except Exception as e:
                     self.logger.warning("canadian_importers_fetch_failed", error=str(e))
 
+            # DEDUPLICATION: Remove duplicates using fingerprinting
+            self.logger.info("deduplication_started", total_businesses=len(all_businesses))
+            deduplicated_businesses = self._deduplicate_businesses(all_businesses)
+            self.logger.info("deduplication_complete",
+                           deduplicated=len(deduplicated_businesses),
+                           duplicates_removed=len(all_businesses) - len(deduplicated_businesses))
+
             # CROSS-VALIDATION: Group businesses by name and validate multi-source data
-            self.logger.info("cross_validation_started", total_businesses=len(all_businesses))
+            self.logger.info("cross_validation_started", total_businesses=len(deduplicated_businesses))
 
             validator = SourceCrossValidator()
-            validated_businesses = await self._cross_validate_businesses(all_businesses, validator)
+            validated_businesses = await self._cross_validate_businesses(deduplicated_businesses, validator)
 
             self.logger.info("cross_validation_complete",
                            validated_businesses=len(validated_businesses),
-                           original_count=len(all_businesses))
+                           original_count=len(deduplicated_businesses))
 
             # Enhance with additional data
             enhanced_businesses = []
@@ -135,6 +143,73 @@ class BusinessDataAggregator:
             self.logger.error("business_aggregation_failed", error=str(e))
             # Return fallback data if all sources fail
             return []  # No fallback - rely on 3 quality sources
+
+    def _deduplicate_businesses(self, businesses: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """
+        Deduplicate businesses using fingerprinting.
+
+        Keeps the first occurrence of each unique business (by fingerprint).
+        Merges data from duplicates into the kept record.
+
+        Args:
+            businesses: List of business records
+
+        Returns:
+            Deduplicated list with merged data
+        """
+        if not businesses:
+            return []
+
+        seen_fingerprints = {}
+        deduplicated = []
+        duplicate_count = 0
+
+        for business in businesses:
+            # Compute fingerprint
+            fingerprint = compute_business_fingerprint(
+                name=business.get('business_name', ''),
+                street=business.get('address', ''),
+                city=business.get('city', ''),
+                postal=business.get('postal_code', ''),
+                phone=business.get('phone', ''),
+                website=business.get('website', '')
+            )
+
+            # Add fingerprint to business record
+            business['fingerprint'] = fingerprint
+
+            if fingerprint in seen_fingerprints:
+                # Duplicate found - merge data into existing record
+                duplicate_count += 1
+                existing = seen_fingerprints[fingerprint]
+
+                # Merge data (prefer non-null values)
+                for key, value in business.items():
+                    if value and not existing.get(key):
+                        existing[key] = value
+
+                # Track data sources
+                existing_sources = existing.get('data_sources', '')
+                new_source = business.get('data_source', '')
+                if new_source and new_source not in existing_sources:
+                    existing['data_sources'] = f"{existing_sources},{new_source}" if existing_sources else new_source
+
+                self.logger.debug("duplicate_business_merged",
+                                business_name=business.get('business_name'),
+                                fingerprint=fingerprint,
+                                sources=existing['data_sources'])
+            else:
+                # New business - add to results
+                seen_fingerprints[fingerprint] = business
+                deduplicated.append(business)
+
+        self.logger.info("deduplication_summary",
+                        original_count=len(businesses),
+                        deduplicated_count=len(deduplicated),
+                        duplicates_removed=duplicate_count,
+                        deduplication_rate=f"{(duplicate_count / len(businesses) * 100):.1f}%")
+
+        return deduplicated
 
     async def _fetch_from_hamilton_chamber(self,
                                           industry_types: List[str],
