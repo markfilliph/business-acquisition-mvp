@@ -15,6 +15,13 @@ except ImportError:
     call_with_retry = None
     google_places_limiter = None
 
+try:
+    from ..utils.cache import cached
+    from ..core.normalization import normalize_business_name
+except ImportError:
+    cached = None
+    normalize_business_name = None
+
 logger = structlog.get_logger(__name__)
 
 # ============================================
@@ -341,26 +348,81 @@ class PlacesService:
         return list(all_types)
 
 
-async def get_place_data(name: str, address: str, google_key: Optional[str] = None, yelp_key: Optional[str] = None) -> Dict:
+def _places_cache_key(name: str, address: str, **kwargs) -> str:
     """
-    Convenience function to get comprehensive place data.
+    Generate cache key for place data lookups.
+    Normalizes name and address to improve cache hit rate.
+
+    Args:
+        name: Business name
+        address: Business address
+        **kwargs: Ignored (google_key, yelp_key don't affect results structure)
 
     Returns:
-        {
-            'types': List[str],  # Canonical types
-            'sources': List[str]  # Which sources returned data
-        }
+        Cache key in format: places:{normalized_name}:{address_normalized}
     """
-    service = PlacesService(google_api_key=google_key, yelp_api_key=yelp_key)
-    types = await service.get_merged_types(name, address)
+    # Normalize name if available
+    if normalize_business_name:
+        normalized_name = normalize_business_name(name).lower()
+    else:
+        normalized_name = name.lower().strip()
 
-    sources = []
-    if google_key:
-        sources.append('google_places')
-    if yelp_key:
-        sources.append('yelp')
+    # Normalize address: lowercase, strip, remove extra whitespace
+    normalized_address = " ".join(address.lower().strip().split())
 
-    return {
-        'types': types,
-        'sources': sources
-    }
+    return f"places:{normalized_name}:{normalized_address}"
+
+
+# Apply caching decorator if available
+if cached:
+    @cached(ttl_seconds=2592000, key_func=_places_cache_key)  # 30 days
+    async def get_place_data(name: str, address: str, google_key: Optional[str] = None, yelp_key: Optional[str] = None) -> Dict:
+        """
+        Convenience function to get comprehensive place data.
+
+        CACHED: Results cached for 30 days based on normalized name+address.
+
+        Returns:
+            {
+                'types': List[str],  # Canonical types
+                'sources': List[str]  # Which sources returned data
+            }
+        """
+        service = PlacesService(google_api_key=google_key, yelp_api_key=yelp_key)
+        types = await service.get_merged_types(name, address)
+
+        sources = []
+        if google_key:
+            sources.append('google_places')
+        if yelp_key:
+            sources.append('yelp')
+
+        return {
+            'types': types,
+            'sources': sources
+        }
+else:
+    # Fallback without caching
+    async def get_place_data(name: str, address: str, google_key: Optional[str] = None, yelp_key: Optional[str] = None) -> Dict:
+        """
+        Convenience function to get comprehensive place data.
+
+        Returns:
+            {
+                'types': List[str],  # Canonical types
+                'sources': List[str]  # Which sources returned data
+            }
+        """
+        service = PlacesService(google_api_key=google_key, yelp_api_key=yelp_key)
+        types = await service.get_merged_types(name, address)
+
+        sources = []
+        if google_key:
+            sources.append('google_places')
+        if yelp_key:
+            sources.append('yelp')
+
+        return {
+            'types': types,
+            'sources': sources
+        }

@@ -8,6 +8,7 @@ Features:
 - Token limits and cost tracking
 - Null-rate monitoring
 - Automatic retries with exponential backoff
+- Response caching (90 days TTL)
 """
 
 import asyncio
@@ -23,6 +24,11 @@ import os
 from ..models.extraction_schemas import BusinessExtraction, ExtractionResult, WebsiteMetadata
 from ..prompts.extraction_prompts import build_extraction_prompt
 from ..utils.rate_limiter import get_limiter
+
+try:
+    from ..utils.cache import cached
+except ImportError:
+    cached = None
 
 logger = structlog.get_logger(__name__)
 
@@ -296,18 +302,59 @@ class LLMExtractionService:
         logger.info("llm_service_metrics", **metrics)
 
 
-# Convenience function for single extraction
-async def extract_business_info(url: str, company_name: str, content: str) -> Optional[ExtractionResult]:
+def _llm_cache_key(url: str, **kwargs) -> str:
     """
-    Convenience function for single extraction.
+    Generate cache key for LLM extractions based on URL only.
 
     Args:
         url: Website URL
-        company_name: Business name
-        content: Website content
+        **kwargs: Ignored (company_name and content don't affect key)
 
     Returns:
-        ExtractionResult or None
+        Cache key in format: llm:{url}
+
+    Note:
+        We cache by URL only because website content rarely changes,
+        and company_name is just context (doesn't affect structured output).
     """
-    service = LLMExtractionService()
-    return await service.extract_from_website(url, company_name, content)
+    # Normalize URL: lowercase, strip, remove trailing slash
+    normalized_url = url.lower().strip().rstrip('/')
+    return f"llm:{normalized_url}"
+
+
+# Convenience function for single extraction with caching
+if cached:
+    @cached(ttl_seconds=7776000, key_func=_llm_cache_key)  # 90 days
+    async def extract_business_info(url: str, company_name: str, content: str) -> Optional[ExtractionResult]:
+        """
+        Convenience function for single extraction.
+
+        CACHED: Results cached for 90 days based on URL.
+        This saves significant API costs for repeat lookups.
+
+        Args:
+            url: Website URL
+            company_name: Business name
+            content: Website content
+
+        Returns:
+            ExtractionResult or None
+        """
+        service = LLMExtractionService()
+        return await service.extract_from_website(url, company_name, content)
+else:
+    # Fallback without caching
+    async def extract_business_info(url: str, company_name: str, content: str) -> Optional[ExtractionResult]:
+        """
+        Convenience function for single extraction.
+
+        Args:
+            url: Website URL
+            company_name: Business name
+            content: Website content
+
+        Returns:
+            ExtractionResult or None
+        """
+        service = LLMExtractionService()
+        return await service.extract_from_website(url, company_name, content)
