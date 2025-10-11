@@ -10,15 +10,20 @@ from typing import Dict, List, Optional, Any
 
 import structlog
 
-from ..core.config import DatabaseConfig
 from ..core.models import BusinessLead, LeadStatus, PipelineResults
 from ..core.exceptions import DatabaseError
 
 
 class DatabaseManager:
     """Production database manager with proper connection pooling and migrations."""
-    
-    def __init__(self, config: DatabaseConfig):
+
+    def __init__(self, config: Any):
+        """
+        Initialize database manager.
+
+        Args:
+            config: Config object with 'path' and 'connection_timeout' attributes
+        """
         self.config = config
         self.logger = structlog.get_logger(__name__)
         self._connection_pool: List[aiosqlite.Connection] = []
@@ -132,6 +137,13 @@ class DatabaseManager:
                     qualification_reasons TEXT, -- JSON array
                     disqualification_reasons TEXT, -- JSON array
                     notes TEXT, -- JSON array
+
+                    -- Human review fields
+                    review_reason TEXT, -- Why review is needed
+                    reviewed_by TEXT, -- Analyst who reviewed
+                    reviewed_at TIMESTAMP, -- When reviewed
+                    review_decision TEXT, -- approved/rejected
+                    review_notes TEXT -- Analyst notes
                     
                     -- Processing tracking
                     validation_errors TEXT, -- JSON array

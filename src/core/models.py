@@ -22,6 +22,7 @@ class LeadStatus(str, Enum):
     ENRICHING = "enriching"
     ENRICHED = "enriched"
     SCORING = "scoring"
+    REVIEW_REQUIRED = "review_required"  # Human review needed
     QUALIFIED = "qualified"
     DISQUALIFIED = "disqualified"
     CONTACTED = "contacted"
