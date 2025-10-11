@@ -22,6 +22,7 @@ from ..core.config import config
 import os
 from ..models.extraction_schemas import BusinessExtraction, ExtractionResult, WebsiteMetadata
 from ..prompts.extraction_prompts import build_extraction_prompt
+from ..utils.rate_limiter import get_limiter
 
 logger = structlog.get_logger(__name__)
 
@@ -168,8 +169,14 @@ class LLMExtractionService:
         Returns:
             Response dict or None
         """
+        # Get rate limiter for OpenAI
+        limiter = get_limiter("openai")
+
         for attempt in range(retries):
             try:
+                # Wait for rate limit token
+                await limiter.wait()
+
                 response = await self.client.chat.completions.create(
                     model=self.model,
                     messages=[

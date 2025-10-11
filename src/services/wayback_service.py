@@ -6,11 +6,14 @@ Uses Internet Archive's Wayback Machine CDX API to determine when a website was 
 """
 
 import re
+import asyncio
 from datetime import datetime
 from typing import Dict, Optional
 from urllib.parse import urlparse
 import structlog
 import requests
+
+from ..utils.rate_limiter import get_limiter
 
 logger = structlog.get_logger(__name__)
 
@@ -82,6 +85,18 @@ class WaybackService:
                 'fl': 'timestamp',  # Only return timestamp field
                 'filter': '!statuscode:404'  # Exclude 404 snapshots
             }
+
+            # Rate limit check (non-blocking)
+            limiter = get_limiter("wayback")
+            if not limiter.acquire():
+                self.logger.warning("wayback_rate_limit_exceeded", domain=domain)
+                return {
+                    'url': url,
+                    'first_seen': None,
+                    'age_years': 0.0,
+                    'snapshot_count': 0,
+                    'error': 'Rate limit exceeded for Wayback Machine API'
+                }
 
             response = requests.get(
                 self.CDX_API_URL,
@@ -193,6 +208,12 @@ class WaybackService:
             # Normalize URL
             if not url.startswith(('http://', 'https://')):
                 url = 'https://' + url
+
+            # Rate limit check (wayback limiter also covers parked domain checks)
+            limiter = get_limiter("wayback")
+            if not limiter.acquire():
+                self.logger.warning("parked_check_rate_limit_exceeded", url=url)
+                return False  # Don't block on rate limit
 
             # Fetch page content
             response = requests.get(
@@ -343,6 +364,11 @@ class WaybackService:
             Number of snapshots (0 if error)
         """
         try:
+            # Rate limit check
+            limiter = get_limiter("wayback")
+            if not limiter.acquire():
+                return 0  # Return 0 on rate limit
+
             params = {
                 'url': domain,
                 'output': 'json',
