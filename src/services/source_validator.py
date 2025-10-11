@@ -9,6 +9,8 @@ import asyncio
 from typing import List, Dict, Optional, Tuple
 import structlog
 
+from ..utils.address_normalizer import addresses_match, normalize_address
+
 logger = structlog.get_logger(__name__)
 
 
@@ -148,24 +150,68 @@ class SourceCrossValidator:
         self,
         businesses: List[Dict]
     ) -> Tuple[List[str], Optional[str]]:
-        """Validate address consistency and return consensus."""
+        """
+        Validate address consistency using Canada Post-compliant normalization.
+
+        Uses fuzzy matching to detect addresses that are the same but formatted differently
+        (e.g., "123 Main St" vs "123 Main Street").
+        """
         issues = []
         addresses = [b.get('address', '').strip() for b in businesses if b.get('address')]
 
         if not addresses:
             return [], None
 
-        # Find most common address
-        from collections import Counter
-        address_counts = Counter(addresses)
-        consensus_address, count = address_counts.most_common(1)[0]
+        # Group addresses by fuzzy matching
+        address_groups = []
+        used_indices = set()
 
-        # If multiple different addresses, flag as issue
-        if len(address_counts) > 1:
-            conflicting = [f"{addr} ({cnt}x)" for addr, cnt in address_counts.items()]
-            issues.append(f"Address conflict: {', '.join(conflicting)}")
+        for i, addr1 in enumerate(addresses):
+            if i in used_indices:
+                continue
 
-        return issues, consensus_address if count >= 2 else None
+            # Start new group with this address
+            group = [addr1]
+            used_indices.add(i)
+
+            # Find all addresses that match this one
+            for j, addr2 in enumerate(addresses):
+                if j <= i or j in used_indices:
+                    continue
+
+                # Use fuzzy matching
+                is_match, confidence = addresses_match(addr1, addr2, fuzzy=True)
+
+                if is_match or confidence >= 0.75:
+                    group.append(addr2)
+                    used_indices.add(j)
+
+            address_groups.append(group)
+
+        # Determine consensus
+        if len(address_groups) == 1:
+            # All addresses match (possibly with different formatting)
+            # Use the most complete version
+            consensus_address = max(address_groups[0], key=len)
+            return [], consensus_address
+
+        elif len(address_groups) > 1:
+            # Conflicting addresses found
+            conflicting_summary = []
+            for group in address_groups:
+                representative = group[0]
+                count = len(group)
+                conflicting_summary.append(f"{representative} ({count}x)")
+
+            issues.append(f"Address conflict detected: {', '.join(conflicting_summary)}")
+
+            # Return most common group's address
+            largest_group = max(address_groups, key=len)
+            consensus_address = max(largest_group, key=len)
+
+            return issues, consensus_address if len(largest_group) >= 2 else None
+
+        return [], None
 
     def _validate_phone_consistency(
         self,
