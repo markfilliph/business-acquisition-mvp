@@ -120,31 +120,38 @@ REQUESTS_PER_MINUTE=30
 # Add API keys as needed
 ```
 
-### Quick Lead Generation
+### Quick Lead Generation (Production System v2)
 
 ```bash
-# Super simple - generate leads immediately
-./generate
+# CURRENT PRODUCTION PIPELINE - Evidence-Based Generator
+./generate_v2           # Generate 20 leads (default)
+./generate_v2 50        # Generate 50 leads
+./generate_v2 10 --show # Generate 10 and show detailed progress
 
-# Generate specific count
-./generate 5
-./generate 10
-
-# Generate and show results
-./generate 5 --show
+# This uses:
+# - Evidence-based validation with strict gates (category, revenue, geo)
+# - Real-time data from OpenStreetMap, Yellow Pages, Canadian Importers
+# - Website age validation (15+ years via Wayback Machine)
+# - Fingerprint-based deduplication
+# - Observation tracking with multi-source corroboration
 ```
 
-### Advanced Usage
+### Review Queue (Human-in-the-Loop)
 
 ```bash
-# Run complete pipeline directly
-python scripts/run_pipeline.py
+# Review borderline cases flagged by the system
+python scripts/review_queue.py
 
-# Export results
-python scripts/export_results.py
+# View metrics dashboard
+python scripts/metrics_dashboard.py
+```
 
-# Test validation system
-python scripts/test_validation.py
+### Legacy Scripts (Deprecated)
+
+```bash
+# DEPRECATED: Old pipeline approaches moved to scripts/legacy/old_pipelines/
+# See scripts/legacy/old_pipelines/README.md for migration guide
+# DO NOT USE: ./generate, lead_generation_pipeline.py, auto_feed.py
 ```
 
 ## 📁 Project Structure
