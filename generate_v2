@@ -2,4 +2,4 @@
 # Evidence-Based Lead Generator v2
 # Uses new validation system with fingerprinting and evidence tracking
 
-PYTHONPATH=/mnt/d/AI_Automated_Potential_Business_outreach python3 -m src.pipeline.evidence_based_generator "$@"
+PYTHONPATH=/mnt/d/AI_Automated_Potential_Business_outreach ./venv/bin/python -m src.pipeline.evidence_based_generator "$@"

@@ -289,8 +289,10 @@ class EvidenceBasedLeadGenerator:
             fetch_count = count * 15  # 15x multiplier based on expected 93% rejection rate
 
             print(f"🔍 Step 1/4: Discovering {fetch_count} businesses from OpenStreetMap...")
+            # Use target industries from config
+            target_industries = ['manufacturing', 'wholesale', 'professional_services', 'printing', 'equipment_rental']
             businesses = await aggregator.fetch_hamilton_businesses(
-                industry_types=config.business_criteria.target_industries,
+                industry_types=target_industries,
                 max_results=fetch_count
             )
 

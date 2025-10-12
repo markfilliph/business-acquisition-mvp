@@ -10,6 +10,8 @@ import structlog
 
 from ..core.models import DataSource
 from ..core.exceptions import DataSourceError
+from ..sources.openstreetmap import OpenStreetMapSearcher
+from ..sources.duckduckgo_businesses import DuckDuckGoBusinessSearcher
 from ..sources.yellowpages import YellowPagesSearcher
 from ..sources.hamilton_chamber import HamiltonChamberSearcher
 from ..sources.canadian_importers import CanadianImportersSearcher
@@ -81,9 +83,63 @@ class BusinessDataAggregator:
                         max_results=max_results)
         
         all_businesses = []
-        
+
         try:
-            # 1. PRIORITY: Yellow Pages Canada (Established B2B directory, FREE)
+            # 0. PRIORITY #1: DuckDuckGo (Free, no API key, working!)
+            if len(all_businesses) < max_results:
+                try:
+                    ddg_searcher = DuckDuckGoBusinessSearcher()
+                    ddg_businesses = await ddg_searcher.search_hamilton_manufacturing(
+                        max_results=max_results - len(all_businesses)
+                    )
+
+                    # Convert DDG format to standard format
+                    for biz in ddg_businesses:
+                        business = {
+                            'business_name': biz.get('name'),
+                            'address': biz.get('street'),
+                            'city': biz.get('city', 'Hamilton'),
+                            'phone': biz.get('phone'),
+                            'website': biz.get('website'),
+                            'description': biz.get('description'),
+                            'data_source': 'duckduckgo'
+                        }
+                        all_businesses.append(business)
+
+                    self.logger.info("duckduckgo_businesses_added", count=len(ddg_businesses))
+                except Exception as e:
+                    self.logger.warning("duckduckgo_fetch_failed", error=str(e))
+
+            # 1. OpenStreetMap (Free, public, but may have rate limits)
+            if len(all_businesses) < max_results:
+                try:
+                    osm_searcher = OpenStreetMapSearcher()
+                    osm_businesses = await osm_searcher.search_hamilton_area(
+                        industry_types=industry_types,
+                        max_results=max_results - len(all_businesses)
+                    )
+
+                    # Convert OSM format to standard format
+                    for biz in osm_businesses:
+                        business = {
+                            'business_name': biz.get('name'),
+                            'address': biz.get('street'),
+                            'city': biz.get('city', 'Hamilton'),
+                            'postal_code': biz.get('postal_code'),
+                            'phone': biz.get('phone'),
+                            'website': biz.get('website'),
+                            'latitude': biz.get('latitude'),
+                            'longitude': biz.get('longitude'),
+                            'industry': industry_types[0] if industry_types else 'general',
+                            'data_source': 'openstreetmap'
+                        }
+                        all_businesses.append(business)
+
+                    self.logger.info("openstreetmap_businesses_added", count=len(osm_businesses))
+                except Exception as e:
+                    self.logger.warning("openstreetmap_fetch_failed", error=str(e))
+
+            # 1. Yellow Pages Canada (Established B2B directory, FREE)
             if len(all_businesses) < max_results:
                 try:
                     yp_businesses = await self._fetch_from_yellowpages(industry_types, max_results - len(all_businesses))
