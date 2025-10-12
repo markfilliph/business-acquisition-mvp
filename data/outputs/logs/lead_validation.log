@@ -1,0 +1,807 @@
+2025-09-30 11:30:32,445 - __main__ - INFO - Initialized Auto-Feeder with STRICT criteria: $1,000,000-$1,400,000
+2025-09-30 11:30:32,445 - __main__ - INFO - ======================================================================
+2025-09-30 11:30:32,446 - __main__ - INFO - 🚀 AUTOMATED HAMILTON BUSINESS FEED STARTING
+2025-09-30 11:30:32,446 - __main__ - INFO - ======================================================================
+2025-09-30 11:30:32,446 - __main__ - INFO - Target Leads: 50
+2025-09-30 11:30:32,446 - __main__ - INFO - Criteria: $1,000,000-$1,400,000, 15+ years
+2025-09-30 11:30:32,446 - __main__ - INFO - ======================================================================
+2025-09-30 11:30:32,446 - __main__ - INFO - 🔧 Initializing pipeline components...
+2025-09-30 11:30:32,791 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-30 11:30:33,143 - scripts.rag_validator_complete - INFO - Created new collection: hamilton_businesses
+2025-09-30 11:30:33,159 - scripts.rag_validator_complete - INFO - Initialized RAG validator with model: mistral:latest
+2025-09-30 11:30:33,159 - scripts.rag_validator_complete - INFO - Context window: 4096, Embedding model: nomic-embed-text
+2025-09-30 11:30:33,160 - scripts.rag_validator_complete - INFO - Host: http://localhost:11434
+2025-09-30 11:30:33,198 - __main__ - WARNING - RAG validator health check issues: {'ollama_running': True, 'model_available': True, 'chromadb_accessible': True, 'embedding_model_ready': False}
+2025-09-30 11:30:33,198 - __main__ - INFO - Continuing without RAG validation (LLM will still validate)
+2025-09-30 11:30:33,233 - scripts.local_lead_generator - INFO - Initialized Local LLM Lead Generator
+2025-09-30 11:30:33,233 - scripts.local_lead_generator - INFO - Model: mistral:latest, Host: http://localhost:11434
+2025-09-30 11:30:33,233 - scripts.local_lead_generator - INFO - Target leads: 40-50
+2025-09-30 11:30:33,236 - httpx - INFO - HTTP Request: GET http://localhost:11434/api/tags "HTTP/1.1 200 OK"
+2025-09-30 11:30:33,237 - scripts.local_lead_generator - ERROR - Health check failed: 'name'
+2025-09-30 11:30:33,237 - __main__ - WARNING - LLM health check issues: {'ollama_running': True, 'model_available': False, 'output_dir_writable': False}
+2025-09-30 11:30:33,237 - __main__ - INFO - ✅ All components initialized
+2025-09-30 11:30:33,237 - __main__ - INFO - 🔍 Stage 1: Discovering 200 real Hamilton businesses...
+2025-09-30 11:30:34,052 - __main__ - INFO - 📊 Discovered 2 businesses from real sources
+2025-09-30 11:30:34,053 - __main__ - INFO - 📍 Data sources: {<DataSource.VERIFIED_DATABASE: 'verified_database'>: 2}
+2025-09-30 11:30:34,053 - __main__ - INFO - 🔍 Stage 2: Applying initial filters...
+2025-09-30 11:30:34,053 - __main__ - INFO - ✅ 2/2 businesses passed initial filters
+2025-09-30 11:30:34,053 - __main__ - INFO - 🤖 Stage 3: Enriching 2 businesses with local LLM...
+2025-09-30 11:30:34,053 - __main__ - INFO - Processing batch 1/1
+2025-09-30 11:30:49,847 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:30:59,060 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:31:00,067 - __main__ - INFO - ✅ Enriched 1 businesses
+2025-09-30 11:31:00,067 - __main__ - INFO - 🔍 Stage 4: Validating 1 leads with RAG system...
+2025-09-30 11:31:00,073 - __main__ - INFO - Populating RAG knowledge base with verified sources...
+2025-09-30 11:31:00,079 - __main__ - WARNING - Could not populate RAG knowledge base: [Errno 2] No such file or directory: 'data/hamilton_businesses.csv'
+2025-09-30 11:31:24,007 - __main__ - INFO - ✅ 1/1 leads passed RAG validation
+2025-09-30 11:31:24,007 - __main__ - INFO - 📤 Exporting 1 qualified leads...
+2025-09-30 11:31:24,058 - __main__ - ERROR - ❌ Pipeline failed: division by zero
+Traceback (most recent call last):
+  File "/mnt/d/AI_Automated_Potential_Business_outreach/scripts/auto_hamilton_business_feeder.py", line 505, in run
+    self.export_results(validated, run_id)
+  File "/mnt/d/AI_Automated_Potential_Business_outreach/scripts/auto_hamilton_business_feeder.py", line 404, in export_results
+    self._create_summary_report(leads, timestamp)
+  File "/mnt/d/AI_Automated_Potential_Business_outreach/scripts/auto_hamilton_business_feeder.py", line 434, in _create_summary_report
+    avg_revenue = sum(l.get('estimated_revenue', 0) for l in leads if l.get('estimated_revenue')) / len([l for l in leads if l.get('estimated_revenue')])
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ZeroDivisionError: division by zero
+2025-09-30 11:38:05,573 - __main__ - INFO - Initialized Auto-Feeder with STRICT criteria: $1,000,000-$1,400,000
+2025-09-30 11:38:05,573 - __main__ - INFO - ======================================================================
+2025-09-30 11:38:05,574 - __main__ - INFO - 🚀 AUTOMATED HAMILTON BUSINESS FEED STARTING
+2025-09-30 11:38:05,574 - __main__ - INFO - ======================================================================
+2025-09-30 11:38:05,574 - __main__ - INFO - Target Leads: 50
+2025-09-30 11:38:05,574 - __main__ - INFO - Criteria: $1,000,000-$1,400,000, 15+ years
+2025-09-30 11:38:05,574 - __main__ - INFO - ======================================================================
+2025-09-30 11:38:05,574 - __main__ - INFO - 🔧 Initializing pipeline components...
+2025-09-30 11:38:05,741 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-30 11:38:05,948 - scripts.rag_validator_complete - INFO - Using existing collection: hamilton_businesses
+2025-09-30 11:38:05,955 - scripts.rag_validator_complete - INFO - Initialized RAG validator with model: mistral:latest
+2025-09-30 11:38:05,955 - scripts.rag_validator_complete - INFO - Context window: 4096, Embedding model: nomic-embed-text
+2025-09-30 11:38:05,955 - scripts.rag_validator_complete - INFO - Host: http://localhost:11434
+2025-09-30 11:38:05,974 - __main__ - WARNING - RAG validator health check issues: {'ollama_running': True, 'model_available': True, 'chromadb_accessible': True, 'embedding_model_ready': False}
+2025-09-30 11:38:05,974 - __main__ - INFO - Continuing without RAG validation (LLM will still validate)
+2025-09-30 11:38:06,009 - scripts.local_lead_generator - INFO - Initialized Local LLM Lead Generator
+2025-09-30 11:38:06,009 - scripts.local_lead_generator - INFO - Model: mistral:latest, Host: http://localhost:11434
+2025-09-30 11:38:06,010 - scripts.local_lead_generator - INFO - Target leads: 40-50
+2025-09-30 11:38:06,012 - httpx - INFO - HTTP Request: GET http://localhost:11434/api/tags "HTTP/1.1 200 OK"
+2025-09-30 11:38:06,013 - scripts.local_lead_generator - ERROR - Health check failed: 'name'
+2025-09-30 11:38:06,013 - __main__ - WARNING - LLM health check issues: {'ollama_running': True, 'model_available': False, 'output_dir_writable': False}
+2025-09-30 11:38:06,013 - __main__ - INFO - ✅ All components initialized
+2025-09-30 11:38:06,013 - __main__ - INFO - 🔍 Stage 1: Discovering 200 real Hamilton businesses...
+2025-09-30 11:38:09,905 - __main__ - INFO - 📊 Discovered 200 businesses from real sources
+2025-09-30 11:38:09,905 - __main__ - INFO - 📍 Data sources: {<DataSource.VERIFIED_DATABASE: 'verified_database'>: 20, <DataSource.OPENSTREETMAP: 'openstreetmap'>: 180}
+2025-09-30 11:38:09,905 - __main__ - INFO - 🔍 Stage 2: Applying initial filters...
+2025-09-30 11:38:09,906 - __main__ - INFO - ✅ 148/200 businesses passed initial filters
+2025-09-30 11:38:09,906 - __main__ - INFO - 🤖 Stage 3: Enriching 148 businesses with local LLM...
+2025-09-30 11:38:09,906 - __main__ - INFO - Processing batch 1/15
+2025-09-30 11:38:21,985 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:38:29,358 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:38:38,322 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:38:46,659 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:38:50,552 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:38:54,360 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:39:01,990 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:39:11,785 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:39:18,335 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:39:22,276 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:39:23,279 - __main__ - INFO - Processing batch 2/15
+2025-09-30 11:39:27,230 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:39:34,378 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:39:40,991 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:39:44,674 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:39:50,980 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:40:00,159 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:40:06,165 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:40:11,239 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:40:18,364 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:40:26,572 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:40:27,574 - __main__ - INFO - Processing batch 3/15
+2025-09-30 11:40:35,814 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:40:39,591 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:40:43,449 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:40:47,039 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:40:50,998 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:40:58,362 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:41:07,899 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:41:14,898 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:41:23,961 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:41:29,231 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:41:30,232 - __main__ - INFO - Processing batch 4/15
+2025-09-30 11:41:34,072 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:41:38,388 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:41:42,819 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:41:42,820 - __main__ - WARNING - LLM enrichment failed for Bell: Expecting property name enclosed in double quotes: line 3 column 32 (char 62)
+2025-09-30 11:41:46,506 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:41:55,464 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:42:02,683 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:42:10,322 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:42:14,145 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:42:20,985 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:42:25,287 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:42:26,289 - __main__ - INFO - Processing batch 5/15
+2025-09-30 11:42:30,230 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:42:40,103 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:42:47,375 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:42:55,767 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:42:59,863 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:43:03,664 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:43:07,622 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:43:15,399 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:43:20,983 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:43:24,894 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:43:25,898 - __main__ - INFO - Processing batch 6/15
+2025-09-30 11:43:33,908 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:43:40,163 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:43:43,934 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:43:47,746 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:43:52,019 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:43:59,823 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:44:05,620 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:44:09,285 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:44:16,842 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:44:24,837 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:44:25,839 - __main__ - INFO - Processing batch 7/15
+2025-09-30 11:44:29,547 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:44:36,012 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:44:45,402 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:44:49,085 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:44:56,141 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:45:04,012 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:45:09,363 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:45:09,364 - __main__ - WARNING - LLM enrichment failed for Royal LePage: Expecting ',' delimiter: line 5 column 28 (char 129)
+2025-09-30 11:45:18,051 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:45:21,840 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:45:27,362 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:45:28,368 - __main__ - INFO - Processing batch 8/15
+2025-09-30 11:45:32,368 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:45:42,247 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:45:51,754 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:45:56,530 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:45:56,530 - __main__ - WARNING - LLM enrichment failed for LCBO: Expecting property name enclosed in double quotes: line 3 column 32 (char 62)
+2025-09-30 11:46:00,370 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:46:09,241 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:46:16,047 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:46:22,897 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:46:30,640 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:46:40,316 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:46:41,318 - __main__ - INFO - Processing batch 9/15
+2025-09-30 11:46:45,054 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:46:52,002 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:47:00,922 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:47:11,898 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:47:19,832 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:47:26,590 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:47:30,428 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:47:37,237 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:47:45,063 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:47:48,824 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:47:49,825 - __main__ - INFO - Processing batch 10/15
+2025-09-30 11:47:53,444 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:48:03,985 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:48:12,616 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:48:16,278 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:48:20,035 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:48:26,502 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:48:36,980 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:48:45,726 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:48:53,995 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:48:59,033 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:49:00,034 - __main__ - INFO - Processing batch 11/15
+2025-09-30 11:49:09,087 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:49:12,957 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:49:20,782 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:49:24,635 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:49:34,308 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:49:42,450 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:49:47,858 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:49:57,713 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:50:06,542 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:50:12,330 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:50:12,331 - __main__ - WARNING - LLM enrichment failed for Sherwin-Williams: Expecting ',' delimiter: line 5 column 28 (char 133)
+2025-09-30 11:50:13,331 - __main__ - INFO - Processing batch 12/15
+2025-09-30 11:50:17,010 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:50:26,523 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:50:34,375 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:50:37,928 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:50:41,825 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:50:49,791 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:50:54,688 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:50:54,689 - __main__ - WARNING - LLM enrichment failed for Bennett's Apples & Cider: Expecting ',' delimiter: line 5 column 28 (char 141)
+2025-09-30 11:51:04,180 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:51:08,093 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:51:11,910 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:51:12,911 - __main__ - INFO - Processing batch 13/15
+2025-09-30 11:51:16,624 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:51:20,341 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:51:28,201 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:51:37,016 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:51:41,092 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:51:47,443 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:51:54,177 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:52:02,180 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:52:08,840 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:52:14,434 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:52:15,436 - __main__ - INFO - Processing batch 14/15
+2025-09-30 11:52:19,335 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:52:23,175 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:52:27,074 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:52:34,228 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:52:37,846 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:52:44,197 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:52:55,242 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:52:59,055 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:53:02,679 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:53:06,400 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:53:07,403 - __main__ - INFO - Processing batch 15/15
+2025-09-30 11:53:10,912 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:53:19,150 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:53:22,965 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:53:30,002 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:53:33,805 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:53:42,915 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:53:46,640 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:53:55,363 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 11:53:55,363 - __main__ - WARNING - LLM enrichment failed for Hamilton Port Authority: Expecting ',' delimiter: line 5 column 28 (char 140)
+2025-09-30 11:53:56,365 - __main__ - INFO - ✅ Enriched 30 businesses
+2025-09-30 11:53:56,366 - __main__ - INFO - 🔍 Stage 4: Validating 30 leads with RAG system...
+2025-09-30 11:53:56,373 - __main__ - INFO - Populating RAG knowledge base with verified sources...
+2025-09-30 11:53:56,378 - __main__ - WARNING - Could not populate RAG knowledge base: [Errno 2] No such file or directory: 'data/hamilton_businesses.csv'
+2025-09-30 11:56:04,592 - __main__ - INFO - ✅ 30/30 leads passed RAG validation
+2025-09-30 11:56:04,592 - __main__ - INFO - 📤 Exporting 30 qualified leads...
+2025-09-30 11:56:04,621 - __main__ - ERROR - ❌ Pipeline failed: unsupported format string passed to NoneType.__format__
+Traceback (most recent call last):
+  File "/mnt/d/AI_Automated_Potential_Business_outreach/scripts/auto_hamilton_business_feeder.py", line 508, in run
+    self.export_results(validated, run_id)
+  File "/mnt/d/AI_Automated_Potential_Business_outreach/scripts/auto_hamilton_business_feeder.py", line 404, in export_results
+    self._create_summary_report(leads, timestamp)
+  File "/mnt/d/AI_Automated_Potential_Business_outreach/scripts/auto_hamilton_business_feeder.py", line 452, in _create_summary_report
+    f.write(f"   Revenue: ${lead.get('estimated_revenue', 0):,}\n")
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unsupported format string passed to NoneType.__format__
+2025-09-30 16:08:31,216 - __main__ - INFO - Initialized Auto-Feeder with STRICT criteria: $1,000,000-$1,400,000
+2025-09-30 16:08:31,216 - __main__ - INFO - ======================================================================
+2025-09-30 16:08:31,217 - __main__ - INFO - 🚀 AUTOMATED HAMILTON BUSINESS FEED STARTING
+2025-09-30 16:08:31,217 - __main__ - INFO - ======================================================================
+2025-09-30 16:08:31,217 - __main__ - INFO - Target Leads: 50
+2025-09-30 16:08:31,217 - __main__ - INFO - Criteria: $1,000,000-$1,400,000, 15+ years
+2025-09-30 16:08:31,217 - __main__ - INFO - ======================================================================
+2025-09-30 16:08:31,218 - __main__ - INFO - 🔧 Initializing pipeline components...
+2025-09-30 16:08:31,379 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-30 16:08:31,593 - scripts.rag_validator_complete - INFO - Using existing collection: hamilton_businesses
+2025-09-30 16:08:31,600 - scripts.rag_validator_complete - INFO - Initialized RAG validator with model: mistral:latest
+2025-09-30 16:08:31,600 - scripts.rag_validator_complete - INFO - Context window: 4096, Embedding model: nomic-embed-text
+2025-09-30 16:08:31,600 - scripts.rag_validator_complete - INFO - Host: http://localhost:11434
+2025-09-30 16:08:31,631 - __main__ - WARNING - RAG validator health check issues: {'ollama_running': True, 'model_available': True, 'chromadb_accessible': True, 'embedding_model_ready': False}
+2025-09-30 16:08:31,631 - __main__ - INFO - Continuing without RAG validation (LLM will still validate)
+2025-09-30 16:08:31,666 - scripts.local_lead_generator - INFO - Initialized Local LLM Lead Generator
+2025-09-30 16:08:31,666 - scripts.local_lead_generator - INFO - Model: mistral:latest, Host: http://localhost:11434
+2025-09-30 16:08:31,666 - scripts.local_lead_generator - INFO - Target leads: 40-50
+2025-09-30 16:08:31,669 - httpx - INFO - HTTP Request: GET http://localhost:11434/api/tags "HTTP/1.1 200 OK"
+2025-09-30 16:08:31,671 - scripts.local_lead_generator - ERROR - Health check failed: 'name'
+2025-09-30 16:08:31,671 - __main__ - WARNING - LLM health check issues: {'ollama_running': True, 'model_available': False, 'output_dir_writable': False}
+2025-09-30 16:08:31,671 - __main__ - INFO - ✅ All components initialized
+2025-09-30 16:08:31,671 - __main__ - INFO - 🔍 Stage 1: Discovering 200 real Hamilton businesses...
+2025-09-30 16:08:34,982 - __main__ - INFO - 📊 Discovered 200 businesses from real sources
+2025-09-30 16:08:34,982 - __main__ - INFO - 📍 Data sources: {<DataSource.VERIFIED_DATABASE: 'verified_database'>: 20, <DataSource.OPENSTREETMAP: 'openstreetmap'>: 180}
+2025-09-30 16:08:34,983 - __main__ - INFO - 🔍 Stage 2: Applying initial filters...
+2025-09-30 16:08:34,984 - __main__ - INFO - ✅ 112/200 businesses passed initial filters
+2025-09-30 16:08:34,985 - __main__ - INFO - 🤖 Stage 3: Enriching 112 businesses with local LLM...
+2025-09-30 16:08:34,985 - __main__ - INFO - Processing batch 1/12
+2025-09-30 16:08:47,124 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:08:51,628 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:08:55,580 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:08:59,303 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:09:03,254 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:09:07,784 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:09:12,445 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:09:16,525 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:09:24,189 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:09:28,269 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:09:29,272 - __main__ - INFO - Processing batch 2/12
+2025-09-30 16:09:34,147 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:09:41,347 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:09:45,637 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:09:50,154 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:09:54,859 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:09:59,454 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:10:03,517 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:10:08,192 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:10:13,071 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:10:17,663 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:10:18,664 - __main__ - INFO - Processing batch 3/12
+2025-09-30 16:10:22,504 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:10:26,575 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:10:30,526 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:10:34,661 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:10:39,200 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:10:43,816 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:10:48,867 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:10:54,203 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:10:58,241 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:11:02,601 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:11:03,603 - __main__ - INFO - Processing batch 4/12
+2025-09-30 16:11:07,596 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:11:11,559 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:11:15,617 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:11:19,510 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:11:23,459 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:11:27,498 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:11:31,612 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:11:36,310 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:11:40,380 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:11:44,966 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:11:45,968 - __main__ - INFO - Processing batch 5/12
+2025-09-30 16:11:50,170 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:11:53,965 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:11:58,004 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:12:04,299 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:12:08,372 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:12:12,197 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:12:16,398 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:12:20,461 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:12:24,572 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:12:28,701 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:12:29,704 - __main__ - INFO - Processing batch 6/12
+2025-09-30 16:12:33,998 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:12:40,447 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:12:40,448 - __main__ - WARNING - LLM enrichment failed for Farm Boy: Expecting property name enclosed in double quotes: line 7 column 35 (char 190)
+2025-09-30 16:12:46,136 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:12:50,477 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:12:54,559 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:12:58,648 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:13:02,571 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:13:06,789 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:13:13,357 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:14:02,398 - __main__ - INFO - Initialized Auto-Feeder with STRICT criteria: $1,000,000-$1,400,000
+2025-09-30 16:14:02,398 - __main__ - INFO - ======================================================================
+2025-09-30 16:14:02,398 - __main__ - INFO - 🚀 AUTOMATED HAMILTON BUSINESS FEED STARTING
+2025-09-30 16:14:02,398 - __main__ - INFO - ======================================================================
+2025-09-30 16:14:02,399 - __main__ - INFO - Target Leads: 50
+2025-09-30 16:14:02,399 - __main__ - INFO - Criteria: $1,000,000-$1,400,000, 15+ years
+2025-09-30 16:14:02,399 - __main__ - INFO - ======================================================================
+2025-09-30 16:14:02,399 - __main__ - INFO - 🔧 Initializing pipeline components...
+2025-09-30 16:14:02,553 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-30 16:14:02,763 - scripts.rag_validator_complete - INFO - Using existing collection: hamilton_businesses
+2025-09-30 16:14:02,769 - scripts.rag_validator_complete - INFO - Initialized RAG validator with model: mistral:latest
+2025-09-30 16:14:02,770 - scripts.rag_validator_complete - INFO - Context window: 4096, Embedding model: nomic-embed-text
+2025-09-30 16:14:02,770 - scripts.rag_validator_complete - INFO - Host: http://localhost:11434
+2025-09-30 16:14:02,789 - __main__ - WARNING - RAG validator health check issues: {'ollama_running': True, 'model_available': True, 'chromadb_accessible': True, 'embedding_model_ready': False}
+2025-09-30 16:14:02,789 - __main__ - INFO - Continuing without RAG validation (LLM will still validate)
+2025-09-30 16:14:02,821 - scripts.local_lead_generator - INFO - Initialized Local LLM Lead Generator
+2025-09-30 16:14:02,821 - scripts.local_lead_generator - INFO - Model: mistral:latest, Host: http://localhost:11434
+2025-09-30 16:14:02,822 - scripts.local_lead_generator - INFO - Target leads: 40-50
+2025-09-30 16:14:02,824 - httpx - INFO - HTTP Request: GET http://localhost:11434/api/tags "HTTP/1.1 200 OK"
+2025-09-30 16:14:02,825 - scripts.local_lead_generator - ERROR - Health check failed: 'name'
+2025-09-30 16:14:02,825 - __main__ - WARNING - LLM health check issues: {'ollama_running': True, 'model_available': False, 'output_dir_writable': False}
+2025-09-30 16:14:02,825 - __main__ - INFO - ✅ All components initialized
+2025-09-30 16:14:02,825 - __main__ - INFO - 🔍 Stage 1: Discovering 200 real Hamilton businesses...
+2025-09-30 16:14:05,797 - __main__ - INFO - 📊 Discovered 200 businesses from real sources
+2025-09-30 16:14:05,797 - __main__ - INFO - 📍 Data sources: {<DataSource.VERIFIED_DATABASE: 'verified_database'>: 20, <DataSource.OPENSTREETMAP: 'openstreetmap'>: 180}
+2025-09-30 16:14:05,797 - __main__ - INFO - 🔍 Stage 2: Applying initial filters...
+2025-09-30 16:14:05,799 - __main__ - INFO - ✅ 112/200 businesses passed initial filters
+2025-09-30 16:14:05,800 - __main__ - INFO - 🤖 Stage 3: Enriching 112 businesses with local LLM...
+2025-09-30 16:14:05,800 - __main__ - INFO - Processing batch 1/12
+2025-09-30 16:14:09,988 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:14:14,642 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:14:18,696 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:14:22,521 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:14:26,622 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:14:31,305 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:14:36,243 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:14:40,828 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:14:47,875 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:14:52,045 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:14:53,047 - __main__ - INFO - Processing batch 2/12
+2025-09-30 16:14:57,772 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:15:04,160 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:15:08,398 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:15:12,947 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:15:17,144 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:15:21,818 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:15:25,914 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:15:30,683 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:15:35,587 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:15:40,210 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:15:41,212 - __main__ - INFO - Processing batch 3/12
+2025-09-30 16:15:45,185 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:15:49,227 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:15:53,222 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:15:57,290 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:16:01,748 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:16:06,451 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:16:10,668 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:16:15,301 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:16:19,352 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:16:23,228 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:16:24,230 - __main__ - INFO - Processing batch 4/12
+2025-09-30 16:16:28,233 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:16:32,255 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:16:36,476 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:16:41,039 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:16:45,024 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:16:49,145 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:16:53,025 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:16:57,651 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:17:01,806 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:17:06,305 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:17:07,309 - __main__ - INFO - Processing batch 5/12
+2025-09-30 16:17:11,481 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:17:15,263 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:17:19,320 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:17:23,552 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:17:28,133 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:17:32,092 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:17:35,984 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:17:40,295 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:17:44,311 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:17:48,470 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:17:49,471 - __main__ - INFO - Processing batch 6/12
+2025-09-30 16:17:54,083 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:17:59,706 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:17:59,707 - __main__ - WARNING - LLM enrichment failed for Farm Boy: Expecting property name enclosed in double quotes: line 7 column 35 (char 190)
+2025-09-30 16:18:03,777 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:18:08,387 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:18:12,520 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:18:16,667 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:18:20,634 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:18:24,855 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:18:31,105 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:18:40,475 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 16:18:41,477 - __main__ - INFO - Processing batch 7/12
+2025-09-30 16:18:45,564 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:18:52,174 - __main__ - INFO - Initialized Auto-Feeder with STRICT criteria: $1,000,000-$1,400,000
+2025-09-30 17:18:52,175 - __main__ - INFO - ======================================================================
+2025-09-30 17:18:52,175 - __main__ - INFO - 🚀 AUTOMATED HAMILTON BUSINESS FEED STARTING
+2025-09-30 17:18:52,175 - __main__ - INFO - ======================================================================
+2025-09-30 17:18:52,175 - __main__ - INFO - Target Leads: 20
+2025-09-30 17:18:52,175 - __main__ - INFO - Criteria: $1,000,000-$1,400,000, 15+ years
+2025-09-30 17:18:52,176 - __main__ - INFO - ======================================================================
+2025-09-30 17:18:52,176 - __main__ - INFO - 🔧 Initializing pipeline components...
+2025-09-30 17:18:52,356 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-30 17:18:52,596 - scripts.rag_validator_complete - INFO - Using existing collection: hamilton_businesses
+2025-09-30 17:18:52,604 - scripts.rag_validator_complete - INFO - Initialized RAG validator with model: mistral:latest
+2025-09-30 17:18:52,605 - scripts.rag_validator_complete - INFO - Context window: 4096, Embedding model: nomic-embed-text
+2025-09-30 17:18:52,605 - scripts.rag_validator_complete - INFO - Host: http://localhost:11434
+2025-09-30 17:18:52,632 - __main__ - WARNING - RAG validator health check issues: {'ollama_running': True, 'model_available': True, 'chromadb_accessible': True, 'embedding_model_ready': False}
+2025-09-30 17:18:52,632 - __main__ - INFO - Continuing without RAG validation (LLM will still validate)
+2025-09-30 17:18:52,667 - scripts.local_lead_generator - INFO - Initialized Local LLM Lead Generator
+2025-09-30 17:18:52,668 - scripts.local_lead_generator - INFO - Model: mistral:latest, Host: http://localhost:11434
+2025-09-30 17:18:52,668 - scripts.local_lead_generator - INFO - Target leads: 40-50
+2025-09-30 17:18:52,670 - httpx - INFO - HTTP Request: GET http://localhost:11434/api/tags "HTTP/1.1 200 OK"
+2025-09-30 17:18:52,671 - scripts.local_lead_generator - ERROR - Health check failed: 'name'
+2025-09-30 17:18:52,671 - __main__ - WARNING - LLM health check issues: {'ollama_running': True, 'model_available': False, 'output_dir_writable': False}
+2025-09-30 17:18:52,671 - __main__ - INFO - ✅ All components initialized
+2025-09-30 17:18:52,672 - __main__ - INFO - 🔍 Stage 1: Discovering 80 real Hamilton businesses...
+2025-09-30 17:19:01,582 - __main__ - INFO - 📊 Discovered 80 businesses from real sources
+2025-09-30 17:19:01,582 - __main__ - INFO - 📍 Data sources: {<DataSource.VERIFIED_DATABASE: 'verified_database'>: 20, <DataSource.OPENSTREETMAP: 'openstreetmap'>: 60}
+2025-09-30 17:19:01,583 - __main__ - INFO - 🔍 Stage 2: Applying initial filters...
+2025-09-30 17:19:01,584 - __main__ - INFO - ✅ 48/80 businesses passed initial filters
+2025-09-30 17:19:01,584 - __main__ - INFO - 🤖 Stage 3: Enriching 48 businesses with local LLM...
+2025-09-30 17:19:01,584 - __main__ - INFO - Processing batch 1/5
+2025-09-30 17:19:14,158 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:19:18,733 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:19:23,240 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:19:26,875 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:19:30,651 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:19:35,158 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:19:39,795 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:19:44,972 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:19:48,742 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:19:52,745 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:19:53,747 - __main__ - INFO - Processing batch 2/5
+2025-09-30 17:19:58,331 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:20:02,427 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:20:06,617 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:20:11,086 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:20:15,836 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:20:20,496 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:20:24,488 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:20:29,103 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:20:33,200 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:20:37,704 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:20:38,706 - __main__ - INFO - Processing batch 3/5
+2025-09-30 17:20:42,593 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:20:46,664 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:20:51,201 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:20:55,294 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:20:59,249 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:21:03,794 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:21:07,913 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:21:12,079 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:21:16,145 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:21:21,205 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:21:22,207 - __main__ - INFO - Processing batch 4/5
+2025-09-30 17:21:26,249 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:21:30,186 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:21:34,651 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 17:21:38,486 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:13:30,738 - __main__ - INFO - Initialized Auto-Feeder with STRICT criteria: $1,000,000-$1,400,000
+2025-09-30 20:13:30,738 - __main__ - INFO - ======================================================================
+2025-09-30 20:13:30,738 - __main__ - INFO - 🚀 AUTOMATED HAMILTON BUSINESS FEED STARTING
+2025-09-30 20:13:30,739 - __main__ - INFO - ======================================================================
+2025-09-30 20:13:30,739 - __main__ - INFO - Target Leads: 10
+2025-09-30 20:13:30,739 - __main__ - INFO - Criteria: $1,000,000-$1,400,000, 15+ years
+2025-09-30 20:13:30,739 - __main__ - INFO - ======================================================================
+2025-09-30 20:13:30,739 - __main__ - INFO - 🔧 Initializing pipeline components...
+2025-09-30 20:13:30,891 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-30 20:13:31,102 - scripts.rag_validator_complete - INFO - Using existing collection: hamilton_businesses
+2025-09-30 20:13:31,109 - scripts.rag_validator_complete - INFO - Initialized RAG validator with model: mistral:latest
+2025-09-30 20:13:31,109 - scripts.rag_validator_complete - INFO - Context window: 4096, Embedding model: nomic-embed-text
+2025-09-30 20:13:31,110 - scripts.rag_validator_complete - INFO - Host: http://localhost:11434
+2025-09-30 20:13:31,135 - __main__ - WARNING - RAG validator health check issues: {'ollama_running': True, 'model_available': True, 'chromadb_accessible': True, 'embedding_model_ready': False}
+2025-09-30 20:13:31,135 - __main__ - INFO - Continuing without RAG validation (LLM will still validate)
+2025-09-30 20:13:31,167 - scripts.local_lead_generator - INFO - Initialized Local LLM Lead Generator
+2025-09-30 20:13:31,167 - scripts.local_lead_generator - INFO - Model: mistral:latest, Host: http://localhost:11434
+2025-09-30 20:13:31,167 - scripts.local_lead_generator - INFO - Target leads: 40-50
+2025-09-30 20:13:31,169 - httpx - INFO - HTTP Request: GET http://localhost:11434/api/tags "HTTP/1.1 200 OK"
+2025-09-30 20:13:31,170 - scripts.local_lead_generator - ERROR - Health check failed: 'name'
+2025-09-30 20:13:31,170 - __main__ - WARNING - LLM health check issues: {'ollama_running': True, 'model_available': False, 'output_dir_writable': False}
+2025-09-30 20:13:31,171 - __main__ - INFO - ✅ All components initialized
+2025-09-30 20:13:31,171 - __main__ - INFO - 🔍 Stage 1: Discovering 40 real Hamilton businesses...
+2025-09-30 20:13:34,409 - __main__ - INFO - 📊 Discovered 40 businesses from real sources
+2025-09-30 20:13:34,409 - __main__ - INFO - 📍 Data sources: {<DataSource.VERIFIED_DATABASE: 'verified_database'>: 20, <DataSource.OPENSTREETMAP: 'openstreetmap'>: 20}
+2025-09-30 20:13:34,409 - __main__ - INFO - 🔍 Stage 2: Applying initial filters...
+2025-09-30 20:13:34,410 - __main__ - INFO - ✅ 29/40 businesses passed initial filters
+2025-09-30 20:13:34,410 - __main__ - INFO - 🤖 Stage 3: Enriching 29 businesses with local LLM...
+2025-09-30 20:13:34,410 - __main__ - INFO - Processing batch 1/3
+2025-09-30 20:13:47,016 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:13:51,547 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:13:56,562 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:14:00,304 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:14:04,790 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:14:09,351 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:14:14,030 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:14:18,499 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:14:22,177 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:14:26,164 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:14:27,166 - __main__ - INFO - Processing batch 2/3
+2025-09-30 20:14:31,789 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:14:35,896 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:14:40,281 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:14:44,851 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:14:49,107 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:14:53,756 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:14:57,851 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:15:02,888 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:15:07,641 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:15:12,096 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:15:13,097 - __main__ - INFO - Processing batch 3/3
+2025-09-30 20:15:16,862 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:15:20,945 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:15:24,863 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:15:28,861 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:15:33,051 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:15:37,730 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:15:42,040 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:15:46,445 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:15:51,222 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:15:52,233 - __main__ - INFO - ✅ Enriched 2 businesses
+2025-09-30 20:15:52,234 - __main__ - INFO - 🔍 Stage 4: Validating 2 leads with RAG system...
+2025-09-30 20:15:52,246 - __main__ - INFO - Populating RAG knowledge base with verified sources...
+2025-09-30 20:15:52,251 - __main__ - WARNING - Could not populate RAG knowledge base: [Errno 2] No such file or directory: 'data/hamilton_businesses.csv'
+2025-09-30 20:16:21,432 - __main__ - INFO - ✅ 2/2 leads passed RAG validation
+2025-09-30 20:16:21,432 - __main__ - INFO - 📤 Exporting 2 qualified leads...
+2025-09-30 20:16:21,473 - __main__ - INFO - 📄 Summary report: output/auto_feed_summary_20250930_201621.txt
+2025-09-30 20:16:21,473 - __main__ - INFO - ✅ Exported to:
+   📋 output/auto_generated_leads_20250930_201621.csv
+   📄 output/auto_generated_leads_20250930_201621.json
+2025-09-30 20:16:21,473 - __main__ - INFO - ======================================================================
+2025-09-30 20:16:21,473 - __main__ - INFO - ✅ SUCCESS: Generated 2 qualified leads
+2025-09-30 20:16:21,474 - __main__ - INFO -    Pipeline: Discover (40) → Filter (29) → Enrich (2) → Validate (2)
+2025-09-30 20:16:21,474 - __main__ - INFO - ======================================================================
+2025-09-30 20:28:28,555 - __main__ - INFO - Initialized Auto-Feeder with STRICT criteria: $1,000,000-$1,400,000
+2025-09-30 20:28:28,555 - __main__ - INFO - ======================================================================
+2025-09-30 20:28:28,555 - __main__ - INFO - 🚀 AUTOMATED HAMILTON BUSINESS FEED STARTING
+2025-09-30 20:28:28,555 - __main__ - INFO - ======================================================================
+2025-09-30 20:28:28,556 - __main__ - INFO - Target Leads: 10
+2025-09-30 20:28:28,556 - __main__ - INFO - Criteria: $1,000,000-$1,400,000, 15+ years
+2025-09-30 20:28:28,556 - __main__ - INFO - ======================================================================
+2025-09-30 20:28:28,556 - __main__ - INFO - 🔧 Initializing pipeline components...
+2025-09-30 20:28:28,709 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-30 20:28:28,913 - scripts.rag_validator_complete - INFO - Using existing collection: hamilton_businesses
+2025-09-30 20:28:28,920 - scripts.rag_validator_complete - INFO - Initialized RAG validator with model: mistral:latest
+2025-09-30 20:28:28,920 - scripts.rag_validator_complete - INFO - Context window: 4096, Embedding model: nomic-embed-text
+2025-09-30 20:28:28,920 - scripts.rag_validator_complete - INFO - Host: http://localhost:11434
+2025-09-30 20:28:28,943 - __main__ - WARNING - RAG validator health check issues: {'ollama_running': True, 'model_available': True, 'chromadb_accessible': True, 'embedding_model_ready': False}
+2025-09-30 20:28:28,944 - __main__ - INFO - Continuing without RAG validation (LLM will still validate)
+2025-09-30 20:28:28,976 - scripts.local_lead_generator - INFO - Initialized Local LLM Lead Generator
+2025-09-30 20:28:28,976 - scripts.local_lead_generator - INFO - Model: mistral:latest, Host: http://localhost:11434
+2025-09-30 20:28:28,977 - scripts.local_lead_generator - INFO - Target leads: 40-50
+2025-09-30 20:28:28,979 - httpx - INFO - HTTP Request: GET http://localhost:11434/api/tags "HTTP/1.1 200 OK"
+2025-09-30 20:28:28,980 - scripts.local_lead_generator - ERROR - Health check failed: 'name'
+2025-09-30 20:28:28,980 - __main__ - WARNING - LLM health check issues: {'ollama_running': True, 'model_available': False, 'output_dir_writable': False}
+2025-09-30 20:28:28,980 - __main__ - INFO - ✅ All components initialized
+2025-09-30 20:28:28,980 - __main__ - INFO - 🔍 Stage 1: Discovering 40 real Hamilton businesses...
+2025-09-30 20:28:31,962 - __main__ - INFO - 📊 Discovered 40 businesses from real sources
+2025-09-30 20:28:31,962 - __main__ - INFO - 📍 Data sources: {<DataSource.VERIFIED_DATABASE: 'verified_database'>: 20, <DataSource.OPENSTREETMAP: 'openstreetmap'>: 20}
+2025-09-30 20:28:31,963 - __main__ - INFO - 🔍 Stage 2: Applying initial filters...
+2025-09-30 20:28:31,963 - __main__ - INFO - ✅ 29/40 businesses passed initial filters
+2025-09-30 20:28:31,963 - __main__ - INFO - 🤖 Stage 3: Enriching 29 businesses with local LLM...
+2025-09-30 20:28:31,964 - __main__ - INFO - Processing batch 1/3
+2025-09-30 20:28:49,234 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:28:59,860 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:29:10,101 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:29:19,112 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:29:27,373 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:29:36,636 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:29:45,873 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:29:54,562 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:30:04,756 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:30:13,558 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:30:14,561 - __main__ - INFO - Processing batch 2/3
+2025-09-30 20:30:24,256 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:30:31,937 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:30:31,939 - __main__ - WARNING - LLM enrichment failed for Hamilton Caster & Manufacturing: Expecting ',' delimiter: line 5 column 28 (char 147)
+2025-09-30 20:30:42,394 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:30:50,532 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:31:01,797 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:31:11,346 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:31:20,201 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:31:29,835 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:31:37,747 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:31:49,478 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:31:50,480 - __main__ - INFO - Processing batch 3/3
+2025-09-30 20:31:57,918 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:32:07,735 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:32:14,081 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:32:23,108 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:32:29,772 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:32:36,752 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:32:43,009 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:32:50,863 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:33:00,223 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-09-30 20:33:01,225 - __main__ - INFO - ✅ Enriched 26 businesses
+2025-09-30 20:33:01,226 - __main__ - INFO - 🔍 Stage 4: Validating 26 leads with RAG system...
+2025-09-30 20:33:01,232 - __main__ - INFO - Populating RAG knowledge base with verified sources...
+2025-09-30 20:33:01,235 - __main__ - WARNING - Could not populate RAG knowledge base: [Errno 2] No such file or directory: 'data/hamilton_businesses.csv'
+2025-09-30 20:35:25,903 - __main__ - INFO - ✅ 26/26 leads passed RAG validation
+2025-09-30 20:35:25,903 - __main__ - INFO - 📤 Exporting 26 qualified leads...
+2025-09-30 20:35:25,952 - __main__ - INFO - 📄 Summary report: output/auto_feed_summary_20250930_203525.txt
+2025-09-30 20:35:25,953 - __main__ - INFO - ✅ Exported to:
+   📋 output/auto_generated_leads_20250930_203525.csv
+   📄 output/auto_generated_leads_20250930_203525.json
+2025-09-30 20:35:25,953 - __main__ - INFO - ======================================================================
+2025-09-30 20:35:25,953 - __main__ - INFO - ✅ SUCCESS: Generated 26 qualified leads
+2025-09-30 20:35:25,954 - __main__ - INFO -    Pipeline: Discover (40) → Filter (29) → Enrich (26) → Validate (26)
+2025-09-30 20:35:25,954 - __main__ - INFO - ======================================================================
+2025-10-01 10:14:00,803 - __main__ - INFO - Initialized Auto-Feeder with STRICT criteria: $1,000,000-$1,400,000
+2025-10-01 10:14:00,804 - __main__ - INFO - ======================================================================
+2025-10-01 10:14:00,804 - __main__ - INFO - 🚀 AUTOMATED HAMILTON BUSINESS FEED STARTING
+2025-10-01 10:14:00,804 - __main__ - INFO - ======================================================================
+2025-10-01 10:14:00,804 - __main__ - INFO - Target Leads: 20
+2025-10-01 10:14:00,805 - __main__ - INFO - Criteria: $1,000,000-$1,400,000, 15+ years
+2025-10-01 10:14:00,805 - __main__ - INFO - ======================================================================
+2025-10-01 10:14:00,805 - __main__ - INFO - 🔧 Initializing pipeline components...
+2025-10-01 10:14:01,137 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-10-01 10:14:01,451 - scripts.rag_validator_complete - INFO - Using existing collection: hamilton_businesses
+2025-10-01 10:14:01,465 - scripts.rag_validator_complete - INFO - Initialized RAG validator with model: mistral:latest
+2025-10-01 10:14:01,465 - scripts.rag_validator_complete - INFO - Context window: 4096, Embedding model: nomic-embed-text
+2025-10-01 10:14:01,465 - scripts.rag_validator_complete - INFO - Host: http://localhost:11434
+2025-10-01 10:14:01,496 - __main__ - WARNING - RAG validator health check issues: {'ollama_running': True, 'model_available': True, 'chromadb_accessible': True, 'embedding_model_ready': False}
+2025-10-01 10:14:01,497 - __main__ - INFO - Continuing without RAG validation (LLM will still validate)
+2025-10-01 10:14:01,528 - scripts.local_lead_generator - INFO - Initialized Local LLM Lead Generator
+2025-10-01 10:14:01,528 - scripts.local_lead_generator - INFO - Model: mistral:latest, Host: http://localhost:11434
+2025-10-01 10:14:01,528 - scripts.local_lead_generator - INFO - Target leads: 40-50
+2025-10-01 10:14:01,530 - httpx - INFO - HTTP Request: GET http://localhost:11434/api/tags "HTTP/1.1 200 OK"
+2025-10-01 10:14:01,531 - scripts.local_lead_generator - ERROR - Health check failed: 'name'
+2025-10-01 10:14:01,531 - __main__ - WARNING - LLM health check issues: {'ollama_running': True, 'model_available': False, 'output_dir_writable': False}
+2025-10-01 10:14:01,531 - __main__ - INFO - ✅ All components initialized
+2025-10-01 10:14:01,531 - __main__ - INFO - 🔍 Stage 1: Discovering 80 real Hamilton businesses...
+2025-10-01 10:14:05,301 - __main__ - INFO - 📊 Discovered 80 businesses from real sources
+2025-10-01 10:14:05,301 - __main__ - INFO - 📍 Data sources: {<DataSource.VERIFIED_DATABASE: 'verified_database'>: 13, <DataSource.OPENSTREETMAP: 'openstreetmap'>: 67}
+2025-10-01 10:14:05,301 - __main__ - INFO - 🔍 Stage 2: Applying initial filters...
+2025-10-01 10:14:05,302 - __main__ - INFO - ✅ 45/80 businesses passed initial filters
+2025-10-01 10:14:05,302 - __main__ - INFO - 🤖 Stage 3: Enriching 45 businesses with local LLM...
+2025-10-01 10:14:05,303 - __main__ - INFO - Processing batch 1/5
+2025-10-01 10:14:21,934 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 10:14:33,735 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 10:14:43,805 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 10:14:52,072 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 10:15:02,983 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 10:15:11,796 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 10:15:21,688 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 10:15:30,163 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 10:15:42,766 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 10:15:51,895 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 10:15:52,897 - __main__ - INFO - Processing batch 2/5
+2025-10-01 10:16:01,471 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 10:16:13,826 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 10:16:21,320 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 10:16:30,004 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 10:16:42,248 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 10:16:52,497 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 10:17:02,715 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 10:17:11,467 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 10:17:24,568 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 10:17:29,781 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 10:17:30,782 - __main__ - INFO - Processing batch 3/5
+2025-10-01 10:17:41,118 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 10:17:51,767 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 10:18:02,444 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 10:18:10,886 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 10:18:20,376 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 10:18:33,460 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 10:18:44,247 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:19:27,264 - __main__ - INFO - Initialized Auto-Feeder with STRICT criteria: $1,000,000-$1,400,000
+2025-10-01 12:19:27,264 - __main__ - INFO - ======================================================================
+2025-10-01 12:19:27,265 - __main__ - INFO - 🚀 AUTOMATED HAMILTON BUSINESS FEED STARTING
+2025-10-01 12:19:27,265 - __main__ - INFO - ======================================================================
+2025-10-01 12:19:27,265 - __main__ - INFO - Target Leads: 20
+2025-10-01 12:19:27,265 - __main__ - INFO - Criteria: $1,000,000-$1,400,000, 15+ years
+2025-10-01 12:19:27,265 - __main__ - INFO - ======================================================================
+2025-10-01 12:19:27,266 - __main__ - INFO - 🔧 Initializing pipeline components...
+2025-10-01 12:19:27,285 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-10-01 12:19:27,445 - scripts.rag_validator_complete - INFO - Using existing collection: hamilton_businesses
+2025-10-01 12:19:27,447 - scripts.rag_validator_complete - INFO - Initialized RAG validator with model: mistral:latest
+2025-10-01 12:19:27,447 - scripts.rag_validator_complete - INFO - Context window: 4096, Embedding model: nomic-embed-text
+2025-10-01 12:19:27,447 - scripts.rag_validator_complete - INFO - Host: http://localhost:11434
+2025-10-01 12:19:27,466 - __main__ - WARNING - RAG validator health check issues: {'ollama_running': True, 'model_available': True, 'chromadb_accessible': True, 'embedding_model_ready': False}
+2025-10-01 12:19:27,467 - __main__ - INFO - Continuing without RAG validation (LLM will still validate)
+2025-10-01 12:19:27,484 - scripts.local_lead_generator - INFO - Initialized Local LLM Lead Generator
+2025-10-01 12:19:27,484 - scripts.local_lead_generator - INFO - Model: mistral:latest, Host: http://localhost:11434
+2025-10-01 12:19:27,484 - scripts.local_lead_generator - INFO - Target leads: 40-50
+2025-10-01 12:19:27,486 - httpx - INFO - HTTP Request: GET http://localhost:11434/api/tags "HTTP/1.1 200 OK"
+2025-10-01 12:19:27,487 - scripts.local_lead_generator - ERROR - Health check failed: 'name'
+2025-10-01 12:19:27,491 - __main__ - WARNING - LLM health check issues: {'ollama_running': True, 'model_available': False, 'output_dir_writable': False}
+2025-10-01 12:19:27,491 - __main__ - INFO - ✅ All components initialized
+2025-10-01 12:19:27,491 - __main__ - INFO - 🔍 Stage 1: Discovering 80 real Hamilton businesses...
+2025-10-01 12:19:30,876 - __main__ - INFO - 📊 Discovered 80 businesses from real sources
+2025-10-01 12:19:30,877 - __main__ - INFO - 📍 Data sources: {<DataSource.VERIFIED_DATABASE: 'verified_database'>: 13, <DataSource.OPENSTREETMAP: 'openstreetmap'>: 67}
+2025-10-01 12:19:30,877 - __main__ - INFO - 🔍 Stage 2: Applying initial filters...
+2025-10-01 12:19:30,878 - __main__ - INFO - ✅ 45/80 businesses passed initial filters
+2025-10-01 12:19:30,878 - __main__ - INFO - 🤖 Stage 3: Enriching 45 businesses with local LLM...
+2025-10-01 12:19:30,878 - __main__ - INFO - Processing batch 1/5
+2025-10-01 12:19:48,448 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:19:59,312 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:20:09,700 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:20:19,913 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:20:30,396 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:20:40,135 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:20:47,429 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:21:00,820 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:21:11,622 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:21:23,001 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:21:24,003 - __main__ - INFO - Processing batch 2/5
+2025-10-01 12:21:37,489 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:21:46,393 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:21:56,423 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:22:04,868 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:22:18,105 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:22:28,096 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:22:37,092 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:22:51,719 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:22:59,976 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:23:06,549 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:23:07,550 - __main__ - INFO - Processing batch 3/5
+2025-10-01 12:23:19,741 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:23:30,399 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:23:38,678 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:23:48,322 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:24:00,451 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:24:11,575 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:24:30,047 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:24:30,048 - __main__ - WARNING - LLM enrichment failed for Pet Valu: Expecting ',' delimiter: line 6 column 28 (char 128)
+2025-10-01 12:24:41,675 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:24:48,687 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:24:59,259 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:25:02,392 - __main__ - INFO - Processing batch 4/5
+2025-10-01 12:25:12,691 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:25:21,442 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:25:33,596 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:25:45,943 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:25:55,328 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:26:05,391 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:26:17,542 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:26:26,329 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:26:36,218 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:26:48,953 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:26:49,954 - __main__ - INFO - Processing batch 5/5
+2025-10-01 12:26:58,736 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:27:08,926 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:27:20,798 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:27:29,156 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:27:34,841 - httpx - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-10-01 12:27:35,843 - __main__ - INFO - ✅ Enriched 41 businesses
+2025-10-01 12:27:35,844 - __main__ - INFO - 🔍 Stage 4: Validating 41 leads with RAG system...
+2025-10-01 12:27:35,848 - __main__ - INFO - Populating RAG knowledge base with verified sources...
+2025-10-01 12:27:35,849 - __main__ - WARNING - Could not populate RAG knowledge base: [Errno 2] No such file or directory: 'data/hamilton_businesses.csv'
