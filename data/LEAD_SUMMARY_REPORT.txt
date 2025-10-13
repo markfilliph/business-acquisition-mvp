@@ -1,0 +1,866 @@
+================================================================================
+LEAD SUMMARY REPORT
+================================================================================
+Generated: 2025-10-13 11:12:11
+Database: data/leads_v3.db
+Total Leads: 20
+================================================================================
+
+BUSINESS #1
+--------------------------------------------------------------------------------
+Company Name:        ArcelorMittal Dofasco
+Status:              QUALIFIED ✅
+Industry:            Steel Manufacturing
+
+CONTACT INFORMATION
+--------------------------------------------------------------------------------
+Address:             1330 Burlington Street East
+City:                Hamilton
+Postal Code:         L8N 3J5
+Phone:               9055487200
+Website:             https://canada.arcelormittal.com/dofasco
+
+ADDITIONAL DETAILS
+--------------------------------------------------------------------------------
+Coordinates:         43.2557, -79.8091
+Distance from HQ:    0.0 km
+Source:              manual_seed_list
+Source Confidence:   100%
+
+ENRICHED CONTACTS
+--------------------------------------------------------------------------------
+Emails (6):
+  - hello@canada.arcelormittal.com (confidence: 40%)
+  - admin@canada.arcelormittal.com (confidence: 40%)
+  - contact@canada.arcelormittal.com (confidence: 40%)
+  - sales@canada.arcelormittal.com (confidence: 40%)
+  - inquiries@canada.arcelormittal.com (confidence: 40%)
+  ... and 1 more
+Additional Phones:   905-548-7200, 905-548-7200
+
+VALIDATION RESULTS
+--------------------------------------------------------------------------------
+✓ category_gate: Category validated: manufacturing
+✓ corroboration_address: address from single high-confidence source (confidence=1.00)
+✓ corroboration_phone: phone corroborated by 2 sources: 9055487200
+✓ corroboration_postal_code: postal_code from single high-confidence source (confidence=1.00)
+✓ geo_gate: Within target radius: 11.7km
+✓ revenue_gate: Revenue check bypassed (high-confidence source: 1.00)
+✓ website_gate: Website check bypassed (high-confidence source: 1.00)
+
+BUSINESS #2
+--------------------------------------------------------------------------------
+Company Name:        Stelco Inc.
+Status:              QUALIFIED ✅
+Industry:            Steel Manufacturing
+
+CONTACT INFORMATION
+--------------------------------------------------------------------------------
+Address:             386 Wilcox Street
+City:                Hamilton
+Postal Code:         L8L 8K5
+Phone:               9055282511
+Website:             https://www.stelco.com
+
+ADDITIONAL DETAILS
+--------------------------------------------------------------------------------
+Coordinates:         43.2619, -79.7894
+Distance from HQ:    1.7 km
+Source:              manual_seed_list
+Source Confidence:   100%
+
+ENRICHED CONTACTS
+--------------------------------------------------------------------------------
+Emails (3):
+  - Sales@stelco.com (confidence: 100%)
+  - Info@stelco.com (confidence: 100%)
+  - Environment@stelco.com (confidence: 100%)
+Additional Phones:   519-587-4541, 1760308331, 1760239967
+
+VALIDATION RESULTS
+--------------------------------------------------------------------------------
+✓ category_gate: Category validated: manufacturing
+✓ corroboration_address: address from single high-confidence source (confidence=1.00)
+✓ corroboration_phone: phone corroborated by 2 sources: 9055282511
+✓ corroboration_postal_code: postal_code from single high-confidence source (confidence=1.00)
+✓ geo_gate: Within target radius: 13.3km
+✓ revenue_gate: Revenue check bypassed (high-confidence source: 1.00)
+✓ website_gate: Website check bypassed (high-confidence source: 1.00)
+
+BUSINESS #3
+--------------------------------------------------------------------------------
+Company Name:        National Steel Car
+Status:              QUALIFIED ✅
+Industry:            Railway Car Manufacturing
+
+CONTACT INFORMATION
+--------------------------------------------------------------------------------
+Address:             750 Aberdeen Avenue
+City:                Hamilton
+Postal Code:         L8H 5V7
+Phone:               9056457000
+Website:             https://www.steelcar.com
+
+ADDITIONAL DETAILS
+--------------------------------------------------------------------------------
+Coordinates:         43.2401, -79.8456
+Distance from HQ:    3.4 km
+Source:              manual_seed_list
+Source Confidence:   100%
+
+ENRICHED CONTACTS
+--------------------------------------------------------------------------------
+Emails (6):
+  - contact@steelcar.com (confidence: 100%)
+  - info@steelcar.com (confidence: 100%)
+  - sales@steelcar.com (confidence: 100%)
+  - hello@steelcar.com (confidence: 100%)
+  - admin@steelcar.com (confidence: 100%)
+  ... and 1 more
+Additional Phones:   2147483647, 905-645-7000, 905.544.3311
+
+VALIDATION RESULTS
+--------------------------------------------------------------------------------
+✓ category_gate: Category validated: manufacturing
+✓ corroboration_address: address from single high-confidence source (confidence=1.00)
+✓ corroboration_phone: phone corroborated by 2 sources: 9056457000
+✓ corroboration_postal_code: postal_code from single high-confidence source (confidence=1.00)
+✓ geo_gate: Within target radius: 8.9km
+✓ revenue_gate: Revenue check bypassed (high-confidence source: 1.00)
+✓ website_gate: Website check bypassed (high-confidence source: 1.00)
+
+BUSINESS #4
+--------------------------------------------------------------------------------
+Company Name:        Hickory Steel Fabrication
+Status:              QUALIFIED ✅
+Industry:            Steel Fabrication
+
+CONTACT INFORMATION
+--------------------------------------------------------------------------------
+Address:             180 South Service Road
+City:                Stoney Creek
+Postal Code:         L8E 5M5
+Phone:               9056629448
+Website:             https://www.hickorysteel.com
+
+ADDITIONAL DETAILS
+--------------------------------------------------------------------------------
+Coordinates:         43.2189, -79.7456
+Distance from HQ:    6.6 km
+Source:              manual_seed_list
+Source Confidence:   95%
+
+ENRICHED CONTACTS
+--------------------------------------------------------------------------------
+Emails (6):
+  - inquiries@hickorysteel.com (confidence: 40%)
+  - hello@hickorysteel.com (confidence: 40%)
+  - info@hickorysteel.com (confidence: 40%)
+  - admin@hickorysteel.com (confidence: 40%)
+  - contact@hickorysteel.com (confidence: 40%)
+  ... and 1 more
+Additional Phones:   905-662-9448, 905-662-9448
+
+VALIDATION RESULTS
+--------------------------------------------------------------------------------
+✓ category_gate: Category validated: manufacturing
+✓ corroboration_address: address from single high-confidence source (confidence=0.95)
+✓ corroboration_phone: phone corroborated by 2 sources: 9056629448
+✓ corroboration_postal_code: postal_code from single high-confidence source (confidence=0.95)
+✓ geo_gate: Within target radius: 17.3km
+✓ revenue_gate: Revenue check bypassed (high-confidence source: 0.95)
+✓ website_gate: Website check bypassed (high-confidence source: 0.95)
+
+BUSINESS #5
+--------------------------------------------------------------------------------
+Company Name:        Walters Inc.
+Status:              QUALIFIED ✅
+Industry:            Metal Fabrication & Machining
+
+CONTACT INFORMATION
+--------------------------------------------------------------------------------
+Address:             120 Kenilworth Avenue North
+City:                Hamilton
+Postal Code:         L8H 5T7
+Phone:               9055408811
+Website:             https://www.waltersinc.com
+
+ADDITIONAL DETAILS
+--------------------------------------------------------------------------------
+Coordinates:         43.2445, -79.8234
+Distance from HQ:    1.7 km
+Source:              manual_seed_list
+Source Confidence:   100%
+
+ENRICHED CONTACTS
+--------------------------------------------------------------------------------
+Emails (6):
+  - contact@waltersinc.com (confidence: 40%)
+  - inquiries@waltersinc.com (confidence: 40%)
+  - sales@waltersinc.com (confidence: 40%)
+  - hello@waltersinc.com (confidence: 40%)
+  - admin@waltersinc.com (confidence: 40%)
+  ... and 1 more
+Additional Phones:   905-540-8811, 905-540-8811
+
+VALIDATION RESULTS
+--------------------------------------------------------------------------------
+✓ category_gate: Category validated: manufacturing
+✓ corroboration_address: address from single high-confidence source (confidence=1.00)
+✓ corroboration_phone: phone corroborated by 2 sources: 9055408811
+✓ corroboration_postal_code: postal_code from single high-confidence source (confidence=1.00)
+✓ geo_gate: Within target radius: 10.6km
+✓ revenue_gate: Revenue check bypassed (high-confidence source: 1.00)
+✓ website_gate: Website check bypassed (high-confidence source: 1.00)
+
+BUSINESS #6
+--------------------------------------------------------------------------------
+Company Name:        Hamilton Caster & Manufacturing
+Status:              QUALIFIED ✅
+Industry:            Industrial Casters & Material Handling
+
+CONTACT INFORMATION
+--------------------------------------------------------------------------------
+Address:             1637 Barton Street East
+City:                Hamilton
+Postal Code:         L8H 2Y2
+Phone:               9055444122
+Website:             https://www.hamiltoncaster.com
+
+ADDITIONAL DETAILS
+--------------------------------------------------------------------------------
+Coordinates:         43.2512, -79.8123
+Distance from HQ:    0.6 km
+Source:              manual_seed_list
+Source Confidence:   100%
+
+ENRICHED CONTACTS
+--------------------------------------------------------------------------------
+Emails (6):
+  - hello@hamiltoncaster.com (confidence: 40%)
+  - inquiries@hamiltoncaster.com (confidence: 40%)
+  - contact@hamiltoncaster.com (confidence: 40%)
+  - info@hamiltoncaster.com (confidence: 40%)
+  - sales@hamiltoncaster.com (confidence: 40%)
+  ... and 1 more
+Additional Phones:   905-544-4122, 905-544-4122
+
+VALIDATION RESULTS
+--------------------------------------------------------------------------------
+✓ category_gate: Category validated: manufacturing
+✓ corroboration_address: address from single high-confidence source (confidence=1.00)
+✓ corroboration_phone: phone corroborated by 2 sources: 9055444122
+✓ corroboration_postal_code: postal_code from single high-confidence source (confidence=1.00)
+✓ geo_gate: Within target radius: 11.5km
+✓ revenue_gate: Revenue check bypassed (high-confidence source: 1.00)
+✓ website_gate: Website check bypassed (high-confidence source: 1.00)
+
+BUSINESS #7
+--------------------------------------------------------------------------------
+Company Name:        Orlick Industries
+Status:              QUALIFIED ✅
+Industry:            Automotive Parts Manufacturing
+
+CONTACT INFORMATION
+--------------------------------------------------------------------------------
+Address:             30 Saunders Road
+City:                Stoney Creek
+Postal Code:         L8E 2Y7
+Phone:               9056623143
+Website:             https://www.orlick.ca
+
+ADDITIONAL DETAILS
+--------------------------------------------------------------------------------
+Coordinates:         43.2278, -79.7512
+Distance from HQ:    5.6 km
+Source:              manual_seed_list
+Source Confidence:   100%
+
+ENRICHED CONTACTS
+--------------------------------------------------------------------------------
+Emails (6):
+  - admin@orlick.ca (confidence: 40%)
+  - info@orlick.ca (confidence: 40%)
+  - hello@orlick.ca (confidence: 40%)
+  - sales@orlick.ca (confidence: 40%)
+  - contact@orlick.ca (confidence: 40%)
+  ... and 1 more
+Additional Phones:   905-662-3143, 905-662-3143
+
+VALIDATION RESULTS
+--------------------------------------------------------------------------------
+✓ category_gate: Category validated: manufacturing
+✓ corroboration_address: address from single high-confidence source (confidence=1.00)
+✓ corroboration_phone: phone corroborated by 2 sources: 9056623143
+✓ corroboration_postal_code: postal_code from single high-confidence source (confidence=1.00)
+✓ geo_gate: Within target radius: 16.7km
+✓ revenue_gate: Revenue check bypassed (high-confidence source: 1.00)
+✓ website_gate: Website check bypassed (high-confidence source: 1.00)
+
+BUSINESS #8
+--------------------------------------------------------------------------------
+Company Name:        Columbus McKinnon Corporation
+Status:              QUALIFIED ✅
+Industry:            Material Handling Equipment
+
+CONTACT INFORMATION
+--------------------------------------------------------------------------------
+Address:             140 John Street
+City:                Dundas
+Postal Code:         L9H 2S5
+Phone:               9056275291
+Website:             https://www.cmco.com
+
+ADDITIONAL DETAILS
+--------------------------------------------------------------------------------
+Coordinates:         43.2654, -79.9512
+Distance from HQ:    11.6 km
+Source:              manual_seed_list
+Source Confidence:   100%
+
+ENRICHED CONTACTS
+--------------------------------------------------------------------------------
+Emails (4):
+  - kristy.moser@cmco.com (confidence: 100%)
+  - christie.lagowski@cmco.com (confidence: 100%)
+  - oseir.garcia@cmco.com (confidence: 100%)
+  - sabrina.neumann@cmco.eu (confidence: 100%)
+Additional Phones:   716-689-5400, 905-627-5291, (800) 888-0985
+
+VALIDATION RESULTS
+--------------------------------------------------------------------------------
+✓ category_gate: Category validated: manufacturing
+✓ corroboration_address: address from single high-confidence source (confidence=1.00)
+✓ corroboration_phone: phone corroborated by 2 sources: 9056275291
+✓ corroboration_postal_code: postal_code from single high-confidence source (confidence=1.00)
+✓ geo_gate: Within target radius: 1.1km
+✓ revenue_gate: Revenue check bypassed (high-confidence source: 1.00)
+✓ website_gate: Website check bypassed (high-confidence source: 1.00)
+
+BUSINESS #9
+--------------------------------------------------------------------------------
+Company Name:        Wentworth Precision
+Status:              QUALIFIED ✅
+Industry:            Precision Machining
+
+CONTACT INFORMATION
+--------------------------------------------------------------------------------
+Address:             85 Gage Avenue North
+City:                Hamilton
+Postal Code:         L8H 6M5
+Phone:               9055458781
+Website:             https://www.wentworthprecision.com
+
+ADDITIONAL DETAILS
+--------------------------------------------------------------------------------
+Coordinates:         43.2478, -79.8567
+Distance from HQ:    4.0 km
+Source:              manual_seed_list
+Source Confidence:   95%
+
+ENRICHED CONTACTS
+--------------------------------------------------------------------------------
+Emails (6):
+  - admin@wentworthprecision.com (confidence: 40%)
+  - sales@wentworthprecision.com (confidence: 40%)
+  - hello@wentworthprecision.com (confidence: 40%)
+  - contact@wentworthprecision.com (confidence: 40%)
+  - info@wentworthprecision.com (confidence: 40%)
+  ... and 1 more
+Additional Phones:   905-545-8781, 905-545-8781
+
+VALIDATION RESULTS
+--------------------------------------------------------------------------------
+✓ category_gate: Category validated: manufacturing
+✓ corroboration_address: address from single high-confidence source (confidence=0.95)
+✓ corroboration_phone: phone corroborated by 2 sources: 9055458781
+✓ corroboration_postal_code: postal_code from single high-confidence source (confidence=0.95)
+✓ geo_gate: Within target radius: 7.9km
+✓ revenue_gate: Revenue check bypassed (high-confidence source: 0.95)
+✓ website_gate: Website check bypassed (high-confidence source: 0.95)
+
+BUSINESS #10
+--------------------------------------------------------------------------------
+Company Name:        Maple Leaf Foods
+Status:              QUALIFIED ✅
+Industry:            Food Processing
+
+CONTACT INFORMATION
+--------------------------------------------------------------------------------
+Address:             555 Townline Road East
+City:                Hamilton
+Postal Code:         L8B 0R3
+Phone:               9055601515
+Website:             https://www.mapleleaffoods.com
+
+ADDITIONAL DETAILS
+--------------------------------------------------------------------------------
+Coordinates:         43.2089, -79.7834
+Distance from HQ:    5.6 km
+Source:              manual_seed_list
+Source Confidence:   100%
+
+ENRICHED CONTACTS
+--------------------------------------------------------------------------------
+Emails (4):
+  - sustainability@mapleleaf.com (confidence: 100%)
+  - Media.Hotline@mapleleaf.com (confidence: 100%)
+  - Investor.Relations@mapleleaf.com (confidence: 100%)
+  - info@feedopportunity.com (confidence: 100%)
+Additional Phones:   905-560-1515, 1363352767, 1760357180
+
+VALIDATION RESULTS
+--------------------------------------------------------------------------------
+✓ category_gate: Category validated: manufacturing
+✓ corroboration_address: address from single high-confidence source (confidence=1.00)
+✓ corroboration_phone: phone corroborated by 2 sources: 9055601515
+✓ corroboration_postal_code: postal_code from single high-confidence source (confidence=1.00)
+✓ geo_gate: Within target radius: 14.7km
+✓ revenue_gate: Revenue check bypassed (high-confidence source: 1.00)
+✓ website_gate: Website check bypassed (high-confidence source: 1.00)
+
+BUSINESS #11
+--------------------------------------------------------------------------------
+Company Name:        Bunge Hamilton
+Status:              QUALIFIED ✅
+Industry:            Grain Processing & Oils
+
+CONTACT INFORMATION
+--------------------------------------------------------------------------------
+Address:             750 Pier 15
+City:                Hamilton
+Postal Code:         L8L 1C9
+Phone:               9055287371
+Website:             https://www.bunge.com
+
+ADDITIONAL DETAILS
+--------------------------------------------------------------------------------
+Coordinates:         43.2634, -79.8445
+Distance from HQ:    3.0 km
+Source:              manual_seed_list
+Source Confidence:   100%
+
+ENRICHED CONTACTS
+--------------------------------------------------------------------------------
+Emails (6):
+  - contact@bunge.com (confidence: 40%)
+  - hello@bunge.com (confidence: 40%)
+  - admin@bunge.com (confidence: 40%)
+  - info@bunge.com (confidence: 40%)
+  - inquiries@bunge.com (confidence: 40%)
+  ... and 1 more
+Additional Phones:   905-528-7371, 905-528-7371
+
+VALIDATION RESULTS
+--------------------------------------------------------------------------------
+✓ category_gate: Category validated: manufacturing
+✓ corroboration_address: address from single high-confidence source (confidence=1.00)
+✓ corroboration_phone: phone corroborated by 2 sources: 9055287371
+✓ corroboration_postal_code: postal_code from single high-confidence source (confidence=1.00)
+✓ geo_gate: Within target radius: 8.9km
+✓ revenue_gate: Revenue check bypassed (high-confidence source: 1.00)
+✓ website_gate: Website check bypassed (high-confidence source: 1.00)
+
+BUSINESS #12
+--------------------------------------------------------------------------------
+Company Name:        Sanko Gosei Technologies
+Status:              QUALIFIED ✅
+Industry:            Plastic Injection Molding
+
+CONTACT INFORMATION
+--------------------------------------------------------------------------------
+Address:             123 Innovation Drive
+City:                Hamilton
+Postal Code:         L9H 7S3
+Phone:               9056287900
+Website:             https://www.sankogosei.com
+
+ADDITIONAL DETAILS
+--------------------------------------------------------------------------------
+Coordinates:         43.2456, -79.9123
+Distance from HQ:    8.4 km
+Source:              manual_seed_list
+Source Confidence:   95%
+
+ENRICHED CONTACTS
+--------------------------------------------------------------------------------
+Emails (6):
+  - info@sankogosei.com (confidence: 40%)
+  - sales@sankogosei.com (confidence: 40%)
+  - hello@sankogosei.com (confidence: 40%)
+  - inquiries@sankogosei.com (confidence: 40%)
+  - admin@sankogosei.com (confidence: 40%)
+  ... and 1 more
+Additional Phones:   905-628-7900, 905-628-7900
+
+VALIDATION RESULTS
+--------------------------------------------------------------------------------
+✓ category_gate: Category validated: manufacturing
+✓ corroboration_address: address from single high-confidence source (confidence=0.95)
+✓ corroboration_phone: phone corroborated by 2 sources: 9056287900
+✓ corroboration_postal_code: postal_code from single high-confidence source (confidence=0.95)
+✓ geo_gate: Within target radius: 3.5km
+✓ revenue_gate: Revenue check bypassed (high-confidence source: 0.95)
+✓ website_gate: Website check bypassed (high-confidence source: 0.95)
+
+BUSINESS #13
+--------------------------------------------------------------------------------
+Company Name:        Atlas Die
+Status:              QUALIFIED ✅
+Industry:            Tool & Die Making
+
+CONTACT INFORMATION
+--------------------------------------------------------------------------------
+Address:             565 Parkdale Avenue North
+City:                Hamilton
+Postal Code:         L8H 5Y8
+Phone:               9055445000
+Website:             https://www.atlasdie.com
+
+ADDITIONAL DETAILS
+--------------------------------------------------------------------------------
+Coordinates:         43.2523, -79.8678
+Distance from HQ:    4.8 km
+Source:              manual_seed_list
+Source Confidence:   100%
+
+ENRICHED CONTACTS
+--------------------------------------------------------------------------------
+Emails (6):
+  - hello@atlasdie.com (confidence: 40%)
+  - admin@atlasdie.com (confidence: 40%)
+  - contact@atlasdie.com (confidence: 40%)
+  - info@atlasdie.com (confidence: 40%)
+  - sales@atlasdie.com (confidence: 40%)
+  ... and 1 more
+Additional Phones:   905-544-5000, 905-544-5000
+
+VALIDATION RESULTS
+--------------------------------------------------------------------------------
+✓ category_gate: Category validated: manufacturing
+✓ corroboration_address: address from single high-confidence source (confidence=1.00)
+✓ corroboration_phone: phone corroborated by 2 sources: 9055445000
+✓ corroboration_postal_code: postal_code from single high-confidence source (confidence=1.00)
+✓ geo_gate: Within target radius: 7.0km
+✓ revenue_gate: Revenue check bypassed (high-confidence source: 1.00)
+✓ website_gate: Website check bypassed (high-confidence source: 1.00)
+
+BUSINESS #14
+--------------------------------------------------------------------------------
+Company Name:        RR Donnelley Hamilton
+Status:              QUALIFIED ✅
+Industry:            Commercial Printing
+
+CONTACT INFORMATION
+--------------------------------------------------------------------------------
+Address:             1290 Central Parkway West
+City:                Hamilton
+Postal Code:         L8N 3M7
+Phone:               9055238000
+Website:             https://www.rrd.com
+
+ADDITIONAL DETAILS
+--------------------------------------------------------------------------------
+Coordinates:         43.2412, -79.9234
+Distance from HQ:    9.4 km
+Source:              manual_seed_list
+Source Confidence:   100%
+
+ENRICHED CONTACTS
+--------------------------------------------------------------------------------
+Emails (6):
+  - sales@rrd.com (confidence: 100%)
+  - contact@rrd.com (confidence: 100%)
+  - hello@rrd.com (confidence: 100%)
+  - info@rrd.com (confidence: 100%)
+  - inquiries@rrd.com (confidence: 100%)
+  ... and 1 more
+Additional Phones:   905-523-8000, 800.782.4892, 905-523-8000
+
+VALIDATION RESULTS
+--------------------------------------------------------------------------------
+✓ category_gate: Category validated: printing
+✓ corroboration_address: address from single high-confidence source (confidence=1.00)
+✓ corroboration_phone: phone corroborated by 2 sources: 9055238000
+✓ corroboration_postal_code: postal_code from single high-confidence source (confidence=1.00)
+✓ geo_gate: Within target radius: 2.9km
+✓ revenue_gate: Revenue check bypassed (high-confidence source: 1.00)
+✓ website_gate: Website check bypassed (high-confidence source: 1.00)
+
+BUSINESS #15
+--------------------------------------------------------------------------------
+Company Name:        Eaton Corporation
+Status:              QUALIFIED ✅
+Industry:            Electrical Equipment Manufacturing
+
+CONTACT INFORMATION
+--------------------------------------------------------------------------------
+Address:             285 Gage Avenue
+City:                Hamilton
+Postal Code:         L8N 2B8
+Phone:               9055288811
+Website:             https://www.eaton.com
+
+ADDITIONAL DETAILS
+--------------------------------------------------------------------------------
+Coordinates:         43.2490, -79.8523
+Distance from HQ:    3.6 km
+Source:              manual_seed_list
+Source Confidence:   100%
+
+ENRICHED CONTACTS
+--------------------------------------------------------------------------------
+Emails (6):
+  - contact@eaton.com (confidence: 40%)
+  - admin@eaton.com (confidence: 40%)
+  - sales@eaton.com (confidence: 40%)
+  - info@eaton.com (confidence: 40%)
+  - hello@eaton.com (confidence: 40%)
+  ... and 1 more
+Additional Phones:   905-528-8811, 905-528-8811
+
+VALIDATION RESULTS
+--------------------------------------------------------------------------------
+✓ category_gate: Category validated: manufacturing
+✓ corroboration_address: address from single high-confidence source (confidence=1.00)
+✓ corroboration_phone: phone corroborated by 2 sources: 9055288811
+✓ corroboration_postal_code: postal_code from single high-confidence source (confidence=1.00)
+✓ geo_gate: Within target radius: 8.2km
+✓ revenue_gate: Revenue check bypassed (high-confidence source: 1.00)
+✓ website_gate: Website check bypassed (high-confidence source: 1.00)
+
+BUSINESS #16
+--------------------------------------------------------------------------------
+Company Name:        Flex Hamilton
+Status:              QUALIFIED ✅
+Industry:            Electronics Manufacturing
+
+CONTACT INFORMATION
+--------------------------------------------------------------------------------
+Address:             115 Commerce Drive
+City:                Dundas
+Postal Code:         L9H 7V4
+Phone:               9056276671
+Website:             https://www.flex.com
+
+ADDITIONAL DETAILS
+--------------------------------------------------------------------------------
+Coordinates:         43.2667, -79.9478
+Distance from HQ:    11.3 km
+Source:              manual_seed_list
+Source Confidence:   100%
+
+ENRICHED CONTACTS
+--------------------------------------------------------------------------------
+Emails (6):
+  - contact@flex.com (confidence: 100%)
+  - info@flex.com (confidence: 100%)
+  - sales@flex.com (confidence: 100%)
+  - inquiries@flex.com (confidence: 100%)
+  - admin@flex.com (confidence: 100%)
+  ... and 1 more
+Additional Phones:   1111111111, 8888888889, 6666666667
+
+VALIDATION RESULTS
+--------------------------------------------------------------------------------
+✓ category_gate: Category validated: manufacturing
+✓ corroboration_address: address from single high-confidence source (confidence=1.00)
+✓ corroboration_phone: phone corroborated by 2 sources: 9056276671
+✓ corroboration_postal_code: postal_code from single high-confidence source (confidence=1.00)
+✓ geo_gate: Within target radius: 1.3km
+✓ revenue_gate: Revenue check bypassed (high-confidence source: 1.00)
+✓ website_gate: Website check bypassed (high-confidence source: 1.00)
+
+BUSINESS #17
+--------------------------------------------------------------------------------
+Company Name:        Canexus Chemicals
+Status:              QUALIFIED ✅
+Industry:            Chemical Manufacturing
+
+CONTACT INFORMATION
+--------------------------------------------------------------------------------
+Address:             730 Beach Boulevard
+City:                Hamilton
+Postal Code:         L8H 6W9
+Phone:               9055442500
+Website:             https://www.canexus.ca
+
+ADDITIONAL DETAILS
+--------------------------------------------------------------------------------
+Coordinates:         43.2678, -79.8012
+Distance from HQ:    1.5 km
+Source:              manual_seed_list
+Source Confidence:   95%
+
+ENRICHED CONTACTS
+--------------------------------------------------------------------------------
+Emails (6):
+  - sales@canexus.ca (confidence: 40%)
+  - inquiries@canexus.ca (confidence: 40%)
+  - contact@canexus.ca (confidence: 40%)
+  - hello@canexus.ca (confidence: 40%)
+  - admin@canexus.ca (confidence: 40%)
+  ... and 1 more
+Additional Phones:   905-544-2500, 905-544-2500
+
+VALIDATION RESULTS
+--------------------------------------------------------------------------------
+✓ category_gate: Category validated: manufacturing
+✓ corroboration_address: address from single high-confidence source (confidence=0.95)
+✓ corroboration_phone: phone corroborated by 2 sources: 9055442500
+✓ corroboration_postal_code: postal_code from single high-confidence source (confidence=0.95)
+✓ geo_gate: Within target radius: 12.4km
+✓ revenue_gate: Revenue check bypassed (high-confidence source: 0.95)
+✓ website_gate: Website check bypassed (high-confidence source: 0.95)
+
+BUSINESS #18
+--------------------------------------------------------------------------------
+Company Name:        Burloak Technologies
+Status:              QUALIFIED ✅
+Industry:            Additive Manufacturing (3D Metal Printing)
+
+CONTACT INFORMATION
+--------------------------------------------------------------------------------
+Address:             51 Fruitland Road
+City:                Stoney Creek
+Postal Code:         L8E 5M9
+Phone:               9056435551
+Website:             https://www.burloaktech.com
+
+ADDITIONAL DETAILS
+--------------------------------------------------------------------------------
+Coordinates:         43.2212, -79.7545
+Distance from HQ:    5.9 km
+Source:              manual_seed_list
+Source Confidence:   100%
+
+ENRICHED CONTACTS
+--------------------------------------------------------------------------------
+Emails (3):
+  - dev@dotsquares.com (confidence: 90%)
+  - demoinfo@gmail.com (confidence: 90%)
+  - u003edemoinfo@gmail.com (confidence: 90%)
+Additional Phones:   905-643-5551, 905-643-5551
+
+VALIDATION RESULTS
+--------------------------------------------------------------------------------
+✓ category_gate: Category validated: printing
+✓ corroboration_address: address from single high-confidence source (confidence=1.00)
+✓ corroboration_phone: phone corroborated by 2 sources: 9056435551
+✓ corroboration_postal_code: postal_code from single high-confidence source (confidence=1.00)
+✓ geo_gate: Within target radius: 16.6km
+✓ revenue_gate: Revenue check bypassed (high-confidence source: 1.00)
+✓ website_gate: Website check bypassed (high-confidence source: 1.00)
+
+BUSINESS #19
+--------------------------------------------------------------------------------
+Company Name:        Taiga Manufacturing
+Status:              QUALIFIED ✅
+Industry:            Precision Machining
+
+CONTACT INFORMATION
+--------------------------------------------------------------------------------
+Address:             45 Masonry Court
+City:                Hamilton
+Postal Code:         L8W 3E1
+Phone:               9053855575
+Website:             https://www.taigamfg.com
+
+ADDITIONAL DETAILS
+--------------------------------------------------------------------------------
+Coordinates:         43.2389, -79.8967
+Distance from HQ:    7.3 km
+Source:              manual_seed_list
+Source Confidence:   95%
+
+ENRICHED CONTACTS
+--------------------------------------------------------------------------------
+Emails (6):
+  - contact@taigamfg.com (confidence: 40%)
+  - inquiries@taigamfg.com (confidence: 40%)
+  - info@taigamfg.com (confidence: 40%)
+  - hello@taigamfg.com (confidence: 40%)
+  - sales@taigamfg.com (confidence: 40%)
+  ... and 1 more
+Additional Phones:   905-385-5575, 905-385-5575
+
+VALIDATION RESULTS
+--------------------------------------------------------------------------------
+✓ category_gate: Category validated: manufacturing
+✓ corroboration_address: address from single high-confidence source (confidence=0.95)
+✓ corroboration_phone: phone corroborated by 2 sources: 9053855575
+✓ corroboration_postal_code: postal_code from single high-confidence source (confidence=0.95)
+✓ geo_gate: Within target radius: 5.0km
+✓ revenue_gate: Revenue check bypassed (high-confidence source: 0.95)
+✓ website_gate: Website check bypassed (high-confidence source: 0.95)
+
+BUSINESS #20
+--------------------------------------------------------------------------------
+Company Name:        Stoney Creek Steel
+Status:              REVIEW_REQUIRED ⚠️
+Industry:            Steel Service Center
+
+CONTACT INFORMATION
+--------------------------------------------------------------------------------
+Address:             320 Barton Street
+City:                Stoney Creek
+Postal Code:         L8E 2K8
+Phone:               9056624711
+Website:             https://www.stoneycreeksteel.com
+
+ADDITIONAL DETAILS
+--------------------------------------------------------------------------------
+Coordinates:         43.2234, -79.7623
+Distance from HQ:    5.2 km
+Source:              manual_seed_list
+Source Confidence:   90%
+
+ENRICHED CONTACTS
+--------------------------------------------------------------------------------
+Emails (6):
+  - hello@stoneycreeksteel.com (confidence: 40%)
+  - admin@stoneycreeksteel.com (confidence: 40%)
+  - contact@stoneycreeksteel.com (confidence: 40%)
+  - inquiries@stoneycreeksteel.com (confidence: 40%)
+  - info@stoneycreeksteel.com (confidence: 40%)
+  ... and 1 more
+Additional Phones:   905-662-4711, 905-662-4711
+
+================================================================================
+SUMMARY STATISTICS
+================================================================================
+
+Status Breakdown:
+  QUALIFIED: 19
+  REVIEW_REQUIRED: 1
+
+Industry Distribution:
+  Steel Manufacturing: 2
+  Precision Machining: 2
+  Railway Car Manufacturing: 1
+  Steel Fabrication: 1
+  Metal Fabrication & Machining: 1
+  Industrial Casters & Material Handling: 1
+  Automotive Parts Manufacturing: 1
+  Material Handling Equipment: 1
+  Food Processing: 1
+  Grain Processing & Oils: 1
+
+Contact Enrichment:
+  Businesses with emails: 20
+  Businesses with phones: 20
+  Total emails discovered: 110
+  Total phones discovered: 82
+  Avg emails per business: 5.5
+  Avg phones per business: 4.1
+
+Geographic Coverage:
+  Average distance from Hamilton: 5.1 km
+  Min distance: 0.0 km
+  Max distance: 11.6 km
+  Cities represented: 3
+  Cities: Dundas, Hamilton, Stoney Creek
+
+================================================================================
+END OF REPORT
+================================================================================
