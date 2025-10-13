@@ -65,6 +65,7 @@ class SmartDiscoveryPipeline:
         Convert industry description to place_types for category gate.
 
         This allows seed list businesses to pass validation without Google Places API.
+        Maps diverse B2B industries to appropriate place_types.
         """
         if not industry:
             return []
@@ -72,7 +73,7 @@ class SmartDiscoveryPipeline:
         industry_lower = industry.lower()
         place_types = []
 
-        # Manufacturing keywords -> place_types
+        # Manufacturing keywords
         if any(kw in industry_lower for kw in ['manufacturing', 'fabrication', 'machining', 'production']):
             place_types.append('manufacturing')
 
@@ -83,16 +84,16 @@ class SmartDiscoveryPipeline:
             place_types.append('printing')
 
         if any(kw in industry_lower for kw in ['wholesale', 'distribution', 'distributor']):
-            place_types.append('wholesale')
+            place_types.append('wholesale_distribution')
 
         if any(kw in industry_lower for kw in ['equipment', 'machinery', 'industrial']):
             place_types.append('manufacturing')
 
         if any(kw in industry_lower for kw in ['food', 'processing', 'grain', 'meat']):
-            place_types.append('manufacturing')
+            place_types.append('food_manufacturing')
 
         if any(kw in industry_lower for kw in ['chemical', 'plastics', 'injection molding']):
-            place_types.append('manufacturing')
+            place_types.append('chemical_manufacturing')
 
         if any(kw in industry_lower for kw in ['electrical', 'electronics', 'power']):
             place_types.append('manufacturing')
@@ -102,6 +103,53 @@ class SmartDiscoveryPipeline:
 
         if 'precision' in industry_lower:
             place_types.append('manufacturing')
+
+        # Consulting keywords
+        if 'consulting' in industry_lower or 'consultant' in industry_lower:
+            if any(kw in industry_lower for kw in ['engineering', 'environmental', 'geotechnical']):
+                place_types.append('engineering_consulting')
+            elif any(kw in industry_lower for kw in ['business', 'management', 'advisory']):
+                place_types.append('business_consulting')
+            elif 'it' in industry_lower or 'technology' in industry_lower:
+                place_types.append('it_consulting')
+
+        # IT & Technology Services
+        if any(kw in industry_lower for kw in ['it solutions', 'it services', 'managed services', 'technology services']):
+            place_types.append('it_consulting')
+
+        if 'cybersecurity' in industry_lower:
+            place_types.append('it_consulting')
+
+        # Marketing & Advertising
+        if any(kw in industry_lower for kw in ['marketing', 'advertising', 'agency']):
+            place_types.append('marketing_agency')
+
+        # Logistics & Warehousing
+        if any(kw in industry_lower for kw in ['logistics', 'warehousing', '3pl', 'distribution']):
+            place_types.append('logistics')
+
+        if 'customs' in industry_lower or 'brokerage' in industry_lower:
+            place_types.append('logistics')
+
+        # Commercial Services
+        if any(kw in industry_lower for kw in ['commercial cleaning', 'janitorial', 'facility']):
+            place_types.append('commercial_cleaning')
+
+        if 'security' in industry_lower and 'commercial' in industry_lower:
+            place_types.append('security_services')
+
+        # Accounting & Business Services
+        if any(kw in industry_lower for kw in ['accounting', 'audit', 'tax']):
+            place_types.append('business_consulting')
+
+        # Packaging
+        if 'packaging' in industry_lower:
+            place_types.append('packaging_services')
+
+        # If no match found, try broader categorization
+        if not place_types:
+            if 'service' in industry_lower:
+                place_types.append('commercial_services')
 
         # Remove duplicates
         return list(set(place_types))
