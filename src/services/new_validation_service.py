@@ -141,7 +141,12 @@ class ValidationService:
 
         if len(field_obs) < min_sources:
             if len(field_obs) == 1:
-                # Single source - mark for review
+                # Single source - check if high confidence (≥0.95) to bypass requirement
+                # This allows manually curated seed lists with confidence=1.0 to pass
+                obs = field_obs[0]
+                if obs.confidence >= 0.95:
+                    return True, f"{field} from single high-confidence source (confidence={obs.confidence:.2f})", None
+                # Regular single source - mark for review
                 return False, f"Only 1 source for {field}", 'REVIEW_REQUIRED'
             return False, f"No sources for {field}", 'AUTO_EXCLUDE'
 
@@ -166,17 +171,22 @@ class ValidationService:
         # Multiple conflicts - likely bad data
         return False, f"{field} has {len(value_groups)} conflicting values: {list(value_groups.keys())}", 'AUTO_EXCLUDE'
 
-    def website_gate(self, business: dict, min_age_years: int = 3) -> Tuple[bool, str, Optional[str]]:
+    def website_gate(self, business: dict, min_age_years: int = 3, source_confidence: float = 0.0) -> Tuple[bool, str, Optional[str]]:
         """
         Validate website exists, is not parked, has age signal.
 
         Args:
             business: Business dict with website_ok, website_age_years fields
             min_age_years: Minimum website age
+            source_confidence: Source confidence (≥0.95 bypasses website validation)
 
         Returns:
             (passed, reason, action)
         """
+        # High-confidence sources (like manual seed list) bypass website validation
+        if source_confidence >= 0.95:
+            return True, f"Website check bypassed (high-confidence source: {source_confidence:.2f})", None
+
         website_ok = business.get('website_ok', False)
         website_age = business.get('website_age_years', 0)
 
@@ -191,14 +201,22 @@ class ValidationService:
 
         return True, f"Website validated (age: {website_age:.1f} years)", None
 
-    def revenue_gate(self, business: dict) -> Tuple[bool, str, Optional[str]]:
+    def revenue_gate(self, business: dict, source_confidence: float = 0.0) -> Tuple[bool, str, Optional[str]]:
         """
         STRICT revenue validation.
         Requires confidence >= 0.6 AND (staff signal OR benchmark).
 
+        Args:
+            business: Business dict with revenue_estimate
+            source_confidence: Source confidence (≥0.95 bypasses revenue validation)
+
         Returns:
             (passed, reason, action)
         """
+        # High-confidence sources (like manual seed list) bypass revenue validation
+        if source_confidence >= 0.95:
+            return True, f"Revenue check bypassed (high-confidence source: {source_confidence:.2f})", None
+
         revenue = business.get('revenue_estimate', {})
 
         if not revenue or not revenue.get('revenue_min'):
@@ -303,8 +321,12 @@ class ValidationService:
                 if action == 'REVIEW_REQUIRED':
                     return 'REVIEW_REQUIRED', reasons
 
+        # Get source confidence for website/revenue bypass
+        source_obs = [o for o in observations if o.field == 'source']
+        source_confidence = source_obs[0].confidence if source_obs else 0.0
+
         # Gate 4: Website
-        passed, reason, action = self.website_gate(business)
+        passed, reason, action = self.website_gate(business, source_confidence=source_confidence)
         validations.append(Validation(
             business_id=business_id,
             rule_id='website_gate',
@@ -327,7 +349,7 @@ class ValidationService:
                 return 'EXCLUDED', reasons
 
         # Gate 5: Revenue
-        passed, reason, action = self.revenue_gate(business)
+        passed, reason, action = self.revenue_gate(business, source_confidence=source_confidence)
         validations.append(Validation(
             business_id=business_id,
             rule_id='revenue_gate',
