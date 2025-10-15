@@ -1,0 +1,41 @@
+# Core Dependencies
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Google Sheets Integration
+gspread>=5.12.0
+google-auth>=2.23.0
+google-auth-oauthlib>=1.1.0
+google-auth-httplib2>=0.1.1
+
+# Data Enrichment APIs (Optional - Free Tiers Available)
+clearbit>=0.1.7          # Employee count, revenue, industry data
+python-hunter>=2.1       # Email discovery
+googlemaps>=4.10.0       # Google Places API for business data
+
+# Web Scraping (for website validation and data extraction)
+beautifulsoup4>=4.12.0
+requests>=2.31.0
+selenium>=4.15.0         # Optional: for JavaScript-heavy sites
+lxml>=4.9.0
+
+# Email and Communication
+python-decouple>=3.8     # Environment variable management
+anthropic>=0.8.0         # Claude AI API
+
+# Data Processing
+python-dateutil>=2.8.2
+pytz>=2023.3
+
+# CLI and Utilities
+colorama>=0.4.6          # Colored terminal output
+tqdm>=4.66.0             # Progress bars
+click>=8.1.7             # Command line interface
+
+# Testing (Optional)
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# Code Quality (Optional)
+black>=23.10.0
+flake8>=6.1.0
