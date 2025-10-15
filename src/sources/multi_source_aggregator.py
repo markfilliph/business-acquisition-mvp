@@ -51,10 +51,37 @@ class MultiSourceAggregator:
         self.sources['cme_csv_import'] = CMECSVImporter()
         self.sources['innovation_canada_csv'] = InnovationCanadaCSVImporter()
 
-        # Note: Add more source implementations here as they're created
-        # self.sources['yellowpages'] = YellowPagesSource()
-        # self.sources['hamilton_chamber'] = HamiltonChamberSource()
-        # etc.
+        # Google Places API (requires API key)
+        try:
+            from src.sources.google_places import GooglePlacesSource
+            self.sources['google_places'] = GooglePlacesSource()
+            self.logger.info("google_places_source_initialized")
+        except Exception as e:
+            self.logger.warning("google_places_init_failed", error=str(e))
+
+        # YellowPages scraper (free, no API key)
+        try:
+            from src.sources.yellowpages_source import YellowPagesSource
+            self.sources['yellowpages'] = YellowPagesSource()
+            self.logger.info("yellowpages_source_initialized")
+        except Exception as e:
+            self.logger.warning("yellowpages_init_failed", error=str(e))
+
+        # OpenStreetMap (free, no API key)
+        try:
+            from src.sources.openstreetmap_source import OpenStreetMapSource
+            self.sources['openstreetmap'] = OpenStreetMapSource()
+            self.logger.info("openstreetmap_source_initialized")
+        except Exception as e:
+            self.logger.warning("openstreetmap_init_failed", error=str(e))
+
+        # Canada411 scraper (free, no API key)
+        try:
+            from src.sources.canada411_source import Canada411Source
+            self.sources['canada411'] = Canada411Source()
+            self.logger.info("canada411_source_initialized")
+        except Exception as e:
+            self.logger.warning("canada411_init_failed", error=str(e))
 
         self.logger.info(
             "sources_initialized",
