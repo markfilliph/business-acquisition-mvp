@@ -25,6 +25,7 @@ from src.core.normalization import compute_fingerprint, normalize_name, normaliz
 from src.core.evidence import Observation, create_observation
 from src.services.new_validation_service import ValidationService
 from src.core.config import config
+from src.exports import CSVExporter, ReportGenerator
 
 logger = structlog.get_logger(__name__)
 
@@ -200,8 +201,8 @@ class SmartDiscoveryPipeline:
             cursor = await db.execute(
                 """INSERT INTO businesses
                 (fingerprint, normalized_name, original_name, street, city, postal_code,
-                 phone, website, latitude, longitude, status)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'DISCOVERED')""",
+                 phone, website, latitude, longitude, employee_count, status)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'DISCOVERED')""",
                 (
                     fingerprint,
                     normalize_name(business_data.name),
@@ -212,7 +213,8 @@ class SmartDiscoveryPipeline:
                     normalize_phone(business_data.phone or ''),
                     business_data.website,
                     business_data.latitude,
-                    business_data.longitude
+                    business_data.longitude,
+                    business_data.employee_count
                 )
             )
 
@@ -497,6 +499,55 @@ class SmartDiscoveryPipeline:
         # Final report
         self.print_stats()
         self.aggregator.print_source_performance()
+
+        # Auto-export: Generate timestamped CSV and report
+        await self.auto_export()
+
+    async def auto_export(self):
+        """
+        Automatically generate timestamped CSV and report files.
+        Called after each lead generation run.
+        """
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+
+        print(f"\n{'='*80}")
+        print(f"📄 AUTO-EXPORT: Generating timestamped files")
+        print(f"{'='*80}")
+
+        # Export CSV
+        csv_path = f"data/leads_{timestamp}.csv"
+        csv_exporter = CSVExporter(self.db_path)
+        csv_stats = await csv_exporter.export(csv_path)
+
+        print(f"\n✅ CSV Export Complete:")
+        print(f"   File: {csv_path}")
+        print(f"   Total: {csv_stats['total']} businesses")
+        print(f"   Qualified: {csv_stats['qualified']}")
+        print(f"   Excluded: {csv_stats['excluded']}")
+        print(f"   Review Required: {csv_stats['review_required']}")
+
+        # Generate Report
+        report_path = f"data/validation_report_{timestamp}.txt"
+        report_gen = ReportGenerator(self.db_path)
+        report_stats = await report_gen.generate(report_path)
+
+        print(f"\n✅ Validation Report Complete:")
+        print(f"   File: {report_path}")
+        print(f"   Lines: {report_stats['lines']}")
+        print(f"   Total: {report_stats['total']} businesses")
+
+        print(f"\n{'='*80}")
+        print(f"📦 EXPORTS SAVED:")
+        print(f"   • {csv_path}")
+        print(f"   • {report_path}")
+        print(f"{'='*80}\n")
+
+        logger.info(
+            "auto_export_complete",
+            csv_path=csv_path,
+            report_path=report_path,
+            total=csv_stats['total']
+        )
 
     def print_stats(self):
         """Print pipeline statistics."""

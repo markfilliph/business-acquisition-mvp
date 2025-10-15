@@ -171,22 +171,18 @@ class ValidationService:
         # Multiple conflicts - likely bad data
         return False, f"{field} has {len(value_groups)} conflicting values: {list(value_groups.keys())}", 'AUTO_EXCLUDE'
 
-    def website_gate(self, business: dict, min_age_years: int = 3, source_confidence: float = 0.0) -> Tuple[bool, str, Optional[str]]:
+    def website_gate(self, business: dict, min_age_years: int = 15) -> Tuple[bool, str, Optional[str]]:
         """
-        Validate website exists, is not parked, has age signal.
+        STRICT website validation - NO BYPASSES.
+        Requires 15+ years in business (website age as proxy).
 
         Args:
             business: Business dict with website_ok, website_age_years fields
-            min_age_years: Minimum website age
-            source_confidence: Source confidence (≥0.95 bypasses website validation)
+            min_age_years: Minimum website age (default: 15 years)
 
         Returns:
             (passed, reason, action)
         """
-        # High-confidence sources (like manual seed list) bypass website validation
-        if source_confidence >= 0.95:
-            return True, f"Website check bypassed (high-confidence source: {source_confidence:.2f})", None
-
         website_ok = business.get('website_ok', False)
         website_age = business.get('website_age_years', 0)
 
@@ -194,47 +190,84 @@ class ValidationService:
             return False, "Website not validated (unreachable or parked)", 'AUTO_EXCLUDE'
 
         if website_age < min_age_years:
-            if website_age >= min_age_years - 0.5:
-                # Borderline (2.5-3.0 years) - review
-                return False, f"Website borderline age ({website_age:.1f} years)", 'REVIEW_REQUIRED'
+            if website_age >= min_age_years - 1:
+                # Borderline (14-15 years) - review
+                return False, f"Website borderline age ({website_age:.1f} years, need {min_age_years}+)", 'REVIEW_REQUIRED'
             return False, f"Website too new ({website_age:.1f} < {min_age_years} years)", 'AUTO_EXCLUDE'
 
-        return True, f"Website validated (age: {website_age:.1f} years)", None
+        return True, f"Website validated (age: {website_age:.1f} years, established business)", None
 
-    def revenue_gate(self, business: dict, source_confidence: float = 0.0) -> Tuple[bool, str, Optional[str]]:
+    def employee_gate(self, business: dict, max_employees: int = 30) -> Tuple[bool, str, Optional[str]]:
         """
-        STRICT revenue validation.
-        Requires confidence >= 0.6 AND (staff signal OR benchmark).
+        STRICT employee count validation - NO BYPASSES.
+        Requires ≤30 employees for target market fit.
 
         Args:
-            business: Business dict with revenue_estimate
-            source_confidence: Source confidence (≥0.95 bypasses revenue validation)
+            business: Business dict with employee_count field
+            max_employees: Maximum employee count (default: 30)
 
         Returns:
             (passed, reason, action)
         """
-        # High-confidence sources (like manual seed list) bypass revenue validation
-        if source_confidence >= 0.95:
-            return True, f"Revenue check bypassed (high-confidence source: {source_confidence:.2f})", None
+        employee_count = business.get('employee_count')
 
-        revenue = business.get('revenue_estimate', {})
+        # If no employee data, mark for review
+        if employee_count is None:
+            return False, "No employee count data available", 'REVIEW_REQUIRED'
 
-        if not revenue or not revenue.get('revenue_min'):
-            return False, "No revenue estimate", 'AUTO_EXCLUDE'
+        if employee_count > max_employees:
+            return False, f"Too many employees ({employee_count} > {max_employees}), too large for target market", 'AUTO_EXCLUDE'
 
-        confidence = revenue.get('confidence', 0)
-        if confidence < 0.6:
-            return False, f"Revenue confidence too low ({confidence:.2f} < 0.6)", 'AUTO_EXCLUDE'
+        if employee_count < 5:
+            return False, f"Too few employees ({employee_count} < 5), may be too small", 'REVIEW_REQUIRED'
 
-        # Require underlying signals
-        has_staff = business.get('staff_count') is not None
-        has_benchmark = business.get('category_benchmark') is not None
+        return True, f"Employee count validated ({employee_count} employees, good fit)", None
 
-        if not (has_staff or has_benchmark):
-            return False, "No staff signal or category benchmark to support revenue estimate", 'AUTO_EXCLUDE'
+    def revenue_gate(self, business: dict, min_revenue: int = 1_000_000, max_revenue: int = 1_400_000) -> Tuple[bool, str, Optional[str]]:
+        """
+        STRICT revenue validation - NO BYPASSES.
+        Requires $1M-$1.4M USD revenue range.
 
-        methodology = revenue.get('methodology', 'unknown')
-        return True, f"Revenue estimate acceptable (confidence {confidence:.2f}, methodology: {methodology})", None
+        Args:
+            business: Business dict with revenue_estimate or employee_count
+            min_revenue: Minimum revenue (default: $1M)
+            max_revenue: Maximum revenue (default: $1.4M)
+
+        Returns:
+            (passed, reason, action)
+        """
+        # Try to get revenue estimate
+        revenue_estimate = business.get('revenue_estimate')
+        employee_count = business.get('employee_count')
+
+        # If we have employee count, estimate revenue ($50k per employee rough estimate)
+        if employee_count and not revenue_estimate:
+            estimated_revenue = employee_count * 50_000
+            business['revenue_estimate'] = {
+                'estimated_amount': estimated_revenue,
+                'revenue_min': estimated_revenue * 0.7,
+                'revenue_max': estimated_revenue * 1.3,
+                'confidence': 0.3,
+                'methodology': 'employee_count_estimate'
+            }
+            revenue_estimate = business['revenue_estimate']
+
+        if not revenue_estimate:
+            return False, "No revenue data or employee count to estimate revenue", 'REVIEW_REQUIRED'
+
+        estimated_amount = revenue_estimate.get('estimated_amount', 0)
+
+        # Check if in range
+        if estimated_amount < min_revenue:
+            return False, f"Revenue too low (${estimated_amount:,.0f} < ${min_revenue:,.0f})", 'AUTO_EXCLUDE'
+
+        if estimated_amount > max_revenue:
+            return False, f"Revenue too high (${estimated_amount:,.0f} > ${max_revenue:,.0f}), too large for target market", 'AUTO_EXCLUDE'
+
+        confidence = revenue_estimate.get('confidence', 0)
+        methodology = revenue_estimate.get('methodology', 'unknown')
+
+        return True, f"Revenue in target range (${estimated_amount:,.0f}, confidence: {confidence:.1%}, method: {methodology})", None
 
     async def validate_business(self, db, business_id: int, place_types: List[str]) -> Tuple[str, List[str]]:
         """
@@ -321,12 +354,31 @@ class ValidationService:
                 if action == 'REVIEW_REQUIRED':
                     return 'REVIEW_REQUIRED', reasons
 
-        # Get source confidence for website/revenue bypass
-        source_obs = [o for o in observations if o.field == 'source']
-        source_confidence = source_obs[0].confidence if source_obs else 0.0
+        # Gate 4: Employee Count (STRICT - NO BYPASS)
+        passed, reason, action = self.employee_gate(business)
+        validations.append(Validation(
+            business_id=business_id,
+            rule_id='employee_gate',
+            passed=passed,
+            reason=reason,
+            validated_at=datetime.utcnow()
+        ))
 
-        # Gate 4: Website
-        passed, reason, action = self.website_gate(business, source_confidence=source_confidence)
+        if not passed:
+            reasons.append(reason)
+            if action == 'REVIEW_REQUIRED':
+                return 'REVIEW_REQUIRED', reasons
+            elif action == 'AUTO_EXCLUDE':
+                await create_exclusion(db, Exclusion(
+                    business_id=business_id,
+                    rule_id='employee_gate',
+                    reason=reason,
+                    excluded_at=datetime.utcnow()
+                ))
+                return 'EXCLUDED', reasons
+
+        # Gate 5: Website Age / Years in Business (STRICT - NO BYPASS)
+        passed, reason, action = self.website_gate(business)
         validations.append(Validation(
             business_id=business_id,
             rule_id='website_gate',
@@ -348,8 +400,8 @@ class ValidationService:
                 ))
                 return 'EXCLUDED', reasons
 
-        # Gate 5: Revenue
-        passed, reason, action = self.revenue_gate(business, source_confidence=source_confidence)
+        # Gate 6: Revenue Range (STRICT - NO BYPASS)
+        passed, reason, action = self.revenue_gate(business)
         validations.append(Validation(
             business_id=business_id,
             rule_id='revenue_gate',
@@ -368,7 +420,7 @@ class ValidationService:
             ))
             return 'EXCLUDED', reasons
 
-        # All gates passed
+        # All gates passed - STRICT VALIDATION COMPLETE
         # Save validations
         from ..core.evidence import create_validation
         for val in validations:
