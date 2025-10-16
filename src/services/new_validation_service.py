@@ -74,11 +74,32 @@ class ValidationService:
 
         # Check 4: Must have at least one whitelisted type
         whitelisted = [pt for pt in place_types if pt in TARGET_WHITELIST]
+
+        # If no whitelisted place_types, check industry field
         if not whitelisted:
+            industry = business.get('industry', '').lower().strip()
+            if industry:
+                # First try exact match
+                if industry in TARGET_WHITELIST:
+                    self.logger.info("category_gate_passed_industry",
+                                   business_name=name,
+                                   industry=industry)
+                    return True, f"Category validated via industry: {industry}", None
+
+                # Try partial match (e.g., "Steel Manufacturing" contains "manufacturing")
+                for whitelisted_type in TARGET_WHITELIST:
+                    if whitelisted_type in industry or industry in whitelisted_type:
+                        self.logger.info("category_gate_passed_industry_partial",
+                                       business_name=name,
+                                       industry=industry,
+                                       matched=whitelisted_type)
+                        return True, f"Category validated via industry match: {industry} → {whitelisted_type}", None
+
             self.logger.info("category_gate_failed_no_whitelist",
                            business_name=name,
-                           place_types=place_types)
-            return False, f"No whitelisted category found in: {place_types}", 'AUTO_EXCLUDE'
+                           place_types=place_types,
+                           industry=industry or 'N/A')
+            return False, f"No whitelisted category found in: {place_types} (industry: {industry or 'N/A'})", 'AUTO_EXCLUDE'
 
         self.logger.info("category_gate_passed",
                        business_name=name,

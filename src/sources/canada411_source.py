@@ -109,7 +109,7 @@ class Canada411Source(BaseBusinessSource):
                 postal_code=raw.get('postal_code'),
                 phone=raw.get('phone'),
                 website=raw.get('website'),
-                industry=raw.get('category', 'general'),
+                industry=raw.get('category', 'general_business'),
                 raw_data=raw
             )
 

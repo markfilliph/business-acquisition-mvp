@@ -111,7 +111,7 @@ class YellowPagesSource(BaseBusinessSource):
                 postal_code=raw.get('postal_code'),
                 phone=raw.get('phone'),
                 website=raw.get('website'),
-                industry=raw.get('categories', ['general'])[0] if raw.get('categories') else 'general',
+                industry=raw.get('categories', ['general_business'])[0] if raw.get('categories') else 'general_business',
                 raw_data=raw
             )
 

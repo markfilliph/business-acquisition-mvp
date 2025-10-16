@@ -19,7 +19,10 @@ TARGET_WHITELIST = {
     # Specialized services
     'commercial_printing', 'industrial_design', 'trade_services_commercial',
     'commercial_cleaning', 'facility_management', 'security_services',
-    'commercial_landscaping', 'property_management_commercial'
+    'commercial_landscaping', 'property_management_commercial',
+
+    # General B2B (for sources with limited categorization)
+    'general_business', 'industrial', 'commercial'
 }
 
 # Negative blacklist (explicitly excluded)

@@ -112,7 +112,7 @@ class OpenStreetMapSource(BaseBusinessSource):
                 website=raw.get('website'),
                 latitude=raw.get('latitude'),
                 longitude=raw.get('longitude'),
-                industry=raw.get('industry', 'general'),
+                industry=raw.get('industry', 'general_business'),
                 raw_data=raw
             )
 
