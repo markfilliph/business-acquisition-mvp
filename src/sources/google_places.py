@@ -1,7 +1,8 @@
 """
-Google Places API Source - Fetch businesses from Google Places API
+Google Places API Source - Fetch businesses using Places API (New)
 
-Uses Google Places API Nearby Search and Text Search to discover businesses.
+Uses Google Places API v2 (New) with Text Search and Place Details.
+Migration from legacy API completed.
 """
 import asyncio
 from typing import List, Optional
@@ -17,20 +18,25 @@ logger = structlog.get_logger(__name__)
 
 class GooglePlacesSource(BaseBusinessSource):
     """
-    Fetch businesses from Google Places API.
+    Fetch businesses from Google Places API (New).
 
     Features:
-    - Nearby Search (radius-based discovery)
-    - Text Search (query-based discovery)
-    - Detailed place information
+    - Text Search API (New) - replaces legacy Nearby Search
+    - Place Details API (New) - enhanced field masking
+    - POST requests with JSON body
+    - Required field masks for response filtering
     - Rate limiting integration
     - Retry logic with exponential backoff
+
+    API Documentation:
+    https://developers.google.com/maps/documentation/places/web-service/text-search
     """
 
     def __init__(self, api_key: Optional[str] = None):
         super().__init__(name='google_places', priority=55)
         self.api_key = api_key or config.GOOGLE_PLACES_API_KEY
-        self.base_url = "https://maps.googleapis.com/maps/api/place"
+        # New API v2 base URL
+        self.base_url = "https://places.googleapis.com/v1"
 
         # Hamilton coordinates
         self.hamilton_coords = {
@@ -101,34 +107,28 @@ class GooglePlacesSource(BaseBusinessSource):
                 if len(all_businesses) >= max_results:
                     break
 
-                # Try nearby search first
-                nearby_results = await self._nearby_search(
+                # Text search with new API (includes phone/website via field mask)
+                search_results = await self._nearby_search(
                     place_type=place_type,
                     max_results=max_results - len(all_businesses)
                 )
 
-                all_businesses.extend(nearby_results)
+                all_businesses.extend(search_results)
 
                 # Rate limiting between type searches
                 await asyncio.sleep(0.5)
 
-            # Get detailed information for each place
-            detailed_businesses = []
-            for biz in all_businesses[:max_results]:
-                details = await self._get_place_details(biz)
-                if details:
-                    detailed_businesses.append(details)
-
+            # New API returns complete data with field mask, no need for details call
             fetch_time = asyncio.get_event_loop().time() - start_time
-            self.update_metrics(len(detailed_businesses), fetch_time)
+            self.update_metrics(len(all_businesses), fetch_time)
 
             self.logger.info(
                 "google_places_fetch_complete",
-                businesses_found=len(detailed_businesses),
+                businesses_found=len(all_businesses),
                 fetch_time=fetch_time
             )
 
-            return detailed_businesses
+            return all_businesses[:max_results]
 
         except Exception as e:
             fetch_time = asyncio.get_event_loop().time() - start_time
@@ -142,10 +142,12 @@ class GooglePlacesSource(BaseBusinessSource):
         max_results: int = 20
     ) -> List[BusinessData]:
         """
-        Perform nearby search for businesses.
+        Perform text search for businesses using new API.
+
+        Uses Text Search (New) API with POST request and field masking.
 
         Args:
-            place_type: Google Places type
+            place_type: Google Places type (or industry query)
             max_results: Maximum results
 
         Returns:
@@ -158,63 +160,172 @@ class GooglePlacesSource(BaseBusinessSource):
             await google_places_limiter.acquire('google_places')
 
             async with aiohttp.ClientSession() as session:
-                url = f"{self.base_url}/nearbysearch/json"
-                params = {
-                    'location': f"{self.hamilton_coords['lat']},{self.hamilton_coords['lng']}",
-                    'radius': self.hamilton_coords['radius'],
-                    'type': place_type,
-                    'key': self.api_key
+                # New API uses POST with JSON body
+                url = f"{self.base_url}/places:searchText"
+
+                # Request body for Text Search (New)
+                request_body = {
+                    "textQuery": f"{place_type} in Hamilton Ontario",
+                    "locationBias": {
+                        "circle": {
+                            "center": {
+                                "latitude": self.hamilton_coords['lat'],
+                                "longitude": self.hamilton_coords['lng']
+                            },
+                            "radius": float(self.hamilton_coords['radius'])
+                        }
+                    },
+                    "maxResultCount": min(max_results, 20),  # API limit is 20
+                    "languageCode": "en"
+                }
+
+                # Required headers for new API
+                headers = {
+                    "Content-Type": "application/json",
+                    "X-Goog-Api-Key": self.api_key,
+                    # Field mask - specify which fields to return (corrected field names)
+                    "X-Goog-FieldMask": "places.id,places.displayName,places.formattedAddress,places.location,places.types,places.nationalPhoneNumber,places.internationalPhoneNumber,places.websiteUri,places.businessStatus"
                 }
 
                 response = await call_with_retry(
-                    session.get,
+                    session.post,
                     url,
-                    params=params,
+                    json=request_body,
+                    headers=headers,
                     timeout=aiohttp.ClientTimeout(total=10)
                 )
 
                 if response.status != 200:
+                    error_text = await response.text()
                     self.logger.error(
                         "google_places_api_error",
                         status=response.status,
-                        place_type=place_type
+                        place_type=place_type,
+                        error=error_text
                     )
                     return []
 
                 data = await response.json()
 
-                if data.get('status') not in ['OK', 'ZERO_RESULTS']:
-                    self.logger.error(
-                        "google_places_api_status_error",
-                        status=data.get('status'),
-                        error=data.get('error_message')
+                # New API returns places array directly (no status field)
+                places = data.get('places', [])
+
+                if not places:
+                    self.logger.debug(
+                        "google_places_no_results",
+                        place_type=place_type
                     )
                     return []
 
                 # Parse results
-                for result in data.get('results', [])[:max_results]:
-                    business = self._parse_place_result(result)
+                for place_data in places[:max_results]:
+                    business = self._parse_place_result_v2(place_data)
                     if business:
                         businesses.append(business)
 
                 self.logger.debug(
-                    "google_places_nearby_search_complete",
+                    "google_places_text_search_complete",
                     place_type=place_type,
                     results=len(businesses)
                 )
 
         except Exception as e:
             self.logger.error(
-                "google_places_nearby_search_failed",
+                "google_places_text_search_failed",
                 error=str(e),
                 place_type=place_type
             )
 
         return businesses
 
+    def _parse_place_result_v2(self, place_data: dict) -> Optional[BusinessData]:
+        """
+        Parse a place result from Google Places API (New).
+
+        New API format uses different field names:
+        - displayName instead of name
+        - formattedAddress instead of vicinity
+        - location.latitude/longitude instead of geometry.location
+
+        Args:
+            place_data: Raw place data from new API
+
+        Returns:
+            BusinessData object or None
+        """
+        try:
+            # Extract basic info
+            place_id = place_data.get('id')
+            if not place_id:
+                return None
+
+            # New API uses displayName.text
+            name = place_data.get('displayName', {}).get('text', '')
+            if not name:
+                return None
+
+            # Location - new format
+            location = place_data.get('location', {})
+            lat = location.get('latitude')
+            lng = location.get('longitude')
+
+            # Address
+            formatted_address = place_data.get('formattedAddress', '')
+
+            # Parse address components
+            street = ''
+            city = 'Hamilton'
+            province = 'ON'
+            postal_code = None
+
+            # Extract street from formatted address (basic parsing)
+            if formatted_address:
+                parts = formatted_address.split(',')
+                if len(parts) >= 1:
+                    street = parts[0].strip()
+                if len(parts) >= 2:
+                    city = parts[1].strip()
+
+            # Business types
+            types = place_data.get('types', [])
+            industry = self._infer_industry_from_types(types)
+
+            # Phone and website (already in response with field mask)
+            phone = place_data.get('nationalPhoneNumber') or place_data.get('internationalPhoneNumber')
+            website = place_data.get('websiteUri')
+
+            # Create BusinessData
+            business = BusinessData(
+                name=name,
+                source='google_places',
+                source_url=f"https://www.google.com/maps/place/?q=place_id:{place_id}",
+                confidence=0.90,  # New API has even better data quality
+                street=street,
+                city=city,
+                province=province,
+                postal_code=postal_code,
+                phone=phone,
+                website=website,
+                latitude=lat,
+                longitude=lng,
+                industry=industry,
+                raw_data={
+                    'place_id': place_id,
+                    'types': types,
+                    'business_status': place_data.get('businessStatus'),
+                    'formatted_address': formatted_address
+                }
+            )
+
+            return business
+
+        except Exception as e:
+            self.logger.error("google_places_parse_error_v2", error=str(e), data=str(place_data)[:200])
+            return None
+
     def _parse_place_result(self, result: dict) -> Optional[BusinessData]:
         """
-        Parse a place result from Google Places API.
+        Parse a place result from Google Places API (LEGACY - kept for compatibility).
 
         Args:
             result: Raw result from API
