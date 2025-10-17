@@ -44,7 +44,11 @@ class MultiSourceAggregator:
     def _initialize_sources(self):
         """Initialize all available source implementations."""
 
-        # Always available: Seed list
+        # Always available: Small business seed list (highest priority - for qualified leads)
+        from src.sources.small_business_seed import SmallBusinessSeedListSource
+        self.sources['small_business_seed'] = SmallBusinessSeedListSource()
+
+        # Always available: Main seed list
         self.sources['manual_seed_list'] = HamiltonSeedListSource()
 
         # CSV importers (available if files exist)

@@ -190,8 +190,16 @@ SOURCES_CONFIG = {
     ),
 
     # ============================================
-    # SEED LISTS (100)
+    # SEED LISTS (100+)
     # ============================================
+    'small_business_seed': SourceConfig(
+        name='small_business_seed',
+        enabled=True,
+        priority=110,  # Highest priority - businesses sized for qualification
+        cost_per_request=0.0,
+        target_industries=['all']
+    ),
+
     'manual_seed_list': SourceConfig(
         name='manual_seed_list',
         enabled=True,
