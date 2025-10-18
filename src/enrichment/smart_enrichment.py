@@ -7,12 +7,16 @@ Uses a waterfall strategy to enrich employee count:
 3. Manual lookup for high-priority businesses
 
 Provides confidence scores for each data point.
+
+UPDATED: Now uses multi-factor revenue estimation for narrower, more accurate ranges.
 """
 import asyncio
 import aiosqlite
 from typing import Optional, Dict
 from datetime import datetime
 import structlog
+
+from ..core.config import INDUSTRY_BENCHMARKS
 
 logger = structlog.get_logger(__name__)
 
@@ -95,32 +99,110 @@ class SmartEnricher:
             'source': 'default_estimate'
         }
 
-    def estimate_revenue_from_employees(self, employee_min: int, employee_max: int, industry: str) -> Dict:
+    def estimate_revenue_from_employees(
+        self,
+        employee_min: int,
+        employee_max: int,
+        industry: str,
+        years_in_business: Optional[int] = None,
+        has_website: bool = False,
+        review_count: int = 0,
+        city: str = None
+    ) -> Dict:
         """
-        Estimate revenue based on employee count and industry.
+        Multi-factor revenue estimation with narrower, more accurate ranges.
 
-        B2B Services: $100K-$200K per employee
-        Manufacturing: $150K-$300K per employee
-        Wholesale: $200K-$400K per employee
+        NEW APPROACH:
+        1. Use industry benchmarks from config for baseline revenue-per-employee
+        2. Calculate midpoint employee count (not min/max range)
+        3. Apply adjustment factors based on signals:
+           - Years in business (maturity factor)
+           - Website presence (professionalism factor)
+           - Review count (market presence factor)
+           - Hamilton location (regional factor)
+        4. Return midpoint ± margin instead of wide min-max range
+
+        RESULT: Ranges like "$1.2M ± 25%" instead of "$800K - $5M"
+
+        Args:
+            employee_min: Minimum employee estimate
+            employee_max: Maximum employee estimate
+            industry: Business industry
+            years_in_business: Years operating (optional)
+            has_website: Whether business has website (optional)
+            review_count: Number of online reviews (optional)
+            city: City location (optional)
+
+        Returns:
+            Dict with revenue_midpoint, revenue_min, revenue_max, confidence, etc.
         """
         industry = industry.lower() if industry else ''
 
-        # Revenue per employee by industry
-        if 'manufacturing' in industry:
-            revenue_per_emp_min = 150_000
-            revenue_per_emp_max = 300_000
-        elif 'wholesale' in industry or 'distribution' in industry:
-            revenue_per_emp_min = 200_000
-            revenue_per_emp_max = 400_000
-        else:  # Services/general
-            revenue_per_emp_min = 100_000
-            revenue_per_emp_max = 200_000
+        # Step 1: Get industry benchmark (single point, not range!)
+        benchmark_data = self._get_industry_benchmark(industry)
+        revenue_per_employee = benchmark_data['revenue_per_employee']
+        base_confidence = benchmark_data['confidence_multiplier']
 
-        # Calculate ranges
-        revenue_min = employee_min * revenue_per_emp_min
-        revenue_max = employee_max * revenue_per_emp_max
+        # Step 2: Use MIDPOINT of employee range (more accurate than min-max)
+        employee_midpoint = (employee_min + employee_max) / 2
 
-        # Format as readable ranges
+        # Step 3: Calculate base revenue
+        base_revenue = employee_midpoint * revenue_per_employee
+
+        # Step 4: Apply adjustment factors
+        adjustment_factor = 1.0
+        confidence_boost = 0.0
+        margin_percentage = 40  # Start with ±40% margin
+
+        # Factor 1: Years in business (mature businesses are more stable)
+        if years_in_business is not None:
+            if years_in_business >= 20:
+                adjustment_factor *= 1.15  # Established businesses earn more
+                confidence_boost += 0.15
+                margin_percentage -= 10  # Tighter range for mature businesses
+            elif years_in_business >= 10:
+                adjustment_factor *= 1.05
+                confidence_boost += 0.10
+                margin_percentage -= 5
+            elif years_in_business < 5:
+                adjustment_factor *= 0.85  # Newer businesses earn less
+                margin_percentage += 5
+
+        # Factor 2: Website presence (indicates professionalism)
+        if has_website:
+            adjustment_factor *= 1.10
+            confidence_boost += 0.10
+            margin_percentage -= 5
+
+        # Factor 3: Review count (market presence signal)
+        if review_count >= 50:
+            adjustment_factor *= 1.10  # High visibility = higher revenue
+            confidence_boost += 0.15
+            margin_percentage -= 10
+        elif review_count >= 20:
+            adjustment_factor *= 1.05
+            confidence_boost += 0.10
+            margin_percentage -= 5
+        elif review_count >= 5:
+            confidence_boost += 0.05
+
+        # Factor 4: Hamilton location (regional adjustment)
+        if city and 'hamilton' in city.lower():
+            adjustment_factor *= 0.95  # Slightly lower than Toronto
+            confidence_boost += 0.05  # But we know the market better
+
+        # Step 5: Calculate adjusted revenue
+        adjusted_revenue = base_revenue * adjustment_factor
+
+        # Step 6: Calculate margin (narrower for high-confidence estimates)
+        margin = adjusted_revenue * (margin_percentage / 100)
+        revenue_min = adjusted_revenue - margin
+        revenue_max = adjusted_revenue + margin
+
+        # Step 7: Calculate final confidence
+        final_confidence = min(base_confidence + confidence_boost, 0.85)  # Cap at 85%
+
+        # Format helper
         def format_revenue(amount):
             if amount >= 1_000_000:
                 return f"${amount / 1_000_000:.1f}M"
@@ -128,11 +210,45 @@ class SmartEnricher:
                 return f"${amount / 1_000:.0f}K"
 
         return {
-            'revenue_min': revenue_min,
-            'revenue_max': revenue_max,
+            'revenue_midpoint': int(adjusted_revenue),
+            'revenue_min': int(revenue_min),
+            'revenue_max': int(revenue_max),
             'revenue_range': f"{format_revenue(revenue_min)}-{format_revenue(revenue_max)}",
-            'confidence': 0.35,
-            'source': 'employee_based_estimate'
+            'revenue_estimate': f"{format_revenue(adjusted_revenue)} ±{margin_percentage}%",
+            'confidence': round(final_confidence, 2),
+            'source': 'multi_factor_estimate',
+            'factors_used': {
+                'industry_benchmark': revenue_per_employee,
+                'employee_midpoint': employee_midpoint,
+                'adjustment_factor': round(adjustment_factor, 2),
+                'margin_percentage': margin_percentage,
+                'years_in_business': years_in_business,
+                'has_website': has_website,
+                'review_count': review_count
+            }
+        }
+
+    def _get_industry_benchmark(self, industry: str) -> Dict:
+        """
+        Get industry benchmark from config.
+
+        Uses single-point revenue-per-employee estimates, not ranges.
+        Much more accurate than the old min-max approach.
+        """
+        industry = industry.lower()
+
+        # Try to match industry to benchmark
+        for key, benchmark in INDUSTRY_BENCHMARKS.items():
+            if key in industry:
+                return benchmark
+
+        # Default to professional services if no match
+        return {
+            'revenue_per_employee': 95_000,  # Average across all industries
+            'confidence_multiplier': 0.45,
+            'typical_margins': 0.18,
+            'employee_range': (5, 20),
+            'growth_rate': 0.03
         }
 
     async def enrich_from_csv(
@@ -205,13 +321,8 @@ class SmartEnricher:
                 biz['Employee Count Source'] = estimate['source']
                 biz['Employee Confidence'] = f"{int(estimate['confidence'] * 100)}%"
 
-            # Revenue estimation
-            revenue = self.estimate_revenue_from_employees(employee_min, employee_max, industry)
-            biz['Revenue Range'] = revenue['revenue_range']
-            biz['Revenue Source'] = revenue['source']
-            biz['Revenue Confidence'] = f"{int(revenue['confidence'] * 100)}%"
-
-            # Years in business
+            # Extract additional signals for revenue estimation
+            years_in_business = None
             if scraped.get('Year Founded (Scraped)') and scraped['Year Founded (Scraped)'].isdigit():
                 year_founded = int(scraped['Year Founded (Scraped)'])
                 years_in_business = datetime.now().year - year_founded
@@ -225,6 +336,29 @@ class SmartEnricher:
                 biz['Founded Year'] = 'UNKNOWN'
                 biz['Age Source'] = 'unknown'
                 biz['Age Confidence'] = '0%'
+
+            # Extract website and review signals
+            has_website = bool(biz.get('Website') or biz.get('website'))
+            review_count = int(biz.get('Review Count', biz.get('reviews', 0)))
+
+            # Multi-factor revenue estimation (NEW!)
+            revenue = self.estimate_revenue_from_employees(
+                employee_min=employee_min,
+                employee_max=employee_max,
+                industry=industry,
+                years_in_business=years_in_business,
+                has_website=has_website,
+                review_count=review_count,
+                city=city
+            )
+
+            # Store revenue estimate with new fields
+            biz['Revenue Range'] = revenue['revenue_range']
+            biz['Revenue Estimate'] = revenue['revenue_estimate']  # NEW: Midpoint ±margin
+            biz['Revenue Midpoint'] = revenue['revenue_midpoint']  # NEW: Single point estimate
+            biz['Revenue Source'] = revenue['source']
+            biz['Revenue Confidence'] = f"{int(revenue['confidence'] * 100)}%"
+            biz['Revenue Margin %'] = revenue['factors_used']['margin_percentage']  # NEW: Show margin
 
             enriched.append(biz)
 

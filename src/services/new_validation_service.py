@@ -244,51 +244,69 @@ class ValidationService:
 
         return True, f"Employee count validated ({employee_count} employees, good fit)", None
 
-    def revenue_gate(self, business: dict, min_revenue: int = 1_000_000, max_revenue: int = 1_400_000) -> Tuple[bool, str, Optional[str]]:
+    async def revenue_gate(self, db, business: dict, business_id: int, min_revenue: int = 1_000_000, max_revenue: int = 1_400_000) -> Tuple[bool, str, Optional[str]]:
         """
         STRICT revenue validation - NO BYPASSES.
         Requires $1M-$1.4M USD revenue range.
 
+        UPDATED: Now uses smart multi-factor revenue estimation from observations!
+
         Args:
+            db: Database connection
             business: Business dict with revenue_estimate or employee_count
+            business_id: Business ID for fetching observations
             min_revenue: Minimum revenue (default: $1M)
             max_revenue: Maximum revenue (default: $1.4M)
 
         Returns:
             (passed, reason, action)
         """
-        # Try to get revenue estimate
-        revenue_estimate = business.get('revenue_estimate')
-        employee_count = business.get('employee_count')
+        # Priority 1: Try to get smart revenue estimate from observations
+        cursor = await db.execute(
+            "SELECT value, confidence FROM observations WHERE business_id = ? AND field = 'revenue_midpoint' ORDER BY confidence DESC LIMIT 1",
+            (business_id,)
+        )
+        row = await cursor.fetchone()
 
-        # If we have employee count, estimate revenue ($50k per employee rough estimate)
-        if employee_count and not revenue_estimate:
-            estimated_revenue = employee_count * 50_000
-            business['revenue_estimate'] = {
-                'estimated_amount': estimated_revenue,
-                'revenue_min': estimated_revenue * 0.7,
-                'revenue_max': estimated_revenue * 1.3,
-                'confidence': 0.3,
-                'methodology': 'employee_count_estimate'
-            }
-            revenue_estimate = business['revenue_estimate']
+        if row:
+            # Use smart enrichment revenue midpoint
+            estimated_revenue = float(row['value'])
+            confidence = float(row['confidence'])
+            methodology = 'smart_enrichment_multi_factor'
 
-        if not revenue_estimate:
-            return False, "No revenue data or employee count to estimate revenue", 'REVIEW_REQUIRED'
+            # Get the revenue estimate string (e.g., "$1.2M ±25%") for display
+            cursor = await db.execute(
+                "SELECT value FROM observations WHERE business_id = ? AND field = 'revenue_estimate' LIMIT 1",
+                (business_id,)
+            )
+            estimate_row = await cursor.fetchone()
+            revenue_str = estimate_row['value'] if estimate_row else f"${estimated_revenue:,.0f}"
+        else:
+            # Priority 2: Fall back to basic employee count estimation
+            revenue_estimate = business.get('revenue_estimate')
+            employee_count = business.get('employee_count')
 
-        estimated_amount = revenue_estimate.get('estimated_amount', 0)
+            if employee_count and not revenue_estimate:
+                estimated_revenue = employee_count * 50_000
+                confidence = 0.3
+                methodology = 'employee_count_basic'
+                revenue_str = f"${estimated_revenue:,.0f}"
+            elif revenue_estimate:
+                estimated_revenue = revenue_estimate.get('estimated_amount', 0)
+                confidence = revenue_estimate.get('confidence', 0)
+                methodology = revenue_estimate.get('methodology', 'unknown')
+                revenue_str = f"${estimated_revenue:,.0f}"
+            else:
+                return False, "No revenue data or employee count to estimate revenue", 'REVIEW_REQUIRED'
 
         # Check if in range
-        if estimated_amount < min_revenue:
-            return False, f"Revenue too low (${estimated_amount:,.0f} < ${min_revenue:,.0f})", 'AUTO_EXCLUDE'
+        if estimated_revenue < min_revenue:
+            return False, f"Revenue too low ({revenue_str} < ${min_revenue:,.0f})", 'AUTO_EXCLUDE'
 
-        if estimated_amount > max_revenue:
-            return False, f"Revenue too high (${estimated_amount:,.0f} > ${max_revenue:,.0f}), too large for target market", 'AUTO_EXCLUDE'
+        if estimated_revenue > max_revenue:
+            return False, f"Revenue too high ({revenue_str} > ${max_revenue:,.0f}), too large for target market", 'AUTO_EXCLUDE'
 
-        confidence = revenue_estimate.get('confidence', 0)
-        methodology = revenue_estimate.get('methodology', 'unknown')
-
-        return True, f"Revenue in target range (${estimated_amount:,.0f}, confidence: {confidence:.1%}, method: {methodology})", None
+        return True, f"Revenue in target range ({revenue_str}, confidence: {confidence:.0%}, method: {methodology})", None
 
     async def validate_business(self, db, business_id: int, place_types: List[str]) -> Tuple[str, List[str]]:
         """
@@ -422,7 +440,7 @@ class ValidationService:
                 return 'EXCLUDED', reasons
 
         # Gate 6: Revenue Range (STRICT - NO BYPASS)
-        passed, reason, action = self.revenue_gate(business)
+        passed, reason, action = await self.revenue_gate(db, business, business_id)
         validations.append(Validation(
             business_id=business_id,
             rule_id='revenue_gate',

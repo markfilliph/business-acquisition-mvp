@@ -21,6 +21,7 @@ import structlog
 
 from src.sources.multi_source_aggregator import MultiSourceAggregator
 from src.enrichment.contact_enrichment import ContactEnricher
+from src.enrichment.smart_enrichment import SmartEnricher
 from src.core.normalization import compute_fingerprint, normalize_name, normalize_phone
 from src.core.evidence import Observation, create_observation
 from src.services.new_validation_service import ValidationService
@@ -48,6 +49,7 @@ class SmartDiscoveryPipeline:
         self.db_path = db_path
         self.aggregator = MultiSourceAggregator()
         self.enricher = ContactEnricher()
+        self.smart_enricher = SmartEnricher()  # NEW: Multi-factor revenue estimation
         self.validator = ValidationService()
 
         self.stats = {
@@ -348,6 +350,104 @@ class SmartDiscoveryPipeline:
                         confidence=business_data.confidence,
                         observed_at=now
                     ))
+
+            # NEW: Smart Employee & Revenue Estimation
+            # Use SmartEnricher for multi-factor revenue estimation (narrower ranges!)
+            if business_data.industry:
+                # Step 1: Estimate employee range from industry
+                employee_estimate = self.smart_enricher.estimate_employees_from_industry(
+                    industry=business_data.industry,
+                    city=business_data.city or 'Hamilton'
+                )
+
+                # Store employee range observations
+                await create_observation(db, Observation(
+                    business_id=business_id,
+                    source_url='smart_enrichment',
+                    field='employee_range_min',
+                    value=str(employee_estimate['employee_range_min']),
+                    confidence=employee_estimate['confidence'],
+                    observed_at=now
+                ))
+
+                await create_observation(db, Observation(
+                    business_id=business_id,
+                    source_url='smart_enrichment',
+                    field='employee_range_max',
+                    value=str(employee_estimate['employee_range_max']),
+                    confidence=employee_estimate['confidence'],
+                    observed_at=now
+                ))
+
+                # Step 2: Estimate revenue using multi-factor approach
+                # Extract signals for revenue estimation
+                years_in_business = getattr(business_data, 'years_in_business', None)
+                has_website = bool(business_data.website)
+                review_count = getattr(business_data, 'review_count', 0)
+
+                revenue_estimate = self.smart_enricher.estimate_revenue_from_employees(
+                    employee_min=employee_estimate['employee_range_min'],
+                    employee_max=employee_estimate['employee_range_max'],
+                    industry=business_data.industry,
+                    years_in_business=years_in_business,
+                    has_website=has_website,
+                    review_count=review_count,
+                    city=business_data.city or 'Hamilton'
+                )
+
+                # Store revenue observations (with new narrow ranges!)
+                await create_observation(db, Observation(
+                    business_id=business_id,
+                    source_url='smart_enrichment',
+                    field='revenue_midpoint',
+                    value=str(revenue_estimate['revenue_midpoint']),
+                    confidence=revenue_estimate['confidence'],
+                    observed_at=now
+                ))
+
+                await create_observation(db, Observation(
+                    business_id=business_id,
+                    source_url='smart_enrichment',
+                    field='revenue_min',
+                    value=str(revenue_estimate['revenue_min']),
+                    confidence=revenue_estimate['confidence'],
+                    observed_at=now
+                ))
+
+                await create_observation(db, Observation(
+                    business_id=business_id,
+                    source_url='smart_enrichment',
+                    field='revenue_max',
+                    value=str(revenue_estimate['revenue_max']),
+                    confidence=revenue_estimate['confidence'],
+                    observed_at=now
+                ))
+
+                await create_observation(db, Observation(
+                    business_id=business_id,
+                    source_url='smart_enrichment',
+                    field='revenue_range',
+                    value=revenue_estimate['revenue_range'],
+                    confidence=revenue_estimate['confidence'],
+                    observed_at=now
+                ))
+
+                await create_observation(db, Observation(
+                    business_id=business_id,
+                    source_url='smart_enrichment',
+                    field='revenue_estimate',
+                    value=revenue_estimate['revenue_estimate'],  # e.g., "$1.2M ±25%"
+                    confidence=revenue_estimate['confidence'],
+                    observed_at=now
+                ))
+
+                logger.info(
+                    "smart_revenue_estimation",
+                    business_id=business_id,
+                    revenue_estimate=revenue_estimate['revenue_estimate'],
+                    confidence=f"{revenue_estimate['confidence']:.0%}",
+                    margin=f"±{revenue_estimate['factors_used']['margin_percentage']}%"
+                )
 
             # Update status
             await db.execute(
