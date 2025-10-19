@@ -71,11 +71,18 @@ backups/
 *.backup
 
 # Data files (contains sensitive business info)
+# SECURITY: NEVER commit real business/lead data
+data/*.csv
+data/*.json
+data/*.xlsx
 data/prospects.csv
 data/emails_sent.csv
 data/responses.csv
 data/research_*.json
 data/email_search_*.txt
+data/*LEADS*.md
+data/*ENRICHED*.csv
+data/*SUMMARY*.md
 
 # Exports directory (contains sensitive lead data)
 exports/

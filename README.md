@@ -14,6 +14,17 @@ This system provides a complete lead generation pipeline with enterprise-grade a
 - Size: Typically 5-50 employees
 - **EXCLUDED**: All skilled trades (welding, machining, construction, etc.) - require special licenses
 
+## 🔒 Security Notice
+
+**⚠️ IMPORTANT:** This repository contains code for lead generation. **NEVER commit:**
+- ❌ API keys or credentials (store in `.env` only)
+- ❌ Real business lead data (CSV files, contact info, PII)
+- ❌ Generated lead summaries or enriched datasets
+
+**See [SECURITY.md](./SECURITY.md) for complete security guidelines and best practices.**
+
+All lead data should remain in the `/data` directory which is protected by `.gitignore`.
+
 ## 🏗️ Architecture Overview
 
 ### Production-Ready Components
