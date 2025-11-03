@@ -159,6 +159,16 @@ SOURCES_CONFIG = {
         target_industries=['all']
     ),
 
+    'geoapify': SourceConfig(
+        name='geoapify',
+        enabled=True,
+        priority=60,  # Higher than Google Places due to free tier
+        cost_per_request=0.0,  # Free tier: 3,000 credits/day
+        requires_api_key=True,
+        rate_limit_per_day=60000,  # ~60k places with free tier
+        target_industries=['all']
+    ),
+
     # ============================================
     # TIER 5: Map Data (30-49)
     # ============================================
@@ -175,7 +185,7 @@ SOURCES_CONFIG = {
     # ============================================
     'duckduckgo': SourceConfig(
         name='duckduckgo',
-        enabled=False,  # Too low accuracy for B2B
+        enabled=True,  # Enabled for multi-source strategy (supplementary data)
         priority=20,
         cost_per_request=0.0,
         target_industries=['all']

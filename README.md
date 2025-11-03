@@ -67,8 +67,22 @@ All lead data should remain in the `/data` directory which is protected by `.git
 - Production monitoring and error handling
 - On-demand lead generation for quality adjustment phase
 
-**✅ Recent P1 Enhancements (October 2025):**
+**✅ Recent P1 Enhancements (October-November 2025):**
 - **Strict Quality Gates**: Category, revenue (60% threshold), and geo (dual enforcement)
+- **Enhanced Chain/Franchise Filtering**: Excludes 50+ major chains, franchises, and large corporations
+  - Brand-based exclusion (Bulk Barn, Factory Shoe, Stelco, Mondelez, etc.)
+  - Corporate pattern detection (multi-location indicators, investor relations URLs)
+  - Large company indicators ("Industries", "International", "Holdings", etc.)
+- **Review Count & Rating Integration**: Google Places review data for market presence
+  - Granular thresholds (2, 5, 10, 20, 50+ reviews)
+  - Differentiated revenue estimates based on visibility
+  - Higher confidence for well-reviewed businesses
+- **Multi-Factor Revenue Estimation**:
+  - Review count (±15% adjustment, ±10% margin)
+  - Years in business (±15% adjustment, ±10% margin)
+  - Website presence (±10% adjustment, ±5% margin)
+  - Industry benchmarks with region-specific adjustments
+  - **Result**: Revenue ranges now 50-80% spread vs. previous identical estimates
 - **Human-in-the-Loop Review Queue**: CLI tool for manual review of borderline cases
 - **API Response Caching**: SQLite-based caching with 50%+ cost savings
 - **Observability Dashboard**: Comprehensive metrics and weekly reports

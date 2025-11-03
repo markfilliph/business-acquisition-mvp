@@ -29,32 +29,32 @@ class SmartEnricher:
     def __init__(self):
         self.logger = logger
 
-        # Industry-based employee range estimates (based on real data)
+        # Industry-based employee range estimates (TIGHTER RANGES for better revenue estimates)
         self.industry_employee_ranges = {
             'manufacturing': {
-                'small': (10, 30),  # Small manufacturers
-                'typical': (15, 50),  # Typical range
-                'confidence': 0.40
+                'small': (8, 18),  # Tighter range for small manufacturers
+                'typical': (12, 35),  # Typical range
+                'confidence': 0.50
             },
             'wholesale': {
-                'small': (5, 20),
-                'typical': (10, 40),
-                'confidence': 0.35
-            },
-            'consulting': {
-                'small': (3, 15),
-                'typical': (5, 25),
+                'small': (6, 14),
+                'typical': (10, 25),
                 'confidence': 0.45
             },
+            'consulting': {
+                'small': (4, 10),
+                'typical': (6, 18),
+                'confidence': 0.55
+            },
             'professional_services': {
-                'small': (5, 20),
-                'typical': (8, 30),
-                'confidence': 0.40
+                'small': (6, 14),
+                'typical': (8, 22),
+                'confidence': 0.50
             },
             'general_business': {
-                'small': (5, 25),
-                'typical': (10, 40),
-                'confidence': 0.30
+                'small': (7, 16),  # Much tighter than before
+                'typical': (10, 28),
+                'confidence': 0.40
             }
         }
 
@@ -90,12 +90,12 @@ class SmartEnricher:
                     'source': 'industry_estimate'
                 }
 
-        # Default fallback
+        # Default fallback (TIGHTER than before)
         return {
-            'employee_range_min': 5,
-            'employee_range_max': 30,
-            'employee_range': "5-30",
-            'confidence': 0.25,
+            'employee_range_min': 7,
+            'employee_range_max': 16,
+            'employee_range': "7-16",
+            'confidence': 0.35,
             'source': 'default_estimate'
         }
 
@@ -175,16 +175,27 @@ class SmartEnricher:
             margin_percentage -= 5
 
         # Factor 3: Review count (market presence signal)
+        # UPDATED: More granular thresholds for small businesses
         if review_count >= 50:
-            adjustment_factor *= 1.10  # High visibility = higher revenue
+            adjustment_factor *= 1.15  # Very high visibility = significantly higher revenue
             confidence_boost += 0.15
             margin_percentage -= 10
         elif review_count >= 20:
-            adjustment_factor *= 1.05
+            adjustment_factor *= 1.12  # High visibility
+            confidence_boost += 0.12
+            margin_percentage -= 8
+        elif review_count >= 10:
+            adjustment_factor *= 1.08  # Good visibility (10-19 reviews)
             confidence_boost += 0.10
             margin_percentage -= 5
         elif review_count >= 5:
+            adjustment_factor *= 1.04  # Moderate visibility (5-9 reviews)
+            confidence_boost += 0.08
+            margin_percentage -= 3
+        elif review_count >= 2:
+            adjustment_factor *= 1.02  # Some visibility (2-4 reviews)
             confidence_boost += 0.05
+            margin_percentage -= 2
 
         # Factor 4: Hamilton location (regional adjustment)
         if city and 'hamilton' in city.lower():

@@ -87,6 +87,22 @@ class MultiSourceAggregator:
         except Exception as e:
             self.logger.warning("canada411_init_failed", error=str(e))
 
+        # Geoapify Places API (free tier: 3,000 credits/day)
+        try:
+            from src.sources.geoapify_source import GeoapifySource
+            self.sources['geoapify'] = GeoapifySource()
+            self.logger.info("geoapify_source_initialized")
+        except Exception as e:
+            self.logger.warning("geoapify_init_failed", error=str(e))
+
+        # DuckDuckGo search (free, no API key - supplementary)
+        try:
+            from src.sources.duckduckgo_source import DuckDuckGoSource
+            self.sources['duckduckgo'] = DuckDuckGoSource()
+            self.logger.info("duckduckgo_source_initialized")
+        except Exception as e:
+            self.logger.warning("duckduckgo_init_failed", error=str(e))
+
         self.logger.info(
             "sources_initialized",
             available_sources=list(self.sources.keys())

@@ -49,6 +49,8 @@ class BusinessData:
     employee_count: Optional[int] = None
     revenue_range: Optional[str] = None
     year_established: Optional[int] = None
+    review_count: Optional[int] = None  # Number of online reviews (Google, Yelp, etc.)
+    rating: Optional[float] = None  # Average rating (0.0-5.0)
     description: Optional[str] = None
 
     # Metadata
@@ -76,6 +78,8 @@ class BusinessData:
             'employee_count': self.employee_count,
             'revenue_range': self.revenue_range,
             'year_established': self.year_established,
+            'review_count': self.review_count,
+            'rating': self.rating,
             'description': self.description,
             'fetched_at': self.fetched_at.isoformat()
         }

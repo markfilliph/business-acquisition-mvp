@@ -184,7 +184,7 @@ class GooglePlacesSource(BaseBusinessSource):
                     "Content-Type": "application/json",
                     "X-Goog-Api-Key": self.api_key,
                     # Field mask - specify which fields to return (corrected field names)
-                    "X-Goog-FieldMask": "places.id,places.displayName,places.formattedAddress,places.location,places.types,places.nationalPhoneNumber,places.internationalPhoneNumber,places.websiteUri,places.businessStatus"
+                    "X-Goog-FieldMask": "places.id,places.displayName,places.formattedAddress,places.location,places.types,places.nationalPhoneNumber,places.internationalPhoneNumber,places.websiteUri,places.businessStatus,places.userRatingCount,places.rating"
                 }
 
                 response = await call_with_retry(
@@ -294,6 +294,10 @@ class GooglePlacesSource(BaseBusinessSource):
             phone = place_data.get('nationalPhoneNumber') or place_data.get('internationalPhoneNumber')
             website = place_data.get('websiteUri')
 
+            # Review count and rating (NEW - for revenue estimation)
+            review_count = place_data.get('userRatingCount', 0)
+            rating = place_data.get('rating')
+
             # Create BusinessData
             business = BusinessData(
                 name=name,
@@ -309,11 +313,15 @@ class GooglePlacesSource(BaseBusinessSource):
                 latitude=lat,
                 longitude=lng,
                 industry=industry,
+                review_count=review_count,
+                rating=rating,
                 raw_data={
                     'place_id': place_id,
                     'types': types,
                     'business_status': place_data.get('businessStatus'),
-                    'formatted_address': formatted_address
+                    'formatted_address': formatted_address,
+                    'review_count': review_count,
+                    'rating': rating
                 }
             )
 

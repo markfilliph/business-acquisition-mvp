@@ -56,6 +56,11 @@ class AppConfig(BaseSettings):
         description="Anthropic API key (optional, for Claude)"
     )
 
+    GEOAPIFY_API_KEY: Optional[str] = Field(
+        default=None,
+        description="Geoapify API key for Places API (free tier: 3,000 credits/day)"
+    )
+
     # ==================== Rate Limits ====================
     GOOGLE_PLACES_RATE_LIMIT: float = Field(
         default=10.0,
@@ -94,13 +99,13 @@ class AppConfig(BaseSettings):
     )
 
     TARGET_REVENUE_MIN: int = Field(
-        default=1_000_000,
+        default=800_000,
         ge=0,
         description="Minimum target revenue in USD"
     )
 
     TARGET_REVENUE_MAX: int = Field(
-        default=1_400_000,
+        default=2_000_000,
         ge=0,
         description="Maximum target revenue in USD"
     )
@@ -339,6 +344,7 @@ class AppConfig(BaseSettings):
             "openai": self.OPENAI_API_KEY,
             "yelp": self.YELP_API_KEY,
             "anthropic": self.ANTHROPIC_API_KEY,
+            "geoapify": self.GEOAPIFY_API_KEY,
         }
         return bool(key_map.get(service))
 
@@ -361,6 +367,7 @@ class AppConfig(BaseSettings):
             has_google_key=self.has_api_key("google_places"),
             has_openai_key=self.has_api_key("openai"),
             has_yelp_key=self.has_api_key("yelp"),
+            has_geoapify_key=self.has_api_key("geoapify"),
         )
 
 
