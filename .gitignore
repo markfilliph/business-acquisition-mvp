@@ -120,3 +120,7 @@ docs/_build/
 
 # Docker
 .dockerignore
+
+# Archived databases (historical reference, not needed in repo)
+data/archive/databases/*.db
+data/archive/databases/*.backup
