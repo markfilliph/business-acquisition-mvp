@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" class="js backgroundsize borderimage csstransitions fontface svg details progressbar meter no-mathml cors largeview">
+<head>
+<meta charset="utf-8">
+<title>Language selection - Innovation, Science and Economic Development Canada Main Site / Sélection de la langue - Site principal d'Innovation, Sciences et Développement économique Canada</title>
+<link rel="schema.dcterms" href="http://purl.org/dc/terms/" />
+<link rel="preload" href="https://canada.ca/content/dam/canada/splash/sp-bg-1.jpg" as="image">
+<link rel="preload" href="https://canada.ca/content/dam/canada/splash/sp-bg-2.jpg" as="image">
+<link rel="preload" href="https://canada.ca/content/dam/canada/splash/sp-bg-3.jpg" as="image">
+<link rel="preload" href="https://canada.ca/content/dam/canada/splash/sp-bg-4.jpg" as="image">
+<link rel="preload" href="https://canada.ca/content/dam/canada/splash/sp-bg-5.jpg" as="image">
+<meta content="width=device-width, initial-scale=1" name="viewport">
+<meta name="description" content="Innovation, Science and Economic Development Canada (ISED) works with Canadians in all areas of the economy and in all parts of the country to improve conditions for investment, enhance Canada's innovation performance, increase Canada's share of global trade and build a fair, efficient and competitive marketplace.">
+<meta name="dcterms.description" content="Innovation, Science and Economic Development Canada (ISED) works with Canadians in all areas of the economy and in all parts of the country to improve conditions for investment, enhance Canada's innovation performance, increase Canada's share of global trade and build a fair, efficient and competitive marketplace.">
+<meta name="dcterms.creator" content="Government of Canada, Innovation, Science and Economic Development Canada, Office of the Deputy Minister,  Strategic Communications and Marketing Sector">
+<meta name="dcterms.title" content="Language selection - Innovation, Science and Economic Development Canada Main Site">
+<meta name="dcterms.issued" title="W3CDTF" content="2013-12-13">
+<meta name="dcterms.modified" title="W3CDTF" content="2022-11-08">
+<meta name="dcterms.subject" content="innovation, science, economic development, développement économique">
+<meta name="dcterms.language" title="ISO639-2" content="eng">
+<meta name="robots" content="noindex, follow">
+<meta property="dcterms:issued" content="2013-12-13">
+<meta property="dcterms:modified" content="2022-11-08">
+<meta property="dcterms:title" lang="en" content="Language selection - Innovation, Science and Economic Development Canada Main Site">
+<meta property="dcterms:creator" lang="en" content="Government of Canada, Innovation, Science and Economic Development Canada, Office of the Deputy Minister,  Strategic Communications and Marketing Sector">
+<meta property="dcterms:subject" lang="en" title="gccore" content="innovation, science, economic development, développement économique">
+<meta property="dcterms:description" lang="en" content="Innovation, Science and Economic Development Canada (ISED) works with Canadians in all areas of the economy and in all parts of the country to improve conditions for investment, enhance Canada's innovation performance, increase Canada's share of global trade and build a fair, efficient and competitive marketplace.">
+<meta property="dcterms:title" lang="fr" content="Sélection de la langue - Site principal d'Innovation, Sciences et Développement économique Canada">
+<meta property="dcterms:creator" lang="fr" content="Gouvernement du Canada, Innovation, Sciences et Développement économique Canada, Cabinet du sous-ministre, Secteur des communications stratégiques et du marketing">
+<meta property="dcterms:subject" lang="fr" title="gccore" content="Sélection de la langue - Site principal d'Innovation, Sciences et Développement économique Canada">
+<meta property="dcterms:description" lang="fr" content="Innovation, Sciences et Développement économique Canada (ISDE) travaille avec les Canadiens de tous les secteurs de l'économie et de toutes les régions du pays à instaurer un climat favorable à l'investissement, à stimuler l'innovation, à accroître la présence canadienne sur les marchés mondiaux et à créer un marché équitable, efficace et concurrentiel.">
+<link href="/site/ised/libraries/theme-gcweb/assets/favicon.ico" rel="icon" type="image/x-icon" />
+<link rel="stylesheet" href="/site/ised/libraries/theme-gcweb/css/theme.min.css" />
+<noscript>
+<link rel="stylesheet" href="/site/ised/libraries/theme-gcweb/css/noscript.min.css" />
+</noscript>
+<link rel="stylesheet" href="/site/ised/libraries/theme-gcweb/css/messages.min.css" />
+
+<!-- Siteimprove --><script>// This script will listen for clicks on all <a> tags. On click, these links will pass the text value of the link to Siteimprove.document.addEventListener( "DOMContentLoaded", function() {    var $ = jQuery;    $("a").addClass("metric-click2"); //Add class "metric-click2" to every <a> tag on page.    $( document ).on( "click", "a.metric-click2", function() {        var $link = $( this ),            //link_url = $link.attr( "href" );			link_text = $link.text( );			//link_img_alt = $link.find("img").attr( "alt" );						        _sz.push(				['event', 'Links', 'link-click', link_text]				);		    } );} );</script><!-- /Siteimprove -->
+
+<meta name="google-site-verification" content="hylYa9NsOl90vezl2drnJmBgImJcds3Q3ZdNYhYkmho" />
+</head>
+<!--/sites/default/files/-->
+<body class="splash" vocab="http://schema.org/" resource="#wb-webpage" typeof="WebPage">
+<div id="bg" data-wb-randomize='{ "shuffle": true, "selector": "img", "toggle": "hide" }'> 
+	<img class="hide" src="https://canada.ca/content/dam/canada/splash/sp-bg-1.jpg" alt=""> 
+	<img class="hide" src="https://canada.ca/content/dam/canada/splash/sp-bg-2.jpg" alt=""> 
+	<img class="" src="https://canada.ca/content/dam/canada/splash/sp-bg-4.jpg" alt=""> 
+	<img class="hide" src="https://canada.ca/content/dam/canada/splash/sp-bg-1.jpg" alt=""> 
+	<img class="hide" src="https://canada.ca/content/dam/canada/splash/sp-bg-5.jpg" alt=""> 
+	<img class="hide" src="https://canada.ca/content/dam/canada/splash/sp-bg-3.jpg" alt=""> 
+</div>
+<main property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
+  <div class="sp-hb">
+    <div class="sp-bx col-xs-12">
+      <h1 property="name" class="wb-inv">Language selection - Innovation, Science and Economic Development Canada Main Site / <span lang="fr">Sélection de la langue - Site principal d'Innovation, Sciences et Développement économique Canada</span></h1>
+      <div class="row">
+        <div class="col-xs-11 col-md-8" property="publisher" resource="#wb-publisher" typeof="GovernmentOrganization"> <img src="/site/ised/libraries/theme-gcweb/assets/sig-spl.svg" width="283" alt="Government of Canada" property="logo"><span class="wb-inv"> / <span lang="fr">Gouvernement du Canada</span></span>
+          <meta property="name" content="Government of Canada">
+          <meta property="name" lang="fr" content="Gouvernement du Canada">
+          <meta property="areaServed" typeof="Country" content="Canada">
+        </div>
+      </div>
+      <div class="row mrgn-tp-lg">
+        <section class="col-xs-6 text-right">
+          <h2 class="h3">Innovation, Science and Economic Development Canada</h2>
+        </section>
+        <section class="col-xs-6" lang="fr">
+          <h2 class="h3">Innovation, Sciences et Développement économique Canada</h2>
+        </section>
+      </div>
+      <div class="row">
+        <section class="col-xs-6 text-right">
+          <p><a href="/site/ised/en/" class="btn btn-primary">English</a></p>
+        </section>
+        <section class="col-xs-6" lang="fr">
+          <p><a href="/site/isde/fr/" class="btn btn-primary">Français</a></p>
+        </section>
+      </div>
+    </div>
+    <div class="sp-bx-bt col-xs-12">
+      <div class="row">
+        <div class="col-xs-7 col-md-8"> <a href="/site/ised/en/terms-and-conditions/terms-and-conditions" class="sp-lk">Terms and conditions</a> <span class="glyphicon glyphicon-asterisk"></span> <a href="/site/isde/fr/avis/conditions" class="sp-lk" lang="fr">Avis</a> </div>
+        <div class="col-xs-5 col-md-4 text-right mrgn-bttm-md"> <img src="/site/ised/libraries/theme-gcweb/assets/wmms-spl.svg" width="127" alt="Symbol of the Government of Canada"><span class="wb-inv"> / <span lang="fr">Symbole du gouvernement du Canada</span></span> </div>
+      </div>
+    </div>
+  </div>
+</main>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha384-rY/jv8mMhqDabXSo+UCggqKtdmBfd3qC2/KvyTDNQ6PcUJXaxK1tMepoQda4g5vB" crossorigin="anonymous"></script> 
+<script src="https://wet-boew.github.io/themes-dist/GCWeb/wet-boew/js/wet-boew.min.js"></script> 
+<script src="/site/ised/libraries/theme-gcweb/js/theme.min.js"></script>
+<section id="block-siteimprove" data-block-plugin-id="block_content:9a1143c9-7853-4fce-8342-428e34731fcf" class="block block-block-content block-block-content9a1143c9-7853-4fce-8342-428e34731fcf clearfix">
+  <div class="field field--name-body field--type-text-with-summary field--label-hidden field--item"><script type="text/javascript">
+/*<![CDATA[*/
+(function() {
+var sz = document.createElement('script'); sz.type = 'text/javascript'; sz.async = true;
+sz.src = '//siteimproveanalytics.com/js/siteanalyze_8489.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sz, s);
+})();
+/*]]>*/
+</script> 
+  </div>
+</section>
+<!--<span id="wb-rsz" class="wb-init">&nbsp;</span>
+<script src="/site/ised/libraries/theme-gcweb/js/theme.min.js"></script>
+-->
+</body>
+</html>

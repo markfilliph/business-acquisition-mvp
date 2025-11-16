@@ -1,0 +1,16 @@
+business_name,verdict,confidence,issues,issue_count,rank,website,industry
+Fiddes Wholesale Produce Co,ACCEPT,MEDIUM,[],0,1,https://www.facebook.com/Fiddes-Wholesale-Produce-FWP-263828676991956/,wholesale
+The Hamilton Club,REJECT,HIGH,"[""NON_PROFIT: Contains 'club'"", ""PRIVATE_CLUB: Contains 'club'""]",2,2,https://www.thehamiltonclub.com/,general_business
+Atlantic Packaging Products Ltd.,REJECT,MEDIUM,"[""MULTI_LOCATION: URL contains '/locations?/'""]",1,3,https://atlantic.ca/locations/,general_business
+Downtown Hamilton BIA,REJECT,MEDIUM,"[""NON_PROFIT: Contains 'bia'""]",1,4,http://www.downtownhamilton.org/,general_business
+Shakespeare's Steak and Seafood,ACCEPT,MEDIUM,[],0,5,http://www.shakespeares.ca/,general_business
+Traynor's Bakery Wholesale Ltd.,ACCEPT,MEDIUM,[],0,6,http://www.traynors.ca,wholesale
+Factory Shoe,ACCEPT,MEDIUM,[],0,7,https://www.factoryshoe.ca/,general_business
+lobby Hamilton,ACCEPT,MEDIUM,[],0,8,https://lobby.ca/,general_business
+Karma Candy Inc,ACCEPT,MEDIUM,[],0,9,http://www.karmacandy.ca/,general_business
+The Ship,ACCEPT,MEDIUM,[],0,10,http://www.theship.ca/,general_business
+Canway Distribution,ACCEPT,MEDIUM,[],0,11,http://canwaydistribution.com/,general_business
+Plank Restobar Augusta,REJECT,HIGH,"[""RESTAURANT_CHAIN: Contains 'bar'"", 'INDUSTRY: Restaurant (high risk, complex operations)']",2,12,http://www.plankrestobar.ca/,general_business
+Berkeley North,ACCEPT,MEDIUM,[],0,13,http://www.berkeleynorth.ca/,general_business
+The Spice Factory,ACCEPT,MEDIUM,[],0,14,http://www.spicefactory.ca/,general_business
+The Cotton Factory,ACCEPT,MEDIUM,[],0,15,https://www.cottonfactory.ca/,general_business
