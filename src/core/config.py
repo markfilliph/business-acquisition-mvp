@@ -105,9 +105,9 @@ class AppConfig(BaseSettings):
     )
 
     TARGET_REVENUE_MAX: int = Field(
-        default=2_000_000,
+        default=1_500_000,
         ge=0,
-        description="Maximum target revenue in USD"
+        description="Maximum target revenue in USD ($1.5M hard cap for SMB thesis)"
     )
 
     MIN_EMPLOYEE_COUNT: int = Field(
@@ -117,9 +117,15 @@ class AppConfig(BaseSettings):
     )
 
     MAX_EMPLOYEE_COUNT: int = Field(
-        default=30,
+        default=25,
         ge=1,
-        description="Maximum employee count (small to mid-sized)"
+        description="Maximum employee count (stricter SMB cap)"
+    )
+
+    MAX_REVIEW_COUNT: int = Field(
+        default=30,
+        ge=0,
+        description="Maximum review count (30+ reviews suggests chain/brand/larger operation)"
     )
 
     MIN_YEARS_IN_BUSINESS: int = Field(

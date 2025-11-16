@@ -272,6 +272,7 @@ class BusinessLead(BaseModel):
     years_in_business: Optional[int] = Field(None, ge=0, le=150)
     employee_count: Optional[int] = Field(None, ge=1, le=10000)
     business_description: Optional[str] = None
+    review_count: Optional[int] = Field(None, ge=0)  # Google reviews count
     
     # Revenue and scoring
     revenue_estimate: RevenueEstimate = Field(default_factory=RevenueEstimate)
@@ -290,6 +291,7 @@ class BusinessLead(BaseModel):
     
     # Internal processing flags
     validation_errors: List[str] = Field(default_factory=list)
+    warnings: List[str] = Field(default_factory=list)  # Non-fatal warnings for manual review
     enrichment_attempts: int = 0
     
     @model_validator(mode='before')
@@ -360,7 +362,13 @@ class BusinessLead(BaseModel):
         formatted_note = f"[{timestamp}] {source}: {note}"
         self.notes.append(formatted_note)
         self.updated_at = datetime.utcnow()
-    
+
+    def add_warning(self, warning_code: str, message: str):
+        """Add non-fatal warning that requires manual review."""
+        formatted_warning = f"{warning_code}: {message}"
+        self.warnings.append(formatted_warning)
+        self.updated_at = datetime.utcnow()
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for export/serialization."""
         return {

@@ -1,3 +1,1 @@
-"""
-Test suite for the Lead Generation Automation System.
-"""
+"""Tests package for pipeline filters."""
