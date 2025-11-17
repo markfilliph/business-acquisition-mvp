@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """
-Export detailed qualified leads with comprehensive information to CSV/JSON formats.
+Export detailed qualified leads using STANDARDIZED output format.
+
+This script ALWAYS exports leads with the same consistent fields:
+- Business Name, Address, Phone Number, Website
+- Estimated Employees (Range), Estimated SDE (CAD), Estimated Revenue (CAD)
+- Confidence Score, Status, Data Sources
 """
 import asyncio
 import sys
@@ -10,10 +15,17 @@ from pathlib import Path
 from datetime import datetime
 
 # Add src to path
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from src.core.config import config
 from src.database.connection import DatabaseManager
+from src.core.output_schema import (
+    STANDARD_CSV_HEADERS,
+    StandardLeadOutput,
+    calculate_employee_range,
+    calculate_sde_from_revenue,
+    format_currency_cad
+)
 
 async def export_detailed_leads():
     """Export qualified leads with all available information."""
@@ -64,66 +76,80 @@ async def export_detailed_leads():
         print(f"❌ Error exporting leads: {e}")
 
 def export_to_csv(leads_data, file_path):
-    """Export leads to CSV format with all details - only verified websites."""
-    
-    fieldnames = [
-        'unique_id', 'business_name', 'industry', 
-        'address', 'city', 'postal_code', 
-        'phone', 'email', 'website', 'website_verified',
-        'website_validation_status', 'website_business_match',
-        'years_in_business', 'employee_count',
-        'estimated_revenue', 'revenue_confidence', 
-        'lead_score', 'qualification_status',
-        'data_sources', 'created_at', 'updated_at',
-        'business_intelligence_notes', 'qualification_reasons'
-    ]
-    
+    """Export leads to CSV using STANDARDIZED format - ensures consistent output."""
+
     with open(file_path, 'w', newline='', encoding='utf-8') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer = csv.DictWriter(csvfile, fieldnames=STANDARD_CSV_HEADERS)
         writer.writeheader()
-        
+
         for lead in leads_data:
-            # Parse notes to extract business intelligence
-            notes = lead.get('notes', '').split('; ') if lead.get('notes') else []
-            bi_notes = [note for note in notes if 'business_intelligence' in note.lower()]
-            
-            # Parse qualification reasons
-            qual_reasons = lead.get('qualification_reasons', '').replace('["', '').replace('"]', '').replace('", "', '; ')
-            
             # Only include website if it's verified
             website_url = lead.get('website', '')
             website_verified = lead.get('website_validated', False)
-            
-            # Filter out unverified websites
             if website_url and not website_verified:
-                website_url = ''  # Don't export unverified websites
-                
-            row = {
-                'unique_id': lead['unique_id'],
-                'business_name': lead['business_name'],
-                'industry': lead['industry'] or '',
-                'address': lead['address'] or '',
-                'city': lead['city'] or '',
-                'postal_code': lead['postal_code'] or '',
-                'phone': lead['phone'] or '',
-                'email': lead['email'] or '',
-                'website': website_url,
-                'website_verified': 'YES' if website_verified else 'NO',
-                'website_validation_status': lead.get('website_status_code', '') or '',
-                'website_business_match': f"{lead.get('website_business_name_match', 0):.1%}" if lead.get('website_business_name_match') else '',
-                'years_in_business': lead['years_in_business'] or '',
-                'employee_count': lead['employee_count'] or '',
-                'estimated_revenue': lead['estimated_revenue'] or '',
-                'revenue_confidence': f"{lead.get('revenue_confidence', 0):.1%}",
-                'lead_score': lead['lead_score'],
-                'qualification_status': lead['status'].title(),
-                'data_sources': lead.get('data_sources', '').replace('["', '').replace('"]', '').replace('", "', ', '),
-                'created_at': lead.get('created_at', ''),
-                'updated_at': lead.get('updated_at', ''),
-                'business_intelligence_notes': '; '.join(bi_notes) if bi_notes else '',
-                'qualification_reasons': qual_reasons
-            }
-            writer.writerow(row)
+                website_url = 'Unknown'  # Don't export unverified websites
+
+            # Calculate employee range
+            employee_count = lead.get('employee_count')
+            employee_range = calculate_employee_range(
+                employee_count=employee_count,
+                industry=lead.get('industry'),
+                revenue=lead.get('estimated_revenue')
+            )
+
+            # Get revenue or calculate from employee count
+            revenue = lead.get('estimated_revenue') or 0
+            if not revenue and employee_count:
+                revenue = employee_count * 75_000  # Default estimation
+
+            # Calculate SDE
+            if revenue > 0:
+                sde_amount, sde_formatted = calculate_sde_from_revenue(
+                    revenue=revenue,
+                    employee_count=employee_count,
+                    industry=lead.get('industry')
+                )
+                revenue_formatted = format_currency_cad(revenue)
+            else:
+                sde_formatted = "Unknown"
+                revenue_formatted = "Unknown"
+
+            # Calculate confidence score
+            has_data = [
+                lead.get('phone'),
+                website_url if website_verified else None,
+                lead.get('address'),
+                lead.get('postal_code'),
+                employee_count,
+                lead.get('industry')
+            ]
+            confidence = sum(1 for x in has_data if x) / len(has_data)
+            confidence_formatted = f"{confidence:.0%}"
+
+            # Format data sources
+            data_sources = lead.get('data_sources', '').replace('["', '').replace('"]', '').replace('", "', ', ')
+            if not data_sources:
+                data_sources = "Database"
+
+            # Create standardized output
+            standard_output = StandardLeadOutput(
+                business_name=lead['business_name'],
+                address=lead.get('address') or 'Unknown',
+                city=lead.get('city') or 'Hamilton',
+                province='ON',
+                postal_code=lead.get('postal_code') or 'Unknown',
+                phone_number=lead.get('phone') or 'Unknown',
+                website=website_url or 'Unknown',
+                industry=lead.get('industry') or 'Unknown',
+                estimated_employees_range=employee_range,
+                estimated_sde_cad=sde_formatted,
+                estimated_revenue_cad=revenue_formatted,
+                confidence_score=confidence_formatted,
+                status=lead.get('status', 'QUALIFIED').upper(),
+                data_sources=data_sources
+            )
+
+            writer.writerow(standard_output.to_dict())
 
 def export_to_json(leads_data, file_path):
     """Export leads to JSON format with full structure."""

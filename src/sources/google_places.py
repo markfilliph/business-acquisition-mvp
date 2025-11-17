@@ -183,8 +183,8 @@ class GooglePlacesSource(BaseBusinessSource):
                 headers = {
                     "Content-Type": "application/json",
                     "X-Goog-Api-Key": self.api_key,
-                    # Field mask - specify which fields to return (corrected field names)
-                    "X-Goog-FieldMask": "places.id,places.displayName,places.formattedAddress,places.location,places.types,places.nationalPhoneNumber,places.internationalPhoneNumber,places.websiteUri,places.businessStatus,places.userRatingCount,places.rating"
+                    # Field mask - specify which fields to return (includes addressComponents for postal codes)
+                    "X-Goog-FieldMask": "places.id,places.displayName,places.formattedAddress,places.addressComponents,places.location,places.types,places.nationalPhoneNumber,places.internationalPhoneNumber,places.websiteUri,places.businessStatus,places.userRatingCount,places.rating"
                 }
 
                 response = await call_with_retry(
@@ -278,12 +278,33 @@ class GooglePlacesSource(BaseBusinessSource):
             province = 'ON'
             postal_code = None
 
-            # Extract street from formatted address (basic parsing)
-            if formatted_address:
+            # Extract from addressComponents if available (preferred method)
+            address_components = place_data.get('addressComponents', [])
+            if address_components:
+                for component in address_components:
+                    types = component.get('types', [])
+
+                    if 'postal_code' in types:
+                        postal_code = component.get('longText') or component.get('shortText')
+                    elif 'locality' in types:
+                        city = component.get('longText', city)
+                    elif 'administrative_area_level_1' in types:
+                        province = component.get('shortText', province)
+                    elif 'route' in types:
+                        street_number = next(
+                            (c.get('longText') for c in address_components
+                             if 'street_number' in c.get('types', [])),
+                            ''
+                        )
+                        route = component.get('longText', '')
+                        street = f"{street_number} {route}".strip()
+
+            # Fallback: Extract street from formatted address if not found
+            if not street and formatted_address:
                 parts = formatted_address.split(',')
                 if len(parts) >= 1:
                     street = parts[0].strip()
-                if len(parts) >= 2:
+                if len(parts) >= 2 and city == 'Hamilton':  # Only override if still default
                     city = parts[1].strip()
 
             # Business types

@@ -370,7 +370,7 @@ class BusinessLead(BaseModel):
         self.updated_at = datetime.utcnow()
 
     def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary for export/serialization."""
+        """Convert to dictionary for export/serialization (internal use)."""
         return {
             "unique_id": self.unique_id,
             "business_name": self.business_name,
@@ -394,6 +394,15 @@ class BusinessLead(BaseModel):
             "updated_at": self.updated_at.isoformat(),
             "notes": "; ".join(self.notes[-3:]) if self.notes else ""  # Last 3 notes
         }
+
+    def to_standard_output(self):
+        """
+        Convert to StandardLeadOutput format for CSV export.
+
+        This ensures ALL leads exported to CSV use the SAME format.
+        """
+        from .output_schema import convert_business_lead_to_standard_output
+        return convert_business_lead_to_standard_output(self)
 
 
 class PipelineResults(BaseModel):
