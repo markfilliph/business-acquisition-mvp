@@ -1,0 +1,5 @@
+Business Name,Address,City,Province,Postal Code,Phone Number,Website,Industry,Estimated Employees (Range),Estimated SDE (CAD),Estimated Revenue (CAD),Confidence Score,Status,Data Sources
+Hamilton Steel Manufacturing,123 Industrial Drive,Hamilton,ON,L8P 4R5,(905) 555-1234,https://hamiltonsteel.com,manufacturing,10-20,$202K (18% margin),$1.1M,100%,QUALIFIED,Test Data
+Maple Printing Solutions,456 Main Street East,Hamilton,ON,L8N 1G6,(905) 555-5678,https://mapleprinting.ca,printing,6-11,$108K (18% margin),$600K,100%,QUALIFIED,Test Data
+Elite Business Consulting,789 King Street West,Hamilton,ON,L8P 1A2,(905) 555-9012,https://elitebusiness.ca,professional_services,3-8,$175K (35% margin),$500K,100%,QUALIFIED,Test Data
+Ontario Wholesale Distributors,321 Burlington Street,Hamilton,ON,L8L 5Y9,(905) 555-3456,https://ontariowholesale.com,wholesale,7-17,$228K (20% margin),$1.1M,100%,QUALIFIED,Test Data
