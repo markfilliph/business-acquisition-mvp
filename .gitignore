@@ -49,6 +49,12 @@ credentials.json
 *.pem
 *.key
 
+# Generated lead data (keep local, don't commit to repo)
+data/outputs/PHASE2_*.csv
+data/outputs/NEW_*.csv
+data/outputs/EXCLUDED_*.csv
+*.xlsx
+
 # Production Lead Generation System specific
 # Database files
 data/*.db
