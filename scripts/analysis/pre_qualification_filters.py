@@ -128,24 +128,39 @@ def estimate_size_from_reviews(rating_count: int) -> Tuple[bool, str]:
 def has_required_categories(types: List[str], categories: List[str]) -> Tuple[bool, str]:
     """
     Check if business has any of the required category indicators
+
+    NOTE: This is a SOFT check - we're flexible with Google Places types
     """
     if not types and not categories:
         return False, "No category information"
-    
+
+    # Expanded list to include actual Google Places API types
     required_categories = [
-        'manufacturer', 'factory', 'machine_shop',
-        'industrial', 'wholesale', 'distributor',
-        'fabrication', 'machining', 'equipment',
-        'printing', 'print_shop'
+        # Manufacturing
+        'manufacturer', 'factory', 'machine_shop', 'industrial_manufacturer',
+        'metal_fabricator',
+        # Wholesale
+        'wholesaler', 'wholesale', 'distributor',
+        # Equipment Rental
+        'equipment_rental', 'rental', 'equipment_rental_agency',
+        # Printing
+        'printing', 'print_shop', 'printer', 'printing_service',
+        # Professional Services
+        'consultant', 'business_consultant', 'accounting',
+        # General industrial/commercial
+        'industrial', 'commercial', 'fabrication', 'machining', 'equipment'
     ]
-    
+
     all_categories = [normalize_text(t) for t in (types or []) + (categories or [])]
-    
+
     for req_cat in required_categories:
-        if any(req_cat in cat for cat in all_categories):
-            return True, ""
-    
-    return False, "No relevant business category found"
+        for cat in all_categories:
+            if req_cat in cat or cat in req_cat:  # Bidirectional substring match
+                return True, ""
+
+    # If we don't find any category match, it's probably retail/consumer
+    # But don't hard reject - log it as a warning instead
+    return True, "WARNING: No exact category match found (may need manual review)"
 
 # ===== MAIN PRE-QUALIFICATION FUNCTION =====
 
@@ -204,11 +219,10 @@ def pre_qualify_lead(place_data: Dict) -> Tuple[bool, str, Dict]:
         metadata['warning_flags'].append(size_reason)
         return False, size_reason, metadata
     
-    # 5. Required category check
-    has_category, category_reason = has_required_categories(types, [])
-    if not has_category:
+    # 5. Required category check (SOFT - warning only, not hard reject)
+    _, category_reason = has_required_categories(types, [])
+    if category_reason:  # If there's a warning
         metadata['warning_flags'].append(category_reason)
-        return False, category_reason, metadata
     
     # === POSITIVE SIGNALS (adjust score) ===
     
