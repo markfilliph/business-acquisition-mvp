@@ -38,12 +38,37 @@ class GooglePlacesSource(BaseBusinessSource):
         # New API v2 base URL
         self.base_url = "https://places.googleapis.com/v1"
 
-        # Hamilton coordinates
-        self.hamilton_coords = {
-            'lat': 43.2557,
-            'lng': -79.8711,
-            'radius': 15000  # 15km
+        # City coordinates mapping for supported locations
+        self.city_coords = {
+            'Hamilton': {
+                'lat': 43.2557,
+                'lng': -79.8711,
+                'radius': 15000  # 15km
+            },
+            'Burlington': {
+                'lat': 43.3255,
+                'lng': -79.7990,
+                'radius': 12000  # 12km (smaller city)
+            },
+            'Oakville': {
+                'lat': 43.4675,
+                'lng': -79.6877,
+                'radius': 12000  # 12km
+            },
+            'Milton': {
+                'lat': 43.5183,
+                'lng': -79.8774,
+                'radius': 10000  # 10km
+            },
+            'Mississauga': {
+                'lat': 43.5890,
+                'lng': -79.6441,
+                'radius': 18000  # 18km (larger city)
+            }
         }
+
+        # Backwards compatibility
+        self.hamilton_coords = self.city_coords['Hamilton']
 
         # Industry to Google Places type mapping
         self.industry_types = {
@@ -61,6 +86,32 @@ class GooglePlacesSource(BaseBusinessSource):
             self.logger.warning("google_places_api_key_missing")
             return False
         return True
+
+    def _get_city_coords(self, location: str) -> tuple:
+        """
+        Parse location string and return (city_name, coords_dict).
+
+        Args:
+            location: Location string like "Burlington, ON" or "Hamilton"
+
+        Returns:
+            Tuple of (city_name, coordinates_dict)
+        """
+        # Extract city name from location string
+        city_name = location.split(',')[0].strip()
+
+        # Get coordinates for the city, default to Hamilton if not found
+        coords = self.city_coords.get(city_name, self.city_coords['Hamilton'])
+
+        if city_name not in self.city_coords:
+            self.logger.warning(
+                "city_not_in_mapping_defaulting_to_hamilton",
+                requested_city=city_name,
+                supported_cities=list(self.city_coords.keys())
+            )
+            city_name = "Hamilton"
+
+        return city_name, coords
 
     async def fetch_businesses(
         self,
@@ -110,6 +161,7 @@ class GooglePlacesSource(BaseBusinessSource):
                 # Text search with new API (includes phone/website via field mask)
                 search_results = await self._nearby_search(
                     place_type=place_type,
+                    location=location,
                     max_results=max_results - len(all_businesses)
                 )
 
@@ -139,6 +191,7 @@ class GooglePlacesSource(BaseBusinessSource):
     async def _nearby_search(
         self,
         place_type: str,
+        location: str = "Hamilton, ON",
         max_results: int = 20
     ) -> List[BusinessData]:
         """
@@ -148,6 +201,7 @@ class GooglePlacesSource(BaseBusinessSource):
 
         Args:
             place_type: Google Places type (or industry query)
+            location: Location string (e.g., "Burlington, ON")
             max_results: Maximum results
 
         Returns:
@@ -156,6 +210,9 @@ class GooglePlacesSource(BaseBusinessSource):
         businesses = []
 
         try:
+            # Get coordinates for the specified location
+            city_name, coords = self._get_city_coords(location)
+
             # Rate limiting
             await google_places_limiter.acquire('google_places')
 
@@ -163,16 +220,16 @@ class GooglePlacesSource(BaseBusinessSource):
                 # New API uses POST with JSON body
                 url = f"{self.base_url}/places:searchText"
 
-                # Request body for Text Search (New)
+                # Request body for Text Search (New) - now uses dynamic location
                 request_body = {
-                    "textQuery": f"{place_type} in Hamilton Ontario",
+                    "textQuery": f"{place_type} in {city_name} Ontario",
                     "locationBias": {
                         "circle": {
                             "center": {
-                                "latitude": self.hamilton_coords['lat'],
-                                "longitude": self.hamilton_coords['lng']
+                                "latitude": coords['lat'],
+                                "longitude": coords['lng']
                             },
-                            "radius": float(self.hamilton_coords['radius'])
+                            "radius": float(coords['radius'])
                         }
                     },
                     "maxResultCount": min(max_results, 20),  # API limit is 20

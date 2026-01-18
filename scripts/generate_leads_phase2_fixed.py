@@ -14,7 +14,7 @@ import asyncio
 import csv
 from pathlib import Path
 from datetime import datetime
-from typing import List, Dict, Tuple, Set
+from typing import Set
 
 # Add src and scripts to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -25,11 +25,13 @@ from src.filters.size_filters import filter_by_size
 from src.filters.business_type_filters import BusinessTypeFilter
 from src.enrichment.warning_generator import generate_warnings
 from src.enrichment.smart_enrichment import SmartEnricher
-from src.core.config import config
 from src.core.models import BusinessLead, ContactInfo, LocationInfo, RevenueEstimate
 
-# Import comprehensive pre-qualification filters
-from analysis.pre_qualification_filters import pre_qualify_lead
+# Import comprehensive pre-qualification filters (STRICT version)
+from analysis.pre_qualification_filters_fixed import pre_qualify_lead_strict as pre_qualify_lead
+
+# Import Master Lead Processor (auto-applied to all leads)
+from src.pipeline.master_lead_processor import process_leads_file
 
 # HARD REJECT - Major corporations and chains (don't even enrich)
 REJECT_NAMES = [
@@ -197,8 +199,8 @@ async def generate_leads_phase2_fixed(target_leads: int = 50, industry: str = 'm
                     'formatted_phone_number': biz.phone or '',
                 }
 
-                # PRE-QUALIFY BEFORE ENRICHMENT (using comprehensive filters)
-                should_enrich, rejection_reason, metadata = pre_qualify_lead(place_data)
+                # PRE-QUALIFY BEFORE ENRICHMENT (using STRICT comprehensive filters)
+                should_enrich, rejection_reason, _ = pre_qualify_lead(place_data, industry=industry)
 
                 if not should_enrich:
                     stats['rejected_pre_qual'] += 1
@@ -442,6 +444,21 @@ async def generate_leads_phase2_fixed(target_leads: int = 50, industry: str = 'm
             })
 
     print(f"✅ Exported {len(qualified_leads)} qualified leads to {output_file}\n")
+
+    # Apply Master Lead Processor (final standardization)
+    print(f"\n{'='*70}")
+    print(f"🔵 APPLYING MASTER LEAD PROCESSOR")
+    print(f"{'='*70}")
+    print(f"Standardizing leads according to acquisition thesis...")
+
+    try:
+        standardized_file = str(output_file).replace('.csv', '_FULLY_STANDARDIZED.csv')
+        process_leads_file(str(output_file), standardized_file)
+        print(f"\n✅ Master processing complete!")
+        print(f"📁 Standardized output: {standardized_file}")
+    except Exception as e:
+        print(f"\n⚠️  Master processing failed: {str(e)}")
+        print(f"   Original file still available: {output_file}")
 
     # Export rejections
     rejections_file = output_dir / f'PHASE2_FIXED_REJECTIONS_{industry}_{timestamp}.csv'

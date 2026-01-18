@@ -61,6 +61,52 @@ def filter_by_size(lead) -> Tuple[bool, str]:
     return False, "PASSED"
 
 
+def filter_by_size_relaxed(lead, max_revenue: int = 2_500_000, max_employees: int = 40) -> Tuple[bool, str]:
+    """
+    Apply RELAXED caps on business size for Burlington/secondary markets.
+
+    Enforces:
+    - max_revenue: $2.5M revenue (default, configurable)
+    - max_employees: 40 employees (default, configurable)
+
+    Args:
+        lead: BusinessLead object or dict with revenue_estimate, employee_count
+        max_revenue: Maximum revenue threshold (default $2.5M)
+        max_employees: Maximum employee count (default 40)
+
+    Returns:
+        (should_exclude: bool, reason: str)
+
+    Examples:
+        >>> # Revenue $2.0M - would fail strict filter but pass relaxed
+        >>> filter_by_size_relaxed({'revenue_estimate': 2_000_000, 'employee_count': 15})
+        (False, "PASSED")
+
+        >>> # Revenue $2.8M - exceeds even relaxed cap
+        >>> filter_by_size_relaxed({'revenue_estimate': 2_800_000, 'employee_count': 15})
+        (True, "EXCLUDED: Revenue $2.8M exceeds $2.5M cap")
+    """
+    # Handle both dict and object access
+    if hasattr(lead, 'revenue_estimate'):
+        revenue = getattr(lead, 'revenue_estimate', None)
+        if hasattr(revenue, 'estimated_amount'):
+            revenue = revenue.estimated_amount
+        employee_count = getattr(lead, 'employee_count', None)
+    else:
+        revenue = lead.get('revenue_estimate') or lead.get('revenue_max')
+        employee_count = lead.get('employee_count')
+
+    # Check 1: Revenue cap (relaxed to $2.5M)
+    if revenue and revenue > max_revenue:
+        return True, f"EXCLUDED: Revenue ${revenue/1_000_000:.1f}M exceeds ${max_revenue/1_000_000:.1f}M cap"
+
+    # Check 2: Employee cap (relaxed to 40 employees)
+    if employee_count and employee_count > max_employees:
+        return True, f"EXCLUDED: {employee_count} employees exceeds {max_employees} employee cap"
+
+    return False, "PASSED"
+
+
 def check_revenue_fit(revenue: float) -> Tuple[bool, str]:
     """
     Check if revenue fits target range.
